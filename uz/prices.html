@@ -10,7 +10,7 @@
   <link rel="alternate" hreflang="uz" href="https://pltgroup.uz/uz/prices.html">
   <link rel="alternate" hreflang="en" href="https://pltgroup.uz/en/prices.html">
   <link rel="alternate" hreflang="x-default" href="https://pltgroup.uz/prices.html">
-  <meta name="theme-color" content="#1b3f96">
+  <meta name="theme-color" content="#1b1243">
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="PLT GROUP">
   <meta property="og:title" content="Narxlar | PLT GROUP">
@@ -23,14 +23,14 @@
   <link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geologica:slnt,wght,CRSV,SHRP@-12..0,100..900,0..1,0..100&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400..800&display=swap">
   <link rel="stylesheet" href="../assets/styles.css">
 </head>
 <body class="page-prices">
 <a class="skip" href="#main">Asosiy qismga o‘tish</a>
 <header class="site-header" data-header>
   <div class="wrap header-row">
-    <a class="brand" href="../uz/"><span class="logo" aria-hidden="true"><svg viewBox="0 0 100 100" aria-hidden="true"><rect width="100" height="100" fill="var(--cobalt)"/><path d="M0 0H50A50 50 0 0 1 0 50Z" fill="var(--plaster)"/><path d="M100 100H50A50 50 0 0 1 100 50Z" fill="var(--plaster)"/></svg></span><span>PLT GROUP</span></a>
+    <a class="brand" href="../uz/"><svg class="logo" viewBox="0 0 30 30" aria-hidden="true"><circle cx="5" cy="5" r="3.2" fill="#ffb547"/><circle cx="15" cy="5" r="3.2" fill="#ffa04f"/><circle cx="25" cy="5" r="3.2" fill="#ff8a56"/><circle cx="5" cy="15" r="3.2" fill="#ff8a56"/><circle cx="15" cy="15" r="4" fill="#ff6f5b"/><circle cx="25" cy="15" r="3.2" fill="#ff7d8a"/><circle cx="5" cy="25" r="3.2" fill="#ff7d8a"/><circle cx="15" cy="25" r="3.2" fill="#ff8fc8"/><circle cx="25" cy="25" r="3.2" fill="#ff8fc8"/></svg><span>PLT GROUP</span></a>
     <nav class="nav" aria-label="Asosiy menyu"><a href="../uz/services.html">Xizmatlar</a><a href="../uz/process.html">Qanday ishlaymiz</a><a href="../uz/prices.html" aria-current="page">Narxlar</a><a href="../uz/contacts.html">Aloqa</a></nav>
     <div class="header-end">
       <nav class="lang" aria-label="Sayt tili"><a href="../prices.html" hreflang="ru" lang="ru">RU</a><a href="../uz/prices.html" hreflang="uz" lang="uz" aria-current="true">UZ</a><a href="../en/prices.html" hreflang="en" lang="en">EN</a></nav>
@@ -47,12 +47,10 @@
 </header>
 <main id="main">
   <section class="page-head">
-    <div class="wrap page-head-grid">
-      <div>
-        <h1>Narxlar</h1>
-        <p class="lead">Loyiha narxi shartnomada qayd etiladi va roziligingizsiz o‘zgarmaydi.</p>
-      </div>
-      <div class="tile-strip" aria-hidden="true"><span style="--r:0deg"><svg viewBox="0 0 100 100" aria-hidden="true"><rect width="100" height="100" fill="var(--cobalt)"/><path d="M0 0H50A50 50 0 0 1 0 50Z" fill="var(--plaster)"/><path d="M100 100H50A50 50 0 0 1 100 50Z" fill="var(--plaster)"/></svg></span><span style="--r:90deg"><svg viewBox="0 0 100 100" aria-hidden="true"><rect width="100" height="100" fill="var(--cobalt)"/><path d="M0 0H50A50 50 0 0 1 0 50Z" fill="var(--plaster)"/><path d="M100 100H50A50 50 0 0 1 100 50Z" fill="var(--plaster)"/></svg></span><span style="--r:0deg"><svg viewBox="0 0 100 100" aria-hidden="true"><rect width="100" height="100" fill="var(--turquoise)"/><path d="M0 0H50A50 50 0 0 1 0 50Z" fill="var(--plaster)"/><path d="M100 100H50A50 50 0 0 1 100 50Z" fill="var(--plaster)"/></svg></span><span style="--r:90deg"><svg viewBox="0 0 100 100" aria-hidden="true"><rect width="100" height="100" fill="var(--cobalt)"/><path d="M0 0H50A50 50 0 0 1 0 50Z" fill="var(--plaster)"/><path d="M100 100H50A50 50 0 0 1 100 50Z" fill="var(--plaster)"/></svg></span></div>
+    <canvas class="page-dust" data-dust aria-hidden="true"></canvas>
+    <div class="wrap">
+      <h1>Narxlar</h1>
+      <p class="lead">Loyiha narxi shartnomada qayd etiladi va roziligingizsiz o‘zgarmaydi.</p>
     </div>
   </section>
   <section class="section">
@@ -88,7 +86,7 @@
             <span class="plan-price">$350 dan</span><span class="plan-per">oyiga</span>
           </th></tr></thead>
           <tbody><tr><th scope="row">Hosting, domen, zaxira nusxalar</th><td><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></td><td class="is-featured"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></td><td><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></td></tr><tr><th scope="row">Oylik tuzatishlar</th><td>2 soatgacha</td><td class="is-featured">6 soatgacha</td><td>15 soatgacha</td></tr><tr><th scope="row">Javob vaqti</th><td>kun davomida</td><td class="is-featured">2 soat</td><td>2 soat, navbatsiz</td></tr><tr><th scope="row">Ish monitoringi</th><td><span class="no">yo‘q</span></td><td class="is-featured"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></td><td><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></td></tr><tr><th scope="row">Hisobot</th><td><span class="no">yo‘q</span></td><td class="is-featured">oyiga bir marta</td><td>har hafta</td></tr></tbody>
-          <tfoot><tr><td></td><td><a class="btn btn--small btn--line" href="../uz/contacts.html?service=support">Tanlash</a></td><td class="is-featured"><a class="btn btn--small btn--saffron" href="../uz/contacts.html?service=support">Tanlash</a></td><td><a class="btn btn--small btn--line" href="../uz/contacts.html?service=support">Tanlash</a></td></tr></tfoot>
+          <tfoot><tr><td></td><td><a class="btn btn--small btn--line" href="../uz/contacts.html?service=support">Tanlash</a></td><td class="is-featured"><a class="btn btn--small btn--amber" href="../uz/contacts.html?service=support">Tanlash</a></td><td><a class="btn btn--small btn--line" href="../uz/contacts.html?service=support">Tanlash</a></td></tr></tfoot>
         </table>
       </div>
       <p class="small payment">To‘lov: 50% ish boshlanishidan oldin, 50% qabul qilingandan keyin. Narxlar mo‘ljal uchun dollarda, shartnomada MB kursi bo‘yicha so‘mda.</p>
@@ -98,14 +96,14 @@
     <div class="wrap cta-grid">
       <h2>Ishingizga nima xalaqit berayotganini aytib bering</h2>
       <p>Ish kuni davomida javob beramiz. Birinchi maslahat bepul.</p>
-      <a class="btn btn--ink" href="../uz/contacts.html">Bizga yozing</a>
+      <a class="btn btn--dark" href="../uz/contacts.html">Bizga yozing</a>
     </div>
   </section>
 </main>
 <footer class="site-footer">
   <div class="wrap footer-top">
     <div class="footer-brand">
-      <a class="brand" href="../uz/"><span class="logo" aria-hidden="true"><svg viewBox="0 0 100 100" aria-hidden="true"><rect width="100" height="100" fill="var(--cobalt)"/><path d="M0 0H50A50 50 0 0 1 0 50Z" fill="var(--plaster)"/><path d="M100 100H50A50 50 0 0 1 100 50Z" fill="var(--plaster)"/></svg></span><span>PLT GROUP</span></a>
+      <a class="brand" href="../uz/"><svg class="logo" viewBox="0 0 30 30" aria-hidden="true"><circle cx="5" cy="5" r="3.2" fill="#ffb547"/><circle cx="15" cy="5" r="3.2" fill="#ffa04f"/><circle cx="25" cy="5" r="3.2" fill="#ff8a56"/><circle cx="5" cy="15" r="3.2" fill="#ff8a56"/><circle cx="15" cy="15" r="4" fill="#ff6f5b"/><circle cx="25" cy="15" r="3.2" fill="#ff7d8a"/><circle cx="5" cy="25" r="3.2" fill="#ff7d8a"/><circle cx="15" cy="25" r="3.2" fill="#ff8fc8"/><circle cx="25" cy="25" r="3.2" fill="#ff8fc8"/></svg><span>PLT GROUP</span></a>
       <p>O‘zbekiston biznesi uchun saytlar, botlar, CRM va tahlil.</p>
     </div>
     <nav class="footer-nav" aria-label="Asosiy menyu"><a href="../uz/services.html">Xizmatlar</a><a href="../uz/process.html">Qanday ishlaymiz</a><a href="../uz/prices.html">Narxlar</a><a href="../uz/contacts.html">Aloqa</a></nav>

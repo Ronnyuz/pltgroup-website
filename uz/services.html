@@ -10,7 +10,7 @@
   <link rel="alternate" hreflang="uz" href="https://pltgroup.uz/uz/services.html">
   <link rel="alternate" hreflang="en" href="https://pltgroup.uz/en/services.html">
   <link rel="alternate" hreflang="x-default" href="https://pltgroup.uz/services.html">
-  <meta name="theme-color" content="#1b3f96">
+  <meta name="theme-color" content="#1b1243">
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="PLT GROUP">
   <meta property="og:title" content="Xizmatlar | PLT GROUP">
@@ -23,14 +23,14 @@
   <link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geologica:slnt,wght,CRSV,SHRP@-12..0,100..900,0..1,0..100&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400..800&display=swap">
   <link rel="stylesheet" href="../assets/styles.css">
 </head>
 <body class="page-services">
 <a class="skip" href="#main">Asosiy qismga o‘tish</a>
 <header class="site-header" data-header>
   <div class="wrap header-row">
-    <a class="brand" href="../uz/"><span class="logo" aria-hidden="true"><svg viewBox="0 0 100 100" aria-hidden="true"><rect width="100" height="100" fill="var(--cobalt)"/><path d="M0 0H50A50 50 0 0 1 0 50Z" fill="var(--plaster)"/><path d="M100 100H50A50 50 0 0 1 100 50Z" fill="var(--plaster)"/></svg></span><span>PLT GROUP</span></a>
+    <a class="brand" href="../uz/"><svg class="logo" viewBox="0 0 30 30" aria-hidden="true"><circle cx="5" cy="5" r="3.2" fill="#ffb547"/><circle cx="15" cy="5" r="3.2" fill="#ffa04f"/><circle cx="25" cy="5" r="3.2" fill="#ff8a56"/><circle cx="5" cy="15" r="3.2" fill="#ff8a56"/><circle cx="15" cy="15" r="4" fill="#ff6f5b"/><circle cx="25" cy="15" r="3.2" fill="#ff7d8a"/><circle cx="5" cy="25" r="3.2" fill="#ff7d8a"/><circle cx="15" cy="25" r="3.2" fill="#ff8fc8"/><circle cx="25" cy="25" r="3.2" fill="#ff8fc8"/></svg><span>PLT GROUP</span></a>
     <nav class="nav" aria-label="Asosiy menyu"><a href="../uz/services.html" aria-current="page">Xizmatlar</a><a href="../uz/process.html">Qanday ishlaymiz</a><a href="../uz/prices.html">Narxlar</a><a href="../uz/contacts.html">Aloqa</a></nav>
     <div class="header-end">
       <nav class="lang" aria-label="Sayt tili"><a href="../services.html" hreflang="ru" lang="ru">RU</a><a href="../uz/services.html" hreflang="uz" lang="uz" aria-current="true">UZ</a><a href="../en/services.html" hreflang="en" lang="en">EN</a></nav>
@@ -47,12 +47,10 @@
 </header>
 <main id="main">
   <section class="page-head">
-    <div class="wrap page-head-grid">
-      <div>
-        <h1>Xizmatlar</h1>
-        <p class="lead">1–6 haftada ishga tushirib, natijasini darhol ko‘rish mumkin bo‘lgan vazifalarni olamiz.</p>
-      </div>
-      <div class="tile-strip" aria-hidden="true"><span style="--r:0deg"><svg viewBox="0 0 100 100" aria-hidden="true"><rect width="100" height="100" fill="var(--cobalt)"/><path d="M0 0H50A50 50 0 0 1 0 50Z" fill="var(--plaster)"/><path d="M100 100H50A50 50 0 0 1 100 50Z" fill="var(--plaster)"/></svg></span><span style="--r:90deg"><svg viewBox="0 0 100 100" aria-hidden="true"><rect width="100" height="100" fill="var(--cobalt)"/><path d="M0 0H50A50 50 0 0 1 0 50Z" fill="var(--plaster)"/><path d="M100 100H50A50 50 0 0 1 100 50Z" fill="var(--plaster)"/></svg></span><span style="--r:0deg"><svg viewBox="0 0 100 100" aria-hidden="true"><rect width="100" height="100" fill="var(--turquoise)"/><path d="M0 0H50A50 50 0 0 1 0 50Z" fill="var(--plaster)"/><path d="M100 100H50A50 50 0 0 1 100 50Z" fill="var(--plaster)"/></svg></span><span style="--r:90deg"><svg viewBox="0 0 100 100" aria-hidden="true"><rect width="100" height="100" fill="var(--cobalt)"/><path d="M0 0H50A50 50 0 0 1 0 50Z" fill="var(--plaster)"/><path d="M100 100H50A50 50 0 0 1 100 50Z" fill="var(--plaster)"/></svg></span></div>
+    <canvas class="page-dust" data-dust aria-hidden="true"></canvas>
+    <div class="wrap">
+      <h1>Xizmatlar</h1>
+      <p class="lead">1–6 haftada ishga tushirib, natijasini darhol ko‘rish mumkin bo‘lgan vazifalarni olamiz.</p>
     </div>
   </section>
   <nav class="jump wrap" aria-label="Xizmatlar"><a href="#audit">Audit</a><a href="#sites">Saytlar</a><a href="#bots">Telegram-botlar</a><a href="#crm">CRM</a><a href="#analytics">Tahlil</a><a href="#ai">AI-yordamchilar</a></nav>
@@ -70,7 +68,7 @@
       <dl class="svc-meta">
         <div><dt>Narx</dt><dd>$150</dd></div>
         <div><dt>Muddat</dt><dd>1 hafta</dd></div>
-        <a class="btn btn--cobalt btn--small" href="../uz/contacts.html?service=audit">Muhokama qilish</a>
+        <a class="btn btn--amber btn--small" href="../uz/contacts.html?service=audit">Muhokama qilish</a>
       </dl>
     </article>
     <article class="svc" id="sites">
@@ -86,7 +84,7 @@
       <dl class="svc-meta">
         <div><dt>Narx</dt><dd>$400 dan</dd></div>
         <div><dt>Muddat</dt><dd>1–2 hafta</dd></div>
-        <a class="btn btn--cobalt btn--small" href="../uz/contacts.html?service=sites">Muhokama qilish</a>
+        <a class="btn btn--amber btn--small" href="../uz/contacts.html?service=sites">Muhokama qilish</a>
       </dl>
     </article>
     <article class="svc" id="bots">
@@ -102,7 +100,7 @@
       <dl class="svc-meta">
         <div><dt>Narx</dt><dd>$500 dan</dd></div>
         <div><dt>Muddat</dt><dd>2–4 hafta</dd></div>
-        <a class="btn btn--cobalt btn--small" href="../uz/contacts.html?service=bots">Muhokama qilish</a>
+        <a class="btn btn--amber btn--small" href="../uz/contacts.html?service=bots">Muhokama qilish</a>
       </dl>
     </article>
     <article class="svc" id="crm">
@@ -118,7 +116,7 @@
       <dl class="svc-meta">
         <div><dt>Narx</dt><dd>$1 000 dan</dd></div>
         <div><dt>Muddat</dt><dd>3–6 hafta</dd></div>
-        <a class="btn btn--cobalt btn--small" href="../uz/contacts.html?service=crm">Muhokama qilish</a>
+        <a class="btn btn--amber btn--small" href="../uz/contacts.html?service=crm">Muhokama qilish</a>
       </dl>
     </article>
     <article class="svc" id="analytics">
@@ -134,7 +132,7 @@
       <dl class="svc-meta">
         <div><dt>Narx</dt><dd>$700 dan</dd></div>
         <div><dt>Muddat</dt><dd>2–4 hafta</dd></div>
-        <a class="btn btn--cobalt btn--small" href="../uz/contacts.html?service=analytics">Muhokama qilish</a>
+        <a class="btn btn--amber btn--small" href="../uz/contacts.html?service=analytics">Muhokama qilish</a>
       </dl>
     </article>
     <article class="svc" id="ai">
@@ -150,7 +148,7 @@
       <dl class="svc-meta">
         <div><dt>Narx</dt><dd>$800 dan</dd></div>
         <div><dt>Muddat</dt><dd>2–4 hafta</dd></div>
-        <a class="btn btn--cobalt btn--small" href="../uz/contacts.html?service=ai">Muhokama qilish</a>
+        <a class="btn btn--amber btn--small" href="../uz/contacts.html?service=ai">Muhokama qilish</a>
       </dl>
     </article>
   </div>
@@ -158,14 +156,14 @@
     <div class="wrap cta-grid">
       <h2>Ishingizga nima xalaqit berayotganini aytib bering</h2>
       <p>Ish kuni davomida javob beramiz. Birinchi maslahat bepul.</p>
-      <a class="btn btn--ink" href="../uz/contacts.html">Bizga yozing</a>
+      <a class="btn btn--dark" href="../uz/contacts.html">Bizga yozing</a>
     </div>
   </section>
 </main>
 <footer class="site-footer">
   <div class="wrap footer-top">
     <div class="footer-brand">
-      <a class="brand" href="../uz/"><span class="logo" aria-hidden="true"><svg viewBox="0 0 100 100" aria-hidden="true"><rect width="100" height="100" fill="var(--cobalt)"/><path d="M0 0H50A50 50 0 0 1 0 50Z" fill="var(--plaster)"/><path d="M100 100H50A50 50 0 0 1 100 50Z" fill="var(--plaster)"/></svg></span><span>PLT GROUP</span></a>
+      <a class="brand" href="../uz/"><svg class="logo" viewBox="0 0 30 30" aria-hidden="true"><circle cx="5" cy="5" r="3.2" fill="#ffb547"/><circle cx="15" cy="5" r="3.2" fill="#ffa04f"/><circle cx="25" cy="5" r="3.2" fill="#ff8a56"/><circle cx="5" cy="15" r="3.2" fill="#ff8a56"/><circle cx="15" cy="15" r="4" fill="#ff6f5b"/><circle cx="25" cy="15" r="3.2" fill="#ff7d8a"/><circle cx="5" cy="25" r="3.2" fill="#ff7d8a"/><circle cx="15" cy="25" r="3.2" fill="#ff8fc8"/><circle cx="25" cy="25" r="3.2" fill="#ff8fc8"/></svg><span>PLT GROUP</span></a>
       <p>O‘zbekiston biznesi uchun saytlar, botlar, CRM va tahlil.</p>
     </div>
     <nav class="footer-nav" aria-label="Asosiy menyu"><a href="../uz/services.html">Xizmatlar</a><a href="../uz/process.html">Qanday ishlaymiz</a><a href="../uz/prices.html">Narxlar</a><a href="../uz/contacts.html">Aloqa</a></nav>

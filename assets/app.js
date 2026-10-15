@@ -14,32 +14,91 @@
   document.addEventListener('keydown', (e) => { if (e.key === 'Escape') setMenu(false); });
   window.matchMedia('(min-width: 1061px)').addEventListener('change', (m) => { if (m.matches) setMenu(false); });
 
-  // Hero tiles: scatter, then settle into the pattern. Runs on load and on every click.
-  const tiles = document.querySelector('[data-tiles]');
-  if (tiles) {
-    const items = [...tiles.children];
-    const rand = (min, max) => Math.round(min + Math.random() * (max - min));
-    const scatter = () => items.forEach((el) => {
-      el.style.setProperty('--tx', `${rand(-26, 26)}px`);
-      el.style.setProperty('--ty', `${rand(-26, 26)}px`);
-      el.style.setProperty('--tr', `${rand(-1, 2) * 90 + rand(-14, 14)}deg`);
-      el.style.setProperty('--ts', (0.82 + Math.random() * 0.12).toFixed(2));
-      el.style.setProperty('--d', `${rand(0, 260)}ms`);
+  // Warm particle palette: amber → coral → pink.
+  const STOPS = [[255, 181, 71], [255, 111, 91], [255, 143, 200]];
+  const mix = (k) => {
+    k = Math.min(0.999, Math.max(0, k)) * (STOPS.length - 1);
+    const i = Math.floor(k), f = k - i, a = STOPS[i], b = STOPS[i + 1];
+    return `rgb(${a.map((v, j) => Math.round(v + (b[j] - v) * f)).join(',')})`;
+  };
+  const sizeCanvas = (c, ctx) => {
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    const W = c.clientWidth, H = c.clientHeight;
+    c.width = W * dpr; c.height = H * dpr; ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    return [W, H];
+  };
+
+  // Home hero: particles assemble into PLT, scatter from the pointer, settle back.
+  const word = document.querySelector('[data-particles]');
+  if (word) {
+    const ctx = word.getContext('2d');
+    let W, H, ps = [], mx = -9999, my = -9999;
+    const build = () => {
+      [W, H] = sizeCanvas(word, ctx);
+      const copy = word.parentElement.querySelector('.hero-copy');
+      const room = Math.max(160, copy.getBoundingClientRect().top - word.getBoundingClientRect().top - 40);
+      const off = document.createElement('canvas'); off.width = W; off.height = H;
+      const o = off.getContext('2d');
+      o.font = '800 100px Manrope, Arial, sans-serif';
+      const ratio = o.measureText('PLT').width / 100;
+      const size = Math.min((room - 76) / 0.74, (W * (W < 600 ? 0.86 : 0.62)) / ratio);
+      o.font = `800 ${size}px Manrope, Arial, sans-serif`;
+      const tw = o.measureText('PLT').width, x0 = (W - tw) / 2;
+      const y0 = Math.max(56, (room - size * 0.74) / 2 + 20) + size * 0.74;
+      o.fillStyle = '#fff'; o.fillText('PLT', x0, y0);
+      const data = o.getImageData(0, 0, W, H).data;
+      const step = W < 600 ? 6 : 8;
+      const old = ps; ps = [];
+      for (let y = 0; y < H; y += step) for (let x = 0; x < W; x += step) {
+        if (data[(y * W + x) * 4 + 3] > 128) {
+          const p = old[ps.length] || { x: Math.random() * W, y: Math.random() * H, vx: 0, vy: 0 };
+          p.tx = x; p.ty = y; p.r = Math.random() < 0.25 ? 3.2 : 2.3;
+          p.col = Math.random() < 0.12 ? '#fff6e8' : mix((x - x0) / tw);
+          ps.push(p);
+        }
+      }
+      for (let i = 0; i < (W < 600 ? 60 : 140); i++) ps.push({ x: Math.random() * W, y: Math.random() * H, vx: 0, vy: 0, tx: Math.random() * W, ty: Math.random() * H, dust: true, r: 1.2, col: 'rgba(255, 220, 200, .32)' });
+    };
+    const paint = () => { ctx.clearRect(0, 0, W, H); for (const p of ps) { ctx.fillStyle = p.col; ctx.fillRect(p.x - p.r / 2, p.y - p.r / 2, p.r, p.r); } };
+    const frame = () => {
+      for (const p of ps) {
+        if (p.dust) { p.ty -= 0.15; if (p.ty < 0) p.ty = H; }
+        const dx = p.x - mx, dy = p.y - my, d2 = dx * dx + dy * dy;
+        if (!p.dust && d2 < 13000) { const f = (13000 - d2) / 13000 * 3.2; const d = Math.sqrt(d2) || 1; p.vx += dx / d * f; p.vy += dy / d * f; }
+        p.vx += (p.tx - p.x) * 0.022; p.vy += (p.ty - p.y) * 0.022; p.vx *= 0.86; p.vy *= 0.86; p.x += p.vx; p.y += p.vy;
+      }
+      paint();
+      requestAnimationFrame(frame);
+    };
+    const hero = word.parentElement;
+    hero.addEventListener('pointermove', (e) => { const r = word.getBoundingClientRect(); mx = e.clientX - r.left; my = e.clientY - r.top; });
+    hero.addEventListener('pointerleave', () => { mx = my = -9999; });
+    window.addEventListener('resize', build);
+    (document.fonts ? document.fonts.ready : Promise.resolve()).then(() => {
+      build();
+      if (reduce) { ps.forEach((p) => { p.x = p.tx; p.y = p.ty; }); paint(); } else frame();
     });
-    const settle = () => {
-      tiles.classList.remove('is-chaos');
-      items.forEach((el) => ['--tx', '--ty', '--tr', '--ts'].forEach((p) => el.style.removeProperty(p)));
-    };
-    const play = (instant) => {
-      if (instant) tiles.classList.add('no-anim');
-      tiles.classList.add('is-chaos');
-      scatter();
-      if (instant) { tiles.getBoundingClientRect(); tiles.classList.remove('no-anim'); }
-      setTimeout(settle, instant ? 450 : 900);
-    };
-    if (!reduce) play(true);
-    tiles.addEventListener('click', () => { if (!reduce) play(false); });
   }
+
+  // Inner pages: a slow drift of warm particles behind the title.
+  document.querySelectorAll('[data-dust]').forEach((c) => {
+    const ctx = c.getContext('2d');
+    let W, H, ps = [];
+    const build = () => {
+      [W, H] = sizeCanvas(c, ctx);
+      const n = Math.round(W * H / 5200);
+      ps = Array.from({ length: n }, () => ({ x: Math.random() * W, y: Math.random() * H, s: 0.15 + Math.random() * 0.35, r: Math.random() < 0.2 ? 2.6 : 1.6, col: mix(Math.random()), a: 0.25 + Math.random() * 0.55 }));
+    };
+    const paint = () => {
+      ctx.clearRect(0, 0, W, H);
+      for (const p of ps) { ctx.globalAlpha = p.a * Math.min(1, p.x / (W * 0.45)); ctx.fillStyle = p.col; ctx.fillRect(p.x, p.y, p.r, p.r); }
+      ctx.globalAlpha = 1;
+    };
+    const frame = () => { for (const p of ps) { p.y -= p.s; if (p.y < -4) { p.y = H + 4; p.x = Math.random() * W; } } paint(); requestAnimationFrame(frame); };
+    window.addEventListener('resize', build);
+    build();
+    if (reduce) paint(); else frame();
+  });
 
   // Example board: the visitor switches between the mess and the sorted table.
   const toggle = document.querySelector('[data-board-toggle]');

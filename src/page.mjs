@@ -17,13 +17,13 @@ const icon = {
   mail: svg('<rect x="3.5" y="5.5" width="17" height="13" rx="2"/><path d="M4 7l8 6 8-6"/>'),
 };
 
-// One Truchet tile: two quarter discs in opposite corners. Rotated tiles join into circles.
-const tile = (bg, fg) => `<svg viewBox="0 0 100 100" aria-hidden="true"><rect width="100" height="100" fill="${bg}"/><path d="M0 0H50A50 50 0 0 1 0 50Z" fill="${fg}"/><path d="M100 100H50A50 50 0 0 1 100 50Z" fill="${fg}"/></svg>`;
-const logo = `<span class="logo" aria-hidden="true">${tile('var(--cobalt)', 'var(--plaster)')}</span>`;
+// Logo mark: a 3x3 dot grid in the particle colours.
+const DOT_COLORS = ['#ffb547', '#ffa04f', '#ff8a56', '#ff8a56', '#ff6f5b', '#ff7d8a', '#ff7d8a', '#ff8fc8', '#ff8fc8'];
+const logo = `<svg class="logo" viewBox="0 0 30 30" aria-hidden="true">${DOT_COLORS.map((c, i) => `<circle cx="${5 + (i % 3) * 10}" cy="${5 + Math.floor(i / 3) * 10}" r="${i === 4 ? 4 : 3.2}" fill="${c}"/>`).join('')}</svg>`;
 
 export const PAGES = ['home', 'services', 'process', 'prices', 'contacts'];
 const FILE = { home: 'index.html', services: 'services.html', process: 'process.html', prices: 'prices.html', contacts: 'contacts.html', privacy: 'privacy.html' };
-const FONTS = 'https://fonts.googleapis.com/css2?family=Geologica:slnt,wght,CRSV,SHRP@-12..0,100..900,0..1,0..100&display=swap';
+const FONTS = 'https://fonts.googleapis.com/css2?family=Manrope:wght@400..800&display=swap';
 
 // Link to a page in the current language (index.html is written as the folder itself).
 const href = (ctx, page) => `${ctx.root}${ctx.langPath}${page === 'home' ? '' : FILE[page]}` || './';
@@ -42,7 +42,7 @@ function head(ctx, { title, description }) {
   <link rel="canonical" href="${url}">
   ${LANGS.map((l) => `<link rel="alternate" hreflang="${l.code}" href="${SITE.url}/${l.path}${file}">`).join('\n  ')}
   <link rel="alternate" hreflang="x-default" href="${SITE.url}/${file}">
-  <meta name="theme-color" content="#1b3f96">
+  <meta name="theme-color" content="#1b1243">
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="PLT GROUP">
   <meta property="og:title" content="${esc(title)}">
@@ -124,14 +124,12 @@ ${body}
 </main>
 ${footer(ctx)}`;
 
-// Inner page opening: title, lead and a strip of four tiles as the page mark.
+// Inner page opening: title and lead over a slow field of particles.
 const pageHead = (title, lead) => `<section class="page-head">
-    <div class="wrap page-head-grid">
-      <div>
-        <h1>${esc(title)}</h1>
-        <p class="lead">${esc(lead)}</p>
-      </div>
-      <div class="tile-strip" aria-hidden="true">${[0, 1, 2, 3].map((i) => `<span style="--r:${i % 2 ? 90 : 0}deg">${tile(i === 2 ? 'var(--turquoise)' : 'var(--cobalt)', 'var(--plaster)')}</span>`).join('')}</div>
+    <canvas class="page-dust" data-dust aria-hidden="true"></canvas>
+    <div class="wrap">
+      <h1>${esc(title)}</h1>
+      <p class="lead">${esc(lead)}</p>
     </div>
   </section>`;
 
@@ -139,7 +137,7 @@ const ctaBand = (ctx) => `<section class="cta-band">
     <div class="wrap cta-grid">
       <h2>${esc(ctx.t.home.ctaTitle)}</h2>
       <p>${esc(ctx.t.home.ctaText)}</p>
-      <a class="btn btn--ink" href="${href(ctx, 'contacts')}">${esc(ctx.t.home.ctaButton)}</a>
+      <a class="btn btn--dark" href="${href(ctx, 'contacts')}">${esc(ctx.t.home.ctaButton)}</a>
     </div>
   </section>`;
 
@@ -158,26 +156,18 @@ function board(b) {
         </div>`;
 }
 
-// Hero tiles: 4×4. Colours per tile: mostly white with cobalt, a few accents.
-const TILE_COLORS = ['p', 'p', 'p', 't', 'p', 's', 'p', 'p', 'p', 'p', 'c', 'p', 't', 'p', 'p', 'p'];
-const tileFor = (k) => ({ p: tile('var(--plaster)', 'var(--cobalt)'), t: tile('var(--turquoise)', 'var(--cobalt)'), s: tile('var(--saffron)', 'var(--cobalt)'), c: tile('var(--cobalt-deep)', 'var(--plaster)') }[k]);
-
 export function home(ctx) {
   const t = ctx.t, h = t.home;
   const body = `  <section class="hero">
-    <div class="wrap hero-grid">
-      <div class="hero-copy">
-        <h1 class="hero-title">${esc(h.title)}</h1>
-        <p class="lead">${esc(h.lead)}</p>
-        <div class="hero-cta">
-          <a class="btn btn--saffron" href="${href(ctx, 'contacts')}">${esc(h.primary)}</a>
-          <a class="btn btn--outline" href="${href(ctx, 'prices')}">${esc(h.secondary)}</a>
-        </div>
-        <p class="hero-note">${esc(h.note)}</p>
+    <canvas class="hero-canvas" data-particles aria-hidden="true"></canvas>
+    <div class="wrap hero-copy">
+      <h1 class="hero-title">${esc(h.title)}</h1>
+      <p class="lead">${esc(h.lead)}</p>
+      <div class="hero-cta">
+        <a class="btn btn--amber" href="${href(ctx, 'contacts')}">${esc(h.primary)}</a>
+        <a class="btn btn--outline" href="${href(ctx, 'prices')}">${esc(h.secondary)}</a>
       </div>
-      <button class="tiles" type="button" data-tiles aria-label="${esc(h.tiles)}">
-        ${TILE_COLORS.map((k, i) => `<span class="tile" style="--r:${((Math.floor(i / 4) + i) % 2) * 90}deg">${tileFor(k)}</span>`).join('')}
-      </button>
+      <p class="hero-note">${esc(h.note)}</p>
     </div>
   </section>
 
@@ -202,7 +192,7 @@ export function home(ctx) {
       <div class="example-copy">
         <h2>${esc(h.exampleTitle)}</h2>
         <p>${esc(h.exampleText)}</p>
-        <button class="btn btn--cobalt" type="button" data-board-toggle data-on="${esc(h.exampleOn)}" data-off="${esc(h.exampleOff)}">${esc(h.exampleOn)}</button>
+        <button class="btn btn--amber" type="button" data-board-toggle data-on="${esc(h.exampleOn)}" data-off="${esc(h.exampleOff)}">${esc(h.exampleOn)}</button>
         <p class="small">${esc(h.exampleNote)}</p>
       </div>
       ${board(t.board)}
@@ -237,7 +227,7 @@ export function services(ctx) {
       <dl class="svc-meta">
         <div><dt>${esc(l.price)}</dt><dd>${esc(i.price)}</dd></div>
         <div><dt>${esc(l.term)}</dt><dd>${esc(i.term)}</dd></div>
-        <a class="btn btn--cobalt btn--small" href="${href(ctx, 'contacts')}?service=${i.id}">${esc(l.cta)}</a>
+        <a class="btn btn--amber btn--small" href="${href(ctx, 'contacts')}?service=${i.id}">${esc(l.cta)}</a>
       </dl>
     </article>`).join('\n    ')}
   </div>
@@ -262,7 +252,7 @@ export function process(ctx) {
   <section class="section rules">
     <div class="wrap">
       <h2>${esc(p.principlesTitle)}</h2>
-      <ul class="rules-grid">${p.principles.map((r, i) => `<li><span class="rule-tile" style="--r:${i * 90}deg">${tile('var(--plaster)', 'var(--cobalt)')}</span><strong>${esc(r[0])}</strong><span>${esc(r[1])}</span></li>`).join('')}</ul>
+      <ul class="rules-grid">${p.principles.map((r, i) => `<li><span class="rule-dot" style="--c:var(--c${i + 1})"></span><strong>${esc(r[0])}</strong><span>${esc(r[1])}</span></li>`).join('')}</ul>
     </div>
   </section>
   <section class="section">
@@ -305,7 +295,7 @@ export function prices(ctx) {
             <span class="plan-price">${esc(x.price)}</span><span class="plan-per">${esc(p.perMonth)}</span>
           </th>`).join('')}</tr></thead>
           <tbody>${p.rows.map((r) => `<tr><th scope="row">${esc(r[0])}</th>${r.slice(1).map((v, i) => `<td${p.plans[i].featured ? ' class="is-featured"' : ''}>${v === true ? icon.check : v === null ? `<span class="no">${esc(p.no)}</span>` : esc(v)}</td>`).join('')}</tr>`).join('')}</tbody>
-          <tfoot><tr><td></td>${p.plans.map((x) => `<td${x.featured ? ' class="is-featured"' : ''}><a class="btn btn--small ${x.featured ? 'btn--saffron' : 'btn--line'}" href="${href(ctx, 'contacts')}?service=support">${esc(p.choose)}</a></td>`).join('')}</tr></tfoot>
+          <tfoot><tr><td></td>${p.plans.map((x) => `<td${x.featured ? ' class="is-featured"' : ''}><a class="btn btn--small ${x.featured ? 'btn--amber' : 'btn--line'}" href="${href(ctx, 'contacts')}?service=support">${esc(p.choose)}</a></td>`).join('')}</tr></tfoot>
         </table>
       </div>
       <p class="small payment">${esc(p.payment)}</p>
@@ -340,7 +330,7 @@ export function contacts(ctx) {
         <div class="field"><label for="f-contact">${esc(f.contact)}</label><input id="f-contact" name="contact" autocomplete="tel" inputmode="tel" placeholder="+998" required><span class="error">${esc(f.required)}</span></div>
         <div class="field"><label for="f-service">${esc(f.service)}</label><select id="f-service" name="service">${f.services.map((x, i) => `<option value="${esc(x)}" data-id="${ids[i]}">${esc(x)}</option>`).join('')}</select></div>
         <div class="field"><label for="f-task">${esc(f.task)}</label><textarea id="f-task" name="task" rows="4" placeholder="${esc(f.taskHint)}"></textarea></div>
-        <button class="btn btn--cobalt btn--block" type="submit">${icon.whatsapp}${esc(f.submit)}</button>
+        <button class="btn btn--amber btn--block" type="submit">${icon.whatsapp}${esc(f.submit)}</button>
         <p class="small form-note">${esc(f.note)}</p>
       </form>
     </div>
@@ -367,8 +357,8 @@ export function notFound(ctx) {
 <html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>${esc(n.title)} | PLT GROUP</title><meta name="robots" content="noindex">
 <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml"><link rel="stylesheet" href="${FONTS}"><link rel="stylesheet" href="/assets/styles.css"></head>
 <body class="page-404"><main class="nf"><div class="wrap">
-<span class="logo nf-logo" aria-hidden="true">${tile('var(--plaster)', 'var(--cobalt)')}</span>
-<h1>${esc(n.title)}</h1><p class="lead">${esc(n.text)}</p><a class="btn btn--saffron" href="/">${esc(n.home)}</a>
+<span class="nf-logo">${logo}</span>
+<h1>${esc(n.title)}</h1><p class="lead">${esc(n.text)}</p><a class="btn btn--amber" href="/">${esc(n.home)}</a>
 </div></main></body></html>
 `;
 }
