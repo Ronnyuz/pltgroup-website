@@ -136,3 +136,19 @@ textarea.input { min-height: 84px; resize: vertical; line-height: 1.5; }
 }
 .topbar-close { display: none; }
 @media (max-width: 860px) { .topbar-close { display: inline-flex; } }
+
+/* Price list */
+.price-table { display: grid; gap: 8px; }
+.price-row { display: grid; grid-template-columns: minmax(160px, 1.2fr) repeat(3, 1fr); gap: 10px; align-items: center; }
+.price-row--sub { margin-top: -2px; margin-bottom: 10px; }
+.price-row--sub .input { min-height: 36px; font-size: 14px; color: var(--muted); }
+.price-head span { font-size: 12px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: .04em; }
+.price-label { font-weight: 700; display: grid; }
+.price-lang { display: none; }
+.price-label small { font-weight: 500; color: var(--faint); font-size: 12px; }
+@media (max-width: 860px) {
+  .price-head { display: none; }
+  .price-row { grid-template-columns: 1fr; gap: 6px; }
+  .price-cell { display: grid; grid-template-columns: 34px 1fr; align-items: center; gap: 8px; }
+  .price-lang { display: block !important; font-size: 12px; font-weight: 700; color: var(--faint); }
+}

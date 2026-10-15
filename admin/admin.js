@@ -101,7 +101,8 @@
   // ---------- Shell ----------
   const SECTIONS = [
     { id: 'leads', title: 'Заявки', ok: () => can('leads') },
-    { id: 'content', title: 'Тексты и цены', ok: () => can('content') },
+    { id: 'prices', title: 'Прайс', ok: () => can('content') },
+    { id: 'content', title: 'Тексты', ok: () => can('content') },
     { id: 'posts', title: 'Кейсы и новости', ok: () => can('posts') },
     { id: 'users', title: 'Сотрудники', ok: () => me.role === 'owner' },
     { id: 'profile', title: 'Мой профиль', ok: () => true },
@@ -140,7 +141,7 @@
     const section = allowed.find((s) => s.id === id) || allowed[0];
     if (section.id !== id) history.replaceState(null, '', `#${section.id}`);
     lastHash = location.hash;
-    ({ leads: viewLeads, content: viewContent, posts: arg ? (a) => viewPost(a) : viewPosts, users: viewUsers, profile: viewProfile })[section.id](arg);
+    ({ leads: viewLeads, prices: viewPrices, content: viewContent, posts: arg ? (a) => viewPost(a) : viewPosts, users: viewUsers, profile: viewProfile })[section.id](arg);
   }
 
   // ---------- Leads ----------
@@ -232,7 +233,7 @@
   const refCache = {};
   async function viewContent() {
     const tab = contentTab;
-    shell('content', head('Тексты и цены', 'Изменения сохраняются в репозиторий сайта. Сайт обновляется сам через 1–2 минуты.'), h('p', { class: 'muted' }, 'Загрузка…'));
+    shell('content', head('Тексты', 'Изменения сохраняются в репозиторий сайта. Сайт обновляется сам через 1–2 минуты.'), h('p', { class: 'muted' }, 'Загрузка…'));
     let file, ref = null;
     try {
       file = await api('GET', `/api/content/${tab}`);
@@ -322,8 +323,52 @@
         Object.keys(GROUPS).filter((g) => draft[g]).map((g, i) => h('details', { class: 'group', open: i === 0 && tab === 'ru' ? true : null },
           h('summary', null, GROUPS[g]), h('div', { class: 'group-body' }, node([g], g)))));
     }
-    shell('content', head('Тексты и цены', 'Изменения сохраняются в репозиторий сайта. Сайт обновляется сам через 1–2 минуты.'),
+    shell('content', head('Тексты', 'Изменения сохраняются в репозиторий сайта. Сайт обновляется сам через 1–2 минуты.'),
       h('div', { class: 'editor-bar' }, tabs, h('div', { class: 'lead-actions' }, state, saveBtn)), body);
+  }
+
+  // ---------- Price list: every price on one screen, all three languages side by side ----------
+  async function viewPrices() {
+    const title = 'Прайс';
+    const lead = 'Все цены сайта на одном экране. На каждом языке цена пишется по-своему: «от $400», «$400 dan», «from $400».';
+    shell('prices', head(title, lead), h('p', { class: 'muted' }, 'Загрузка…'));
+    const files = {};
+    try {
+      for (const l of Object.keys(LANGS)) files[l] = await api('GET', `/api/content/${l}`);
+    } catch (e) { loadFailed(e); return; }
+    const changed = new Set();
+    const state = h('span', { class: 'muted small' }, 'Изменений нет');
+    const saveBtn = h('button', { class: 'btn btn--dark', type: 'button', disabled: true }, 'Сохранить');
+    const mark = (l) => { changed.add(l); dirty = true; saveBtn.disabled = false; state.replaceChildren(h('span', { class: 'dirty-dot' }), 'Есть несохранённые изменения'); };
+    saveBtn.onclick = () => run(saveBtn, async () => {
+      for (const l of [...changed]) {
+        const out = await api('PUT', `/api/content/${l}`, { data: files[l].data, sha: files[l].sha });
+        files[l].sha = out.sha; changed.delete(l);
+      }
+      dirty = false; saveBtn.disabled = true; refCache.ru = structuredClone(files.ru.data);
+      state.textContent = 'Сохранено. Сайт обновится через 1–2 минуты.';
+      toast('Сохранено. Сайт обновится через 1–2 минуты.');
+    });
+    // One table row: a label and an input per language bound to get(data) -> object, key.
+    const cellInput = (l, obj, key) => h('label', { class: 'price-cell' }, h('span', { class: 'price-lang' }, l.toUpperCase()),
+      h('input', { class: 'input', value: obj[key], 'aria-label': LANGS[l], oninput: (e) => { obj[key] = e.target.value; mark(l); } }));
+    const table = (heads, rows) => h('div', { class: 'price-table' },
+      h('div', { class: 'price-row price-head' }, heads.map((x) => h('span', null, x))),
+      rows);
+    const langs = Object.keys(LANGS);
+    const services = files.ru.data.services.items.map((item, i) => [
+      h('div', { class: 'price-row' }, h('span', { class: 'price-label' }, item.title, h('small', null, 'цена')), langs.map((l) => cellInput(l, files[l].data.services.items[i], 'price'))),
+      h('div', { class: 'price-row price-row--sub' }, h('span', { class: 'price-label' }, h('small', null, 'срок')), langs.map((l) => cellInput(l, files[l].data.services.items[i], 'term'))),
+    ]);
+    const plans = files.ru.data.prices.plans.map((plan, i) =>
+      h('div', { class: 'price-row' }, h('span', { class: 'price-label' }, plan.name, h('small', null, plan.for)), langs.map((l) => cellInput(l, files[l].data.prices.plans[i], 'price'))));
+    const heads = ['', ...langs.map((l) => LANGS[l])];
+    shell('prices', head(title, lead),
+      h('div', { class: 'editor-bar' }, h('span'), h('div', { class: 'lead-actions' }, state, saveBtn)),
+      h('div', { class: 'stack' },
+        h('div', { class: 'card' }, h('h2', { style: 'margin-bottom:14px' }, 'Услуги'), table(heads, services)),
+        h('div', { class: 'card' }, h('h2', { style: 'margin-bottom:4px' }, 'Поддержка после запуска'), h('p', { class: 'muted small', style: 'margin-bottom:14px' }, 'Цена в месяц. Подпись «в месяц» добавляется сама.'), table(heads, plans)),
+        h('p', { class: 'muted small' }, 'Описания услуг, что входит в тарифы и остальные тексты меняются в разделе «Тексты».')));
   }
 
   // ---------- Cases and news ----------
