@@ -14,8 +14,11 @@
   document.addEventListener('keydown', (e) => { if (e.key === 'Escape') setMenu(false); });
   window.matchMedia('(min-width: 1061px)').addEventListener('change', (m) => { if (m.matches) setMenu(false); });
 
-  // Warm particle palette: amber → coral → pink.
-  const STOPS = [[255, 181, 71], [255, 111, 91], [255, 143, 200]];
+  // Particle palette comes from the theme colours --c1, --c2, --c3 in styles.css.
+  const hex = (v) => { v = v.trim().replace('#', ''); return [0, 2, 4].map((i) => parseInt(v.slice(i, i + 2), 16)); };
+  let STOPS = [];
+  const readStops = () => { const cs = getComputedStyle(document.documentElement); STOPS = ['--c1', '--c2', '--c3'].map((n) => hex(cs.getPropertyValue(n))); };
+  readStops();
   const mix = (k) => {
     k = Math.min(0.999, Math.max(0, k)) * (STOPS.length - 1);
     const i = Math.floor(k), f = k - i, a = STOPS[i], b = STOPS[i + 1];
@@ -53,11 +56,11 @@
         if (data[(y * W + x) * 4 + 3] > 128) {
           const p = old[ps.length] || { x: Math.random() * W, y: Math.random() * H, vx: 0, vy: 0 };
           p.tx = x; p.ty = y; p.r = Math.random() < 0.25 ? 3.2 : 2.3;
-          p.col = Math.random() < 0.12 ? '#fff6e8' : mix((x - x0) / tw);
+          p.col = Math.random() < 0.12 ? 'rgba(255, 255, 255, .92)' : mix((x - x0) / tw);
           ps.push(p);
         }
       }
-      for (let i = 0; i < (W < 600 ? 60 : 140); i++) ps.push({ x: Math.random() * W, y: Math.random() * H, vx: 0, vy: 0, tx: Math.random() * W, ty: Math.random() * H, dust: true, r: 1.2, col: 'rgba(255, 220, 200, .32)' });
+      for (let i = 0; i < (W < 600 ? 60 : 140); i++) ps.push({ x: Math.random() * W, y: Math.random() * H, vx: 0, vy: 0, tx: Math.random() * W, ty: Math.random() * H, dust: true, r: 1.2, col: mix(Math.random()).replace('rgb', 'rgba').replace(')', ',.32)') });
     };
     const paint = () => { ctx.clearRect(0, 0, W, H); for (const p of ps) { ctx.fillStyle = p.col; ctx.fillRect(p.x - p.r / 2, p.y - p.r / 2, p.r, p.r); } };
     const frame = () => {
@@ -74,6 +77,7 @@
     hero.addEventListener('pointermove', (e) => { const r = word.getBoundingClientRect(); mx = e.clientX - r.left; my = e.clientY - r.top; });
     hero.addEventListener('pointerleave', () => { mx = my = -9999; });
     window.addEventListener('resize', build);
+    window.addEventListener('plt:palette', () => { readStops(); build(); if (reduce) { ps.forEach((p) => { p.x = p.tx; p.y = p.ty; }); paint(); } });
     (document.fonts ? document.fonts.ready : Promise.resolve()).then(() => {
       build();
       if (reduce) { ps.forEach((p) => { p.x = p.tx; p.y = p.ty; }); paint(); } else frame();

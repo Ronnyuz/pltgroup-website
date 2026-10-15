@@ -18,7 +18,7 @@ const icon = {
 };
 
 // Logo mark: a 3x3 dot grid in the particle colours.
-const DOT_COLORS = ['#ffb547', '#ffa04f', '#ff8a56', '#ff8a56', '#ff6f5b', '#ff7d8a', '#ff7d8a', '#ff8fc8', '#ff8fc8'];
+const DOT_COLORS = ['var(--c1)', 'var(--c1)', 'var(--c2)', 'var(--c1)', 'var(--c2)', 'var(--c3)', 'var(--c2)', 'var(--c3)', 'var(--c3)'];
 const logo = `<svg class="logo" viewBox="0 0 30 30" aria-hidden="true">${DOT_COLORS.map((c, i) => `<circle cx="${5 + (i % 3) * 10}" cy="${5 + Math.floor(i / 3) * 10}" r="${i === 4 ? 4 : 3.2}" fill="${c}"/>`).join('')}</svg>`;
 
 export const PAGES = ['home', 'services', 'process', 'prices', 'contacts'];
