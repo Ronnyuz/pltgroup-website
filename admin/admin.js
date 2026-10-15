@@ -486,7 +486,19 @@
       run(btn, async () => { await api('POST', '/api/auth/password', { current: cur.value, next: next.value }); form.reset(); toast('Пароль изменён. На других устройствах нужно войти заново.'); });
     } }, h('h2', { style: 'margin-bottom:16px' }, 'Смена пароля'),
     field('Текущий пароль', cur), field('Новый пароль', next, 'Не короче 8 символов'), field('Повторите новый пароль', again), btn);
-    shell('profile', head('Мой профиль', `${me.name || me.login} · логин ${me.login}`), form);
+    const pName = h('input', { class: 'input', value: me.name === 'Владелец' ? '' : me.name, placeholder: 'Как вас называть в панели' });
+    const pLogin = h('input', { class: 'input', value: me.login, autocapitalize: 'none', autocomplete: 'username' });
+    const pCur = h('input', { class: 'input', type: 'password', autocomplete: 'current-password' });
+    const pBtn = h('button', { class: 'btn btn--dark', type: 'submit' }, 'Сохранить');
+    const profile = h('form', { class: 'card', style: 'max-width:440px', onsubmit: (e) => {
+      e.preventDefault();
+      run(pBtn, async () => {
+        me = (await api('POST', '/api/auth/profile', { login: pLogin.value, name: pName.value, current: pCur.value })).user;
+        toast(`Сохранено. Ваш логин теперь: ${me.login}`); viewProfile();
+      });
+    } }, h('h2', { style: 'margin-bottom:16px' }, 'Логин и имя'),
+    field('Имя', pName), field('Логин', pLogin, 'Латиница, цифры, точка или дефис, от 3 символов'), field('Текущий пароль', pCur, 'Для подтверждения'), pBtn);
+    shell('profile', head('Мой профиль', `${me.name && me.name !== 'Владелец' ? me.name + ' · ' : ''}логин ${me.login}`), h('div', { class: 'stack' }, profile, form));
   }
 
   // ---------- Start ----------
