@@ -56,7 +56,7 @@
         if (data[(y * W + x) * 4 + 3] > 128) {
           const p = old[ps.length] || { x: Math.random() * W, y: Math.random() * H, vx: 0, vy: 0 };
           p.tx = x; p.ty = y; p.r = Math.random() < 0.25 ? 3.2 : 2.3;
-          p.col = Math.random() < 0.12 ? 'rgba(255, 255, 255, .92)' : mix((x - x0) / tw);
+          p.col = mix((x - x0) / tw);
           ps.push(p);
         }
       }
