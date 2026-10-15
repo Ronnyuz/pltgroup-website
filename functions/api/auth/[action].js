@@ -1,5 +1,5 @@
 // /api/auth/login, /api/auth/logout, /api/auth/me, /api/auth/password
-import { body, checkPassword, clearFailures, createSession, currentUser, db, endSession, fail, hashPassword, json, noteFailure, publicUser, requireUser, sameOrigin, tooManyFailures, validPassword } from '../../_lib/core.js';
+import { body, checkPassword, clip, clearFailures, createSession, currentUser, db, endSession, fail, hashPassword, json, noteFailure, publicUser, requireUser, sameOrigin, tooManyFailures, validPassword } from '../../_lib/core.js';
 
 export async function onRequest({ request, env, params }) {
   const action = params.action;
@@ -45,6 +45,19 @@ export async function onRequest({ request, env, params }) {
     await d.prepare('UPDATE users SET pass_hash = ?, salt = ? WHERE id = ?').bind(hash, salt, user.id).run();
     await d.prepare('DELETE FROM sessions WHERE user_id = ?').bind(user.id).run();
     return json({ ok: true }, 200, { 'set-cookie': await createSession(env, user.id) });
+  }
+  // Change own login and display name; the current password confirms it.
+  if (action === 'profile') {
+    const { user, error } = await requireUser(request, env);
+    if (error) return error;
+    const b = await body(request) || {};
+    if (!(await checkPassword(String(b.current || ''), user))) return fail(400, 'Текущий пароль указан неверно.');
+    const login = clip(b.login, 60).toLowerCase();
+    if (!/^[a-z0-9._-]{3,60}$/.test(login)) return fail(400, 'Логин: от 3 символов, латиница, цифры, точка, дефис.');
+    const d = await db(env);
+    if (await d.prepare('SELECT id FROM users WHERE login = ? AND id != ?').bind(login, user.id).first()) return fail(400, 'Такой логин уже занят.');
+    await d.prepare('UPDATE users SET login = ?, name = ? WHERE id = ?').bind(login, clip(b.name, 120), user.id).run();
+    return json({ user: publicUser(await d.prepare('SELECT * FROM users WHERE id = ?').bind(user.id).first()) });
   }
   return fail(404, 'not found');
 }
