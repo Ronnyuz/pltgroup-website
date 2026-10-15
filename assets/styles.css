@@ -147,7 +147,7 @@ svg { display: block; max-width: 100%; }
 .board.is-order .board-cols { opacity: 1; }
 
 /* CTA band */
-.cta-band { background: linear-gradient(100deg, var(--c1), var(--c2) 55%, var(--c3)); color: var(--on-amber); padding-block: clamp(52px, 7vw, 92px); }
+.cta-band { background: linear-gradient(100deg, var(--c1), var(--c2) 55%, var(--c3)); color: var(--bg); padding-block: clamp(52px, 7vw, 92px); }
 .cta-grid { display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr) auto; gap: 24px 48px; align-items: end; }
 .cta-band h2 { font-size: clamp(30px, 3.6vw, 46px); font-weight: 800; }
 .cta-band p { max-width: 26em; font-weight: 600; }
