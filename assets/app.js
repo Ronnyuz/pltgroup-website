@@ -130,6 +130,13 @@
     else select();
   }));
 
+  // Where the visitor came from: ?utm_source=instagram on any page is kept for the request form.
+  try {
+    const src = new URLSearchParams(location.search).get('utm_source');
+    if (src) localStorage.setItem('plt_source', src.slice(0, 40));
+  } catch (err) { /* storage blocked */ }
+  const source = () => { try { return localStorage.getItem('plt_source') || ''; } catch (err) { return ''; } };
+
   // Request form. ?service=crm preselects the service. Saves the request, then opens WhatsApp with a prepared message.
   const form = document.querySelector('[data-form]');
   if (form) {
@@ -152,7 +159,7 @@
       // Keep a copy of the request for the team; WhatsApp opens regardless of the result.
       const lead = Object.fromEntries(['name', 'contact', 'service', 'task', 'website'].map((k) => [k, String(data.get(k) || '').trim()]));
       try {
-        fetch('/api/lead', { method: 'POST', keepalive: true, headers: { 'content-type': 'application/json' }, body: JSON.stringify({ ...lead, lang: form.dataset.lang, page: location.pathname }) }).catch(() => {});
+        fetch('/api/lead', { method: 'POST', keepalive: true, headers: { 'content-type': 'application/json' }, body: JSON.stringify({ ...lead, lang: form.dataset.lang, page: location.pathname, source: source() }) }).catch(() => {});
       } catch (err) { /* old browsers */ }
       const label = (name) => form.querySelector(`[name="${name}"]`).closest('.field').querySelector('label').textContent;
       const lines = [form.dataset.intro, ''];
