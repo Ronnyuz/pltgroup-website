@@ -6,6 +6,8 @@
 //   GITHUB_TOKEN    secret, token with "Contents: read and write" on the site repository
 //   GITHUB_REPO     variable, e.g. "Ronnyuz/pltgroup-website"
 //   GITHUB_BRANCH   variable, default "main"
+//   ANTHROPIC_API_KEY secret, for the site consultant (/api/chat)
+//   CHAT_MODEL      variable, optional, model for the consultant
 
 export const PERMS = ['leads', 'content', 'posts'];
 const SESSION_DAYS = 14;
@@ -24,6 +26,8 @@ const SCHEMA = [
   `CREATE TABLE IF NOT EXISTS sessions (token_hash TEXT PRIMARY KEY, user_id INTEGER NOT NULL, expires_at TEXT NOT NULL)`,
   `CREATE TABLE IF NOT EXISTS leads (id INTEGER PRIMARY KEY AUTOINCREMENT, created_at TEXT NOT NULL DEFAULT (datetime('now')), name TEXT, contact TEXT, service TEXT, task TEXT, lang TEXT, page TEXT, status TEXT NOT NULL DEFAULT 'new', note TEXT NOT NULL DEFAULT '', updated_by TEXT)`,
   `CREATE TABLE IF NOT EXISTS login_failures (key TEXT PRIMARY KEY, count INTEGER NOT NULL, first_at INTEGER NOT NULL)`,
+  `CREATE TABLE IF NOT EXISTS chats (id TEXT PRIMARY KEY, created_at TEXT NOT NULL DEFAULT (datetime('now')), updated_at TEXT NOT NULL DEFAULT (datetime('now')), lang TEXT, page TEXT, system TEXT NOT NULL, messages TEXT NOT NULL, turns INTEGER NOT NULL DEFAULT 0, lead_id INTEGER)`,
+  `CREATE TABLE IF NOT EXISTS chat_hits (key TEXT PRIMARY KEY, count INTEGER NOT NULL)`,
 ];
 let schemaReady = false;
 export async function db(env) {
