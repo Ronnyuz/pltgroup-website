@@ -51,6 +51,7 @@ const ru = {
       { name: 'Бизнес', for: 'Сайт, бот и CRM', price: 'от $150', featured: true, list: ['Всё из «Старта»', 'До 6 часов правок', 'Ежемесячный отчёт', 'Ответ за 2 часа'] },
       { name: 'Партнёр', for: 'С аналитикой', price: 'от $350', list: ['Всё из «Бизнеса»', 'До 15 часов правок', 'Еженедельный отчёт по цифрам', 'Приоритет'] },
     ],
+    rows: [['Хостинг, домен, резервные копии', true, true, true], ['Правки в месяц', 'до 2 часов', 'до 6 часов', 'до 15 часов'], ['Время ответа', 'в течение дня', '2 часа', '2 часа, вне очереди'], ['Мониторинг работы', null, true, true], ['Отчёт', null, 'раз в месяц', 'каждую неделю, с цифрами']],
     note: 'Цены в долларах для ориентира. В договоре — в сумах по курсу ЦБ.',
   },
   faq: {
@@ -140,6 +141,7 @@ const uz = {
       { name: 'Biznes', for: 'Sayt, bot va CRM', price: '$150 dan', featured: true, list: ['«Start»dagi hammasi', '6 soatgacha tuzatish', 'Oylik hisobot', '2 soatda javob'] },
       { name: 'Hamkor', for: 'Tahlil bilan', price: '$350 dan', list: ['«Biznes»dagi hammasi', '15 soatgacha tuzatish', 'Raqamlar bo‘yicha haftalik hisobot', 'Ustuvorlik'] },
     ],
+    rows: [['Hosting, domen, zaxira nusxalar', true, true, true], ['Oylik tuzatishlar', '2 soatgacha', '6 soatgacha', '15 soatgacha'], ['Javob vaqti', 'kun davomida', '2 soat', '2 soat, navbatsiz'], ['Ish monitoringi', null, true, true], ['Hisobot', null, 'oyiga bir marta', 'har hafta, raqamlar bilan']],
     note: 'Narxlar mo‘ljal uchun dollarda. Shartnomada — MB kursi bo‘yicha so‘mda.',
   },
   faq: {
@@ -229,6 +231,7 @@ const en = {
       { name: 'Business', for: 'Website, bot and CRM', price: 'from $150', featured: true, list: ['Everything in Start', 'Up to 6 hours of changes', 'Monthly report', 'Reply within 2 hours'] },
       { name: 'Partner', for: 'With analytics', price: 'from $350', list: ['Everything in Business', 'Up to 15 hours of changes', 'Weekly numbers report', 'Priority'] },
     ],
+    rows: [['Hosting, domain, backups', true, true, true], ['Changes per month', 'up to 2 hours', 'up to 6 hours', 'up to 15 hours'], ['Response time', 'within a day', '2 hours', '2 hours, priority'], ['Uptime monitoring', null, true, true], ['Report', null, 'monthly', 'weekly, with numbers']],
     note: 'Prices in US dollars for reference. Contracts are in UZS at the Central Bank rate.',
   },
   faq: {

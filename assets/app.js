@@ -48,8 +48,22 @@
   // Hero: cycle the coloured word.
   const swap = document.querySelector('[data-swap]');
   if (swap) {
-    const words = [...swap.children];
+    const words = [...swap.querySelectorAll('.swap-word')];
     let i = 0;
+    // The marker band under the word takes the width of the visible word.
+    const title = swap.closest('.hero-title');
+    const fit = () => swap.style.setProperty('--bw', `${words[i].getBoundingClientRect().width}px`);
+    // Shrink the headline when the longest word (Uzbek words run long) is wider than its column.
+    const fitTitle = () => {
+      title.style.fontSize = '';
+      const widest = Math.max(...words.map((w) => w.getBoundingClientRect().width));
+      const room = title.parentElement.clientWidth * 0.94;
+      if (widest > room) title.style.fontSize = `${parseFloat(getComputedStyle(title).fontSize) * room / widest}px`;
+      fit();
+    };
+    fitTitle();
+    if (document.fonts) document.fonts.ready.then(fitTitle);
+    window.addEventListener('resize', fitTitle);
     heroAccent = words[0].dataset.accent;
     if (!reduce && words.length > 1) {
       setInterval(() => {
@@ -60,6 +74,7 @@
         prev.classList.add('is-out');
         setTimeout(() => prev.classList.remove('is-out'), 800);
         words[i].classList.add('is-on');
+        fit();
         heroAccent = words[i].dataset.accent;
         if (!current || current.classList.contains('hero')) setAccent(heroAccent);
       }, 2600);

@@ -1,7 +1,13 @@
 // HTML templates. Text comes from src/i18n.mjs, contacts from src/site.mjs.
 import { SITE, LANGS } from './site.mjs';
 
-const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+// Escape HTML, then keep short words and dashes attached to the next word (Russian typography).
+const NB = /(^|[\s(«„"])(в|и|с|к|о|у|а|я|на|не|по|за|до|от|из|для|без|или|но|что|как|все|всё|мы|вы|их|a|an|in|on|of|to|by|va|bu)\s+/gi;
+const esc = (s) => {
+  let out = String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+  out = out.replace(NB, '$1$2\u00a0').replace(NB, '$1$2\u00a0');
+  return out.replace(/\s+—/g, '\u00a0—');
+};
 const svg = (d, cls = '') => `<svg class="ico ${cls}" viewBox="0 0 24 24" aria-hidden="true">${d}</svg>`;
 
 const icon = {
@@ -107,7 +113,7 @@ function heroTitle(h) {
   return `<h1 class="hero-title">
           <span class="sr">${esc(full)}</span>
           ${h.lines.map((l) => `<span class="ht-line" aria-hidden="true">${esc(l)}</span>`).join('')}
-          <span class="swap" data-swap aria-hidden="true">${h.words.map((w, i) =>
+          <span class="swap" data-swap aria-hidden="true"><span class="swap-band"></span>${h.words.map((w, i) =>
             `<span class="swap-word${i === 0 ? ' is-on' : ''}" data-accent="${w[1]}">${letters(w[0])}</span>`).join('')}</span>
           ${h.after.map((l) => `<span class="ht-line" aria-hidden="true">${esc(l)}</span>`).join('')}
         </h1>`;
@@ -159,7 +165,6 @@ ${header(t, ctx)}
     <div class="hero-bg" aria-hidden="true"></div>
     <div class="wrap hero-grid">
       <div class="hero-copy">
-        <p class="eyebrow">${esc(s.hero.eyebrow)}</p>
         ${heroTitle(s.hero)}
         <p class="hero-lead">${esc(s.hero.lead)}</p>
         <div class="hero-cta">
@@ -177,7 +182,6 @@ ${header(t, ctx)}
   <section class="services" id="services" data-accent="blue" aria-labelledby="services-title">
     <div class="wrap">
       <header class="sec-head">
-        <p class="eyebrow">${esc(s.services.eyebrow)}</p>
         <h2 id="services-title">${esc(s.services.title)}</h2>
       </header>
       <ul class="svc-list">
@@ -196,7 +200,6 @@ ${header(t, ctx)}
   <section class="process" id="process" data-accent="violet" aria-labelledby="process-title">
     <div class="wrap">
       <header class="sec-head">
-        <p class="eyebrow">${esc(s.process.eyebrow)}</p>
         <h2 id="process-title">${esc(s.process.title)}</h2>
       </header>
       <ol class="steps" data-steps>
@@ -218,19 +221,30 @@ ${header(t, ctx)}
     <div class="wrap">
       <header class="sec-head sec-head--row">
         <div>
-          <p class="eyebrow">${esc(s.pricing.eyebrow)}</p>
           <h2 id="pricing-title">${esc(s.pricing.title)}</h2>
         </div>
         <p class="sec-lead">${esc(s.pricing.lead)}</p>
       </header>
-      <div class="plans">
-        ${s.pricing.plans.map((p) => `<article class="plan${p.featured ? ' plan--featured' : ''}">
-          <header><h3>${esc(p.name)}</h3>${p.featured ? `<span class="plan-badge">${esc(s.pricing.popular)}</span>` : ''}</header>
-          <p class="plan-for">${esc(p.for)}</p>
-          <p class="plan-price">${esc(p.price)}<small>${esc(s.pricing.perMonth)}</small></p>
-          <ul>${p.list.map((x) => `<li>${icon.check}<span>${esc(x)}</span></li>`).join('')}</ul>
-          <a class="btn ${p.featured ? 'btn--accent' : 'btn--line'}" href="#contact" data-service="${esc(s.form.services.at(-1))}">${esc(s.pricing.cta)}</a>
-        </article>`).join('\n        ')}
+      <div class="plans-scroll">
+        <table class="plans">
+          <thead>
+            <tr>
+              <td></td>
+              ${s.pricing.plans.map((p) => `<th scope="col"${p.featured ? ' class="is-featured"' : ''}>
+                <span class="plan-name">${esc(p.name)}</span>
+                ${p.featured ? `<span class="plan-badge">${esc(s.pricing.popular)}</span>` : ''}
+                <span class="plan-for">${esc(p.for)}</span>
+                <span class="plan-price">${esc(p.price)}<small>${esc(s.pricing.perMonth)}</small></span>
+              </th>`).join('')}
+            </tr>
+          </thead>
+          <tbody>
+            ${s.pricing.rows.map((r) => `<tr><th scope="row">${esc(r[0])}</th>${r.slice(1).map((v, i) => `<td${s.pricing.plans[i].featured ? ' class="is-featured"' : ''}>${v === true ? icon.check : v === null ? '<span class="no">—</span>' : esc(v)}</td>`).join('')}</tr>`).join('\n            ')}
+          </tbody>
+          <tfoot>
+            <tr><td></td>${s.pricing.plans.map((p) => `<td${p.featured ? ' class="is-featured"' : ''}><a class="btn ${p.featured ? 'btn--accent' : 'btn--line'} btn--small" href="#contact" data-service="${esc(s.form.services.at(-1))}">${esc(s.pricing.cta)}</a></td>`).join('')}</tr>
+          </tfoot>
+        </table>
       </div>
       <p class="fine">${esc(s.pricing.note)}</p>
     </div>
@@ -239,7 +253,6 @@ ${header(t, ctx)}
   <section class="faq" id="faq" data-accent="sky" aria-labelledby="faq-title">
     <div class="wrap faq-grid">
       <header class="sec-head">
-        <p class="eyebrow">${esc(s.faq.eyebrow)}</p>
         <h2 id="faq-title">${esc(s.faq.title)}</h2>
       </header>
       <div class="faq-list">
@@ -254,7 +267,6 @@ ${header(t, ctx)}
   <section class="contact" id="contact" data-accent="coral" aria-labelledby="contact-title">
     <div class="wrap contact-grid">
       <div class="contact-copy">
-        <p class="eyebrow">${esc(s.contact.eyebrow)}</p>
         <h2 id="contact-title">${esc(s.contact.title)}</h2>
         <p class="contact-lead">${esc(s.contact.lead)}</p>
         <div class="mail-row">
