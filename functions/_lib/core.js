@@ -7,7 +7,7 @@
 //   GITHUB_REPO     variable, e.g. "Ronnyuz/pltgroup-website"
 //   GITHUB_BRANCH   variable, default "main"
 //   ANTHROPIC_API_KEY secret, for the site consultant (/api/chat)
-//   CHAT_MODEL      variable, optional, model for the consultant
+//   CHAT_MODEL      variable, optional, model for the consultant (default claude-haiku-5-5)
 
 export const PERMS = ['leads', 'content', 'posts'];
 const SESSION_DAYS = 14;

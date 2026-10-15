@@ -72,15 +72,18 @@ export async function onRequestPost({ request, env }) {
   chat.turns += 1;
 
   const client = new Anthropic({ apiKey: env.ANTHROPIC_API_KEY, ...(env.ANTHROPIC_BASE_URL ? { baseURL: env.ANTHROPIC_BASE_URL } : {}) });
+  // Claude Haiku 5.5 by default: fast and inexpensive. CHAT_MODEL switches to a larger model.
+  const model = env.CHAT_MODEL || 'claude-haiku-5-5';
+  const fallback = !model.startsWith('claude-haiku');
   let reply = '';
   let saved = false;
   try {
     for (let round = 0; round <= MAX_TOOL_ROUNDS; round++) {
       const response = await client.beta.messages.create({
-        model: env.CHAT_MODEL || 'claude-opus-5-5',
+        model,
         max_tokens: 4000,
-        betas: ['server-side-fallback-2026-07-01', 'thinking-binding-controls-2026-08-01'],
-        fallbacks: 'default',
+        // Haiku has no server-side fallback; larger models retry a declined request on another model.
+        ...(fallback ? { betas: ['server-side-fallback-2026-07-01', 'thinking-binding-controls-2026-08-01'], fallbacks: 'default' } : { betas: ['thinking-binding-controls-2026-08-01'] }),
         thinking: { type: 'adaptive', block_binding: { prefix_mismatch_behavior: 'drop_block' } },
         output_config: { effort: 'low' },
         cache_control: { type: 'ephemeral' },
