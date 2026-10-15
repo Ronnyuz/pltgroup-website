@@ -123,6 +123,14 @@
     app.className = '';
     app.replaceChildren(top, h('div', { class: 'shell' }, side, h('main', { class: 'main' }, ...content)));
   }
+  // A section that could not load shows why, with a retry, instead of hanging on «Загрузка…».
+  function loadFailed(e) {
+    const main = app.querySelector('.main');
+    if (!main || !me) return;
+    const box = main.querySelector('p.muted:last-child');
+    const msg = h('div', { class: 'empty' }, h('p', null, e.message), h('button', { class: 'btn btn--small', type: 'button', style: 'margin-top:14px', onclick: route }, 'Повторить'));
+    if (box) box.replaceWith(msg); else main.append(msg);
+  }
   const head = (title, text, ...actions) => h('div', { class: 'head' }, h('div', null, h('h1', null, title), text ? h('p', { class: 'muted' }, text) : null), actions.length ? h('div', { class: 'lead-actions' }, actions) : null);
 
   function route() {
@@ -140,7 +148,7 @@
   async function viewLeads() {
     shell('leads', head('Заявки', 'Заявки из формы на сайте. Каждая заявка также приходит вам в WhatsApp.'), h('p', { class: 'muted' }, 'Загрузка…'));
     let data;
-    try { data = await api('GET', `/api/leads${leadFilter === 'all' ? '' : `?status=${leadFilter}`}`); } catch (e) { toast(e.message, true); return; }
+    try { data = await api('GET', `/api/leads${leadFilter === 'all' ? '' : `?status=${leadFilter}`}`); } catch (e) { loadFailed(e); return; }
     newCount = data.counts.new || 0;
     const total = Object.entries(data.counts).filter(([k]) => k !== 'spam').reduce((a, [, n]) => a + n, 0);
     const tabs = h('div', { class: 'tabs', role: 'tablist' },
@@ -230,7 +238,7 @@
       file = await api('GET', `/api/content/${tab}`);
       if (tab === 'uz' || tab === 'en') ref = refCache.ru || (refCache.ru = (await api('GET', '/api/content/ru')).data);
       if (tab === 'ru') refCache.ru = file.data;
-    } catch (e) { toast(e.message, true); return; }
+    } catch (e) { loadFailed(e); return; }
     const draft = structuredClone(file.data);
     let sha = file.sha;
     const mark = () => { dirty = true; saveBtn.disabled = false; state.replaceChildren(h('span', { class: 'dirty-dot' }), 'Есть несохранённые изменения'); };
@@ -322,7 +330,7 @@
   async function viewPosts() {
     shell('posts', head('Кейсы и новости', 'Раздел «Кейсы» появляется в меню сайта, как только опубликована первая запись.'), h('p', { class: 'muted' }, 'Загрузка…'));
     let data;
-    try { data = await api('GET', '/api/posts'); } catch (e) { toast(e.message, true); return; }
+    try { data = await api('GET', '/api/posts'); } catch (e) { loadFailed(e); return; }
     const add = h('a', { class: 'btn btn--dark', href: '#posts/new' }, '+ Новая запись');
     const list = data.posts.length ? h('div', { class: 'stack' }, data.posts.map((p) => h('div', { class: 'card post-row' },
       h('span', { class: 'thumb', style: p.cover ? `background-image:url('/${p.cover}')` : null }),
@@ -342,7 +350,7 @@
     let post = { type: 'case', published: false, date: new Date().toISOString().slice(0, 10), client: '', cover: '', title: { ru: '', uz: '', en: '' }, summary: { ru: '', uz: '', en: '' }, body: { ru: '', uz: '', en: '' } };
     let sha = null;
     if (!isNew) {
-      try { const out = await api('GET', `/api/posts/${slug}`); post = out.post; sha = out.sha; } catch (e) { toast(e.message, true); return; }
+      try { const out = await api('GET', `/api/posts/${slug}`); post = out.post; sha = out.sha; } catch (e) { loadFailed(e); return; }
     }
     const mark = () => { dirty = true; };
     const type = h('select', { class: 'input', onchange: () => { post.type = type.value; mark(); } }, h('option', { value: 'case' }, 'Кейс'), h('option', { value: 'news' }, 'Новость'));
@@ -418,7 +426,7 @@
   async function viewUsers() {
     shell('users', head('Сотрудники'), h('p', { class: 'muted' }, 'Загрузка…'));
     let data;
-    try { data = await api('GET', '/api/users'); } catch (e) { toast(e.message, true); return; }
+    try { data = await api('GET', '/api/users'); } catch (e) { loadFailed(e); return; }
     const permBoxes = (perms, onchange) => h('div', { class: 'perms' }, Object.entries(PERMS).map(([k, t]) => {
       const box = h('input', { type: 'checkbox', checked: perms.includes(k), onchange: () => onchange(k, box.checked) });
       return h('label', { class: 'check' }, box, t);
