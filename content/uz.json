@@ -393,7 +393,6 @@
     "placeholder": "Savolingizni yozing",
     "send": "Yuborish",
     "close": "Yopish",
-    "error": "Yuborib bo‘lmadi. Qayta urinib ko‘ring.",
-    "saved": "Ariza saqlandi. Menejer ish kuni davomida bog‘lanadi."
+    "error": "Yuborib bo‘lmadi. Qayta urinib ko‘ring."
   }
 }

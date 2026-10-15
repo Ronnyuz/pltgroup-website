@@ -393,7 +393,6 @@
     "placeholder": "Type your question",
     "send": "Send",
     "close": "Close",
-    "error": "Could not send. Please try again.",
-    "saved": "Request saved. A manager will contact you within one working day."
+    "error": "Could not send. Please try again."
   }
 }
