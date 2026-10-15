@@ -1,6 +1,8 @@
 // Contact details and languages shared by every page.
 export const SITE = {
   url: 'https://pltgroup.uz',
+  // Corporate mailbox on the domain. Create it before publishing (see README).
+  email: 'info@pltgroup.uz',
   phone: '+998331113010',
   phoneHuman: '+998 33 111 30 10',
   whatsappNumber: '998331113010',
