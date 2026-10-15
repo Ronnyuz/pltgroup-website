@@ -10,7 +10,7 @@
     },
     "services": {
       "title": "Xizmatlar | PLT GROUP",
-      "description": "Audit, saytlar, Telegram-botlar, CRM, tahlil va AI-yordamchilar. Nima kiradi, qancha turadi va qancha davom etadi."
+      "description": "Saytlar, Telegram-botlar, CRM, tahlil va AI-yordamchilar. Nima kiradi, qancha turadi va qancha davom etadi."
     },
     "process": {
       "title": "Qanday ishlaymiz | PLT GROUP",
@@ -110,20 +110,6 @@
       "cta": "Muhokama qilish"
     },
     "items": [
-      {
-        "id": "audit",
-        "title": "Audit",
-        "for": "Nimadan boshlashni bilmasangiz",
-        "short": "Arizalar va pul qayerda yo‘qolishini topamiz.",
-        "text": "Arizalar, savdo va hisob qanday tashkil etilganini ko‘rib chiqamiz. Pul qayerda yo‘qolishini ko‘rsatib, narxlari bilan reja beramiz. Audit narxi loyiha narxiga qo‘shib hisoblanadi.",
-        "includes": [
-          "Siz va jamoangiz bilan ikki uchrashuv",
-          "Joriy jarayonlar sxemasi",
-          "Smetali joriy etish rejasi"
-        ],
-        "price": "$4 000",
-        "term": "4 hafta"
-      },
       {
         "id": "sites",
         "title": "Saytlar",
@@ -345,7 +331,6 @@
     "taskHint": "Masalan: Instagramdan kelgan arizalar yo‘qoladi, ularni bir joyda ko‘rmoqchimiz",
     "services": [
       "Hali bilmayman, maslahat kerak",
-      "Audit",
       "Saytlar",
       "Telegram-botlar",
       "CRM",

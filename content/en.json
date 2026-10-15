@@ -10,7 +10,7 @@
     },
     "services": {
       "title": "Services | PLT GROUP",
-      "description": "Audit, websites, Telegram bots, CRM, analytics and AI assistants. What is included, what it costs and how long it takes."
+      "description": "Websites, Telegram bots, CRM, analytics and AI assistants. What is included, what it costs and how long it takes."
     },
     "process": {
       "title": "How we work | PLT GROUP",
@@ -110,20 +110,6 @@
       "cta": "Discuss"
     },
     "items": [
-      {
-        "id": "audit",
-        "title": "Audit",
-        "for": "When you are not sure where to start",
-        "short": "We find where leads and money get lost.",
-        "text": "We look at how your leads, sales and accounting work, show where money is lost and give you a plan with prices. The audit fee is credited to the project.",
-        "includes": [
-          "Two meetings with you and your team",
-          "A map of current processes",
-          "Implementation plan with a quote"
-        ],
-        "price": "$4 000",
-        "term": "4 week"
-      },
       {
         "id": "sites",
         "title": "Websites",
@@ -345,7 +331,6 @@
     "taskHint": "For example: Instagram leads get lost, we want to see them in one place",
     "services": [
       "Not sure yet, need advice",
-      "Audit",
       "Websites",
       "Telegram bots",
       "CRM",
