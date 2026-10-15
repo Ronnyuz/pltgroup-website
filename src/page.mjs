@@ -1,6 +1,8 @@
 // HTML templates for every page. Text: src/i18n.mjs. Contacts: src/site.mjs.
 import { SITE, LANGS } from './site.mjs';
 
+const META = { ru: { htmlLang: 'ru', ogLocale: 'ru_RU' }, uz: { htmlLang: 'uz', ogLocale: 'uz_UZ' }, en: { htmlLang: 'en', ogLocale: 'en_US' } };
+
 // Escape HTML, then keep short words attached to the next word (no hanging prepositions).
 const NB = /(^|[\s(«"])(в|и|с|к|о|у|а|я|на|не|по|за|до|от|из|для|без|или|но|что|как|мы|вы|a|an|in|on|of|to|by|va|bu)\s+/gi;
 const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;')
@@ -21,8 +23,14 @@ const icon = {
 const DOT_COLORS = ['var(--c1)', 'var(--c1)', 'var(--c2)', 'var(--c1)', 'var(--c2)', 'var(--c3)', 'var(--c2)', 'var(--c3)', 'var(--c3)'];
 const logo = `<svg class="logo" viewBox="0 0 30 30" aria-hidden="true">${DOT_COLORS.map((c, i) => `<circle cx="${5 + (i % 3) * 10}" cy="${5 + Math.floor(i / 3) * 10}" r="${i === 4 ? 4 : 3.2}" fill="${c}"/>`).join('')}</svg>`;
 
+// Path of the current page inside a language folder.
+const pageFile = (ctx) => (ctx.page === 'home' ? '' : ctx.page === 'post' ? `work/${ctx.post.slug}.html` : FILE[ctx.page]);
+
+// Support table cell: "+" shows a tick, "-" or empty shows the word for "no", anything else is shown as text.
+const cell = (v, no) => { const x = String(v ?? '').trim(); return x === '+' ? icon.check : (x === '-' || x === '') ? `<span class="no">${esc(no)}</span>` : esc(x); };
+
 export const PAGES = ['home', 'services', 'process', 'prices', 'contacts'];
-const FILE = { home: 'index.html', services: 'services.html', process: 'process.html', prices: 'prices.html', contacts: 'contacts.html', privacy: 'privacy.html' };
+const FILE = { home: 'index.html', services: 'services.html', process: 'process.html', prices: 'prices.html', contacts: 'contacts.html', privacy: 'privacy.html', work: 'work.html' };
 const FONTS = 'https://fonts.googleapis.com/css2?family=Manrope:wght@400..800&display=swap';
 
 // Link to a page in the current language (index.html is written as the folder itself).
@@ -30,10 +38,10 @@ const href = (ctx, page) => `${ctx.root}${ctx.langPath}${page === 'home' ? '' : 
 
 function head(ctx, { title, description }) {
   const t = ctx.t;
-  const file = ctx.page === 'home' ? '' : FILE[ctx.page];
+  const file = pageFile(ctx);
   const url = `${SITE.url}/${ctx.langPath}${file}`;
   return `<!doctype html>
-<html lang="${t.meta.htmlLang}">
+<html lang="${META[t.meta.code].htmlLang}">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -49,7 +57,7 @@ function head(ctx, { title, description }) {
   <meta property="og:description" content="${esc(description)}">
   <meta property="og:url" content="${url}">
   <meta property="og:image" content="${SITE.url}/assets/og.png">
-  <meta property="og:locale" content="${t.meta.ogLocale}">
+  <meta property="og:locale" content="${META[t.meta.code].ogLocale}">
   <meta name="twitter:card" content="summary_large_image">
   <link rel="icon" href="${ctx.root}assets/favicon.svg" type="image/svg+xml">
   <link rel="apple-touch-icon" href="${ctx.root}assets/apple-touch-icon.png">
@@ -60,9 +68,9 @@ function head(ctx, { title, description }) {
 }
 
 const langSwitch = (ctx) => `<nav class="lang" aria-label="${esc(ctx.t.meta.langLabel)}">${LANGS.map((l) =>
-  `<a href="${ctx.root}${l.path}${ctx.page === 'home' ? '' : FILE[ctx.page]}" hreflang="${l.code}" lang="${l.code}"${l.code === ctx.t.meta.code ? ' aria-current="true"' : ''}>${l.short}</a>`).join('')}</nav>`;
+  `<a href="${ctx.root}${l.path}${pageFile(ctx)}" hreflang="${l.code}" lang="${l.code}"${l.code === ctx.t.meta.code ? ' aria-current="true"' : ''}>${l.short}</a>`).join('')}</nav>`;
 
-const navLinks = (ctx) => ['services', 'process', 'prices', 'contacts'].map((p) =>
+const navLinks = (ctx) => ['services', ...(ctx.posts && ctx.posts.length ? ['work'] : []), 'process', 'prices', 'contacts'].map((p) =>
   `<a href="${href(ctx, p)}"${ctx.page === p ? ' aria-current="page"' : ''}>${esc(ctx.t.nav[p])}</a>`).join('');
 
 function header(ctx) {
@@ -148,9 +156,9 @@ function board(b) {
           <div class="board-cols" aria-hidden="true">${b.cols.map((c) => `<span>${esc(c)}</span>`).join('')}</div>
           <ul class="board-field">
             ${b.items.map((it, i) => `<li class="card" style="--cx:${CHAOS[i][0]}px;--cy:${CHAOS[i][1]}px;--cr:${CHAOS[i][2]}deg;--oy:${i * 54}px;--d:${i * 50}ms">
-              <span class="card-src"><i class="dot dot--${it[2]}"></i>${esc(it[0])}</span>
-              <span class="card-text">${esc(it[1])}</span>
-              <span class="pill pill--${it[2]}">${esc(b.status[it[2]])}</span>
+              <span class="card-src"><i class="dot dot--${it.status}"></i>${esc(it.channel)}</span>
+              <span class="card-text">${esc(it.text)}</span>
+              <span class="pill pill--${it.status}">${esc(b.status[it.status])}</span>
             </li>`).join('\n            ')}
           </ul>
         </div>`;
@@ -252,14 +260,14 @@ export function process(ctx) {
   <section class="section rules">
     <div class="wrap">
       <h2>${esc(p.principlesTitle)}</h2>
-      <ul class="rules-grid">${p.principles.map((r, i) => `<li><span class="rule-dot" style="--c:var(--c${i + 1})"></span><strong>${esc(r[0])}</strong><span>${esc(r[1])}</span></li>`).join('')}</ul>
+      <ul class="rules-grid">${p.principles.map((r, i) => `<li><span class="rule-dot" style="--c:var(--c${i + 1})"></span><strong>${esc(r.title)}</strong><span>${esc(r.text)}</span></li>`).join('')}</ul>
     </div>
   </section>
   <section class="section">
     <div class="wrap faq-grid">
       <h2>${esc(p.faqTitle)}</h2>
       <div class="faq-list">
-        ${p.faq.map((q) => `<details class="qa"><summary><span>${esc(q[0])}</span>${icon.plus}</summary><p>${esc(q[1])}</p></details>`).join('\n        ')}
+        ${p.faq.map((q) => `<details class="qa"><summary><span>${esc(q.question)}</span>${icon.plus}</summary><p>${esc(q.answer)}</p></details>`).join('\n        ')}
       </div>
     </div>
   </section>
@@ -294,7 +302,7 @@ export function prices(ctx) {
             <span class="plan-for">${esc(x.for)}</span>
             <span class="plan-price">${esc(x.price)}</span><span class="plan-per">${esc(p.perMonth)}</span>
           </th>`).join('')}</tr></thead>
-          <tbody>${p.rows.map((r) => `<tr><th scope="row">${esc(r[0])}</th>${r.slice(1).map((v, i) => `<td${p.plans[i].featured ? ' class="is-featured"' : ''}>${v === true ? icon.check : v === null ? `<span class="no">${esc(p.no)}</span>` : esc(v)}</td>`).join('')}</tr>`).join('')}</tbody>
+          <tbody>${p.rows.map((r) => `<tr><th scope="row">${esc(r.label)}</th>${[r.start, r.business, r.partner].map((v, i) => `<td${p.plans[i] && p.plans[i].featured ? ' class="is-featured"' : ''}>${cell(v, p.no)}</td>`).join('')}</tr>`).join('')}</tbody>
           <tfoot><tr><td></td>${p.plans.map((x) => `<td${x.featured ? ' class="is-featured"' : ''}><a class="btn btn--small ${x.featured ? 'btn--amber' : 'btn--line'}" href="${href(ctx, 'contacts')}?service=support">${esc(p.choose)}</a></td>`).join('')}</tr></tfoot>
         </table>
       </div>
@@ -324,8 +332,9 @@ export function contacts(ctx) {
         </ul>
         <p class="small">${esc(c.city)}</p>
       </div>
-      <form class="form" data-form novalidate data-wa="${SITE.whatsappNumber}" data-intro="${esc(f.intro)}">
+      <form class="form" data-form novalidate data-wa="${SITE.whatsappNumber}" data-intro="${esc(f.intro)}" data-lang="${ctx.t.meta.code}">
         <h2>${esc(f.title)}</h2>
+        <div class="hp" aria-hidden="true"><label for="f-website">Website</label><input id="f-website" name="website" tabindex="-1" autocomplete="off"></div>
         <div class="field"><label for="f-name">${esc(f.name)}</label><input id="f-name" name="name" autocomplete="name" required><span class="error">${esc(f.required)}</span></div>
         <div class="field"><label for="f-contact">${esc(f.contact)}</label><input id="f-contact" name="contact" autocomplete="tel" inputmode="tel" placeholder="+998" required><span class="error">${esc(f.required)}</span></div>
         <div class="field"><label for="f-service">${esc(f.service)}</label><select id="f-service" name="service">${f.services.map((x, i) => `<option value="${esc(x)}" data-id="${ids[i]}">${esc(x)}</option>`).join('')}</select></div>
@@ -344,7 +353,7 @@ export function privacy(ctx) {
     <div class="wrap doc-wrap">
       <h1>${esc(p.title)}</h1>
       <p class="lead">${esc(p.description)}</p>
-      ${p.sections.map((x) => `<h2>${esc(x[0])}</h2>\n      <p>${esc(x[1])}</p>`).join('\n      ')}
+      ${p.sections.map((x) => `<h2>${esc(x.title)}</h2>\n      <p>${esc(x.text)}</p>`).join('\n      ')}
       <p class="small">${esc(p.updated)}</p>
     </div>
   </section>`;
@@ -361,4 +370,52 @@ export function notFound(ctx) {
 <h1>${esc(n.title)}</h1><p class="lead">${esc(n.text)}</p><a class="btn btn--amber" href="/">${esc(n.home)}</a>
 </div></main></body></html>
 `;
+}
+
+// Work and news. A post has text for each language; an empty translation falls back to Russian.
+const pick = (field, code) => (field && (field[code] || field.ru)) || '';
+const fmtDate = (iso, code) => {
+  const d = new Date(`${iso}T00:00:00Z`);
+  if (Number.isNaN(d.getTime())) return '';
+  return d.toLocaleDateString({ ru: 'ru-RU', uz: 'uz-UZ', en: 'en-GB' }[code], { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' });
+};
+const paragraphs = (text) => String(text || '').split(/\n\s*\n/).map((p) => p.trim()).filter(Boolean).map((p) => `<p>${esc(p).replace(/\n/g, '<br>')}</p>`).join('\n        ');
+const media = (ctx, src) => (/^https?:\/\//.test(src) ? src : `${ctx.root}${String(src).replace(/^\//, '')}`);
+
+export function work(ctx) {
+  const w = ctx.t.work, code = ctx.t.meta.code;
+  const body = `  ${pageHead(w.title, w.lead)}
+  <section class="section">
+    <div class="wrap">
+      <ul class="posts">
+        ${ctx.posts.map((p) => `<li><a class="post-row" href="${ctx.root}${ctx.langPath}work/${p.slug}.html">
+          ${p.cover ? `<span class="post-cover"><img src="${media(ctx, p.cover)}" alt="" loading="lazy"></span>` : ''}
+          <span class="post-meta">${esc(p.type === 'news' ? w.news : w.case)}${p.date ? ` · ${esc(fmtDate(p.date, code))}` : ''}</span>
+          <span class="post-title">${esc(pick(p.title, code))}</span>
+          <span class="post-summary">${esc(pick(p.summary, code))}</span>
+        </a></li>`).join('\n        ')}
+      </ul>
+    </div>
+  </section>
+  ${ctaBand(ctx)}`;
+  return layout(ctx, { title: `${w.title} | PLT GROUP`, description: w.description }, body);
+}
+
+export function post(ctx) {
+  const w = ctx.t.work, code = ctx.t.meta.code, p = ctx.post;
+  const title = pick(p.title, code);
+  const body = `  <article class="section doc post">
+    <div class="wrap doc-wrap">
+      <a class="link" href="${href(ctx, 'work')}">${esc(w.back)}</a>
+      <p class="post-meta">${esc(p.type === 'news' ? w.news : w.case)}${p.date ? ` · ${esc(fmtDate(p.date, code))}` : ''}${p.client ? ` · ${esc(p.client)}` : ''}</p>
+      <h1>${esc(title)}</h1>
+      <p class="lead">${esc(pick(p.summary, code))}</p>
+      ${p.cover ? `<img class="post-hero" src="${media(ctx, p.cover)}" alt="">` : ''}
+      <div class="post-body">
+        ${paragraphs(pick(p.body, code))}
+      </div>
+    </div>
+  </article>
+  ${ctaBand(ctx)}`;
+  return layout(ctx, { title: `${title} | PLT GROUP`, description: pick(p.summary, code) }, body);
 }

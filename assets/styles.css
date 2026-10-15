@@ -343,3 +343,23 @@ svg { display: block; max-width: 100%; }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation: none !important; transition: none !important; }
 }
+
+/* Work and news */
+.posts { border-top: 1px solid var(--line); }
+.post-row { display: grid; grid-template-columns: 220px minmax(0, 1fr); grid-template-areas: 'cover meta' 'cover title' 'cover summary'; gap: 6px 32px; padding-block: 28px; border-bottom: 1px solid var(--line); text-decoration: none; align-content: start; }
+.post-row:not(:has(.post-cover)) { grid-template-columns: minmax(0, 1fr); grid-template-areas: 'meta' 'title' 'summary'; }
+.post-cover { grid-area: cover; aspect-ratio: 4 / 3; border-radius: 14px; overflow: hidden; background: var(--surface-2); }
+.post-cover img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.post-meta { grid-area: meta; font-size: 14px; color: var(--muted); }
+.post-title { grid-area: title; font-size: clamp(24px, 2.6vw, 34px); font-weight: 700; letter-spacing: -.03em; line-height: 1.12; }
+.post-summary { grid-area: summary; color: var(--muted); max-width: 42em; }
+.post-row:hover .post-title { text-decoration: underline; text-underline-offset: 6px; text-decoration-thickness: 2px; }
+.post .post-meta { margin: 28px 0 10px; }
+.post-hero { width: 100%; max-width: 100%; height: auto; border-radius: 18px; margin: 8px 0 32px; }
+.post-body p { margin-bottom: 18px; font-size: 18px; }
+@media (max-width: 600px) {
+  .post-row { grid-template-columns: minmax(0, 1fr); grid-template-areas: 'cover' 'meta' 'title' 'summary'; }
+}
+
+/* Hidden field that only bots fill in. */
+.hp { position: absolute; left: -10000px; width: 1px; height: 1px; overflow: hidden; }
