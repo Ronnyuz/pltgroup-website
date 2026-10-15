@@ -315,7 +315,7 @@ export function prices(ctx) {
 
 export function contacts(ctx) {
   const c = ctx.t.contacts, f = ctx.t.form;
-  const ids = ['', 'audit', 'sites', 'bots', 'crm', 'analytics', 'ai', 'support'];
+  const ids = ['', 'sites', 'bots', 'crm', 'analytics', 'ai', 'support'];
   const body = `  <section class="section contacts">
     <div class="wrap contacts-grid">
       <div class="contacts-info">

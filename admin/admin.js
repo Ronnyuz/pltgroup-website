@@ -191,7 +191,7 @@
     return h('article', { class: 'card lead' },
       h('div', { class: 'lead-top' },
         h('div', null, h('p', { class: 'lead-name' }, l.name, ' ', h('span', { class: `pill pill--${l.status}` }, STATUS[l.status])), contactLink(l.contact || '')),
-        h('p', { class: 'lead-meta' }, fmtDate(l.created_at), l.lang ? ` · ${l.lang.toUpperCase()}` : '')),
+        h('p', { class: 'lead-meta' }, fmtDate(l.created_at), l.lang ? ` · ${l.lang.toUpperCase()}` : '', (l.page || '').includes(' · ') ? ` · источник: ${l.page.split(' · ').pop()}` : '')),
       l.service ? h('p', null, h('b', null, 'Услуга: '), l.service) : null,
       l.task ? h('p', { class: 'lead-task' }, l.task) : null,
       note,
