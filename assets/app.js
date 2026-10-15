@@ -130,7 +130,7 @@
     else select();
   }));
 
-  // Request form. ?service=crm preselects the service. Opens WhatsApp with a prepared message.
+  // Request form. ?service=crm preselects the service. Saves the request, then opens WhatsApp with a prepared message.
   const form = document.querySelector('[data-form]');
   if (form) {
     const want = new URLSearchParams(location.search).get('service');
@@ -149,6 +149,11 @@
       });
       if (firstBad) { firstBad.focus(); return; }
       const data = new FormData(form);
+      // Keep a copy of the request for the team; WhatsApp opens regardless of the result.
+      const lead = Object.fromEntries(['name', 'contact', 'service', 'task', 'website'].map((k) => [k, String(data.get(k) || '').trim()]));
+      try {
+        fetch('/api/lead', { method: 'POST', keepalive: true, headers: { 'content-type': 'application/json' }, body: JSON.stringify({ ...lead, lang: form.dataset.lang, page: location.pathname }) }).catch(() => {});
+      } catch (err) { /* old browsers */ }
       const label = (name) => form.querySelector(`[name="${name}"]`).closest('.field').querySelector('label').textContent;
       const lines = [form.dataset.intro, ''];
       ['name', 'contact', 'service', 'task'].forEach((k) => {

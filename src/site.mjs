@@ -1,13 +1,20 @@
-// Contact details and languages shared by every page.
+// Contacts come from content/site.json (editable in the admin panel). Languages are fixed here.
+import { readFileSync } from 'node:fs';
+import { dirname, join } from 'node:path';
+import { fileURLToPath } from 'node:url';
+
+const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
+const site = JSON.parse(readFileSync(join(ROOT, 'content/site.json'), 'utf8'));
+const digits = (s) => String(s || '').replace(/\D/g, '');
+
 export const SITE = {
   url: 'https://pltgroup.uz',
-  // Corporate mailbox on the domain. Create it before publishing (see README).
-  email: 'info@pltgroup.uz',
-  phone: '+998331113010',
-  phoneHuman: '+998 33 111 30 10',
-  whatsappNumber: '998331113010',
-  whatsapp: 'https://wa.me/998331113010',
-  telegram: 'https://t.me/+998331113010',
+  email: site.email,
+  phone: '+' + digits(site.phone),
+  phoneHuman: site.phoneHuman,
+  whatsappNumber: digits(site.whatsappNumber),
+  whatsapp: `https://wa.me/${digits(site.whatsappNumber)}`,
+  telegram: site.telegram,
 };
 
 // path: folder relative to the site root ('' = root).

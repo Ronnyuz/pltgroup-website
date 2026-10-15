@@ -1,0 +1,403 @@
+{
+  "meta": {
+    "code": "uz",
+    "langLabel": "Sayt tili"
+  },
+  "pages": {
+    "home": {
+      "title": "PLT GROUP | Saytlar, Telegram-botlar, CRM va tahlil, Toshkent",
+      "description": "O‘zbekiston biznesi uchun saytlar, Telegram-botlar, CRM va tahlil. Shartnoma asosida, qat’iy narx bilan."
+    },
+    "services": {
+      "title": "Xizmatlar | PLT GROUP",
+      "description": "Audit, saytlar, Telegram-botlar, CRM, tahlil va AI-yordamchilar. Nima kiradi, qancha turadi va qancha davom etadi."
+    },
+    "process": {
+      "title": "Qanday ishlaymiz | PLT GROUP",
+      "description": "Suhbatdan ishga tushirishgacha to‘rt qadam. Narx va muddat ish boshlanishidan oldin ma’lum."
+    },
+    "prices": {
+      "title": "Narxlar | PLT GROUP",
+      "description": "Loyihalar va ishga tushgandan keyingi qo‘llab-quvvatlash narxlari. Shartnoma bo‘yicha so‘mda to‘lov."
+    },
+    "contacts": {
+      "title": "Aloqa | PLT GROUP",
+      "description": "PLT GROUP pochtasi, telefoni, Telegram va WhatsApp, Toshkent."
+    }
+  },
+  "nav": {
+    "skip": "Asosiy qismga o‘tish",
+    "label": "Asosiy menyu",
+    "home": "Bosh sahifa",
+    "services": "Xizmatlar",
+    "process": "Qanday ishlaymiz",
+    "prices": "Narxlar",
+    "contacts": "Aloqa",
+    "cta": "Vazifani muhokama qilish",
+    "menu": "Menyu",
+    "work": "Keyslar"
+  },
+  "home": {
+    "title": "Arizalar, savdo va raqamlarni tartibga solamiz",
+    "lead": "O‘zbekiston biznesi uchun saytlar, Telegram-botlar, CRM va tahlil qilamiz. Birinchi natija ikki haftada.",
+    "primary": "Vazifani muhokama qilish",
+    "secondary": "Narxlarni ko‘rish",
+    "note": "Toshkent. Shartnoma asosida ishlaymiz.",
+    "tiles": "Koshinlar naqshi: aralashtirish uchun bosing",
+    "servicesTitle": "Nimada yordam beramiz",
+    "more": "Barcha xizmatlar",
+    "exampleTitle": "Mijozda bu qanday ko‘rinadi",
+    "exampleText": "Distribyutor arizalarni Telegram, Instagram va telefon orqali oladi. Ularning bir qismi yo‘qoladi. Biz hammasini har bir arizaning holati ko‘rinadigan bitta jadvalga yig‘amiz.",
+    "exampleOn": "Tartibga solish",
+    "exampleOff": "Avvalgi holatga qaytarish",
+    "exampleNote": "Namuna. Nomlar va ma’lumotlar shartli.",
+    "ctaTitle": "Ishingizga nima xalaqit berayotganini aytib bering",
+    "ctaText": "Ish kuni davomida javob beramiz. Birinchi maslahat bepul.",
+    "ctaButton": "Bizga yozing"
+  },
+  "board": {
+    "cols": [
+      "Kanal",
+      "So‘rov",
+      "Holat"
+    ],
+    "status": {
+      "new": "Yangi",
+      "wip": "Jarayonda",
+      "ok": "Tayyor"
+    },
+    "items": [
+      {
+        "channel": "Telegram",
+        "text": "40 dona bormi?",
+        "status": "new"
+      },
+      {
+        "channel": "Instagram",
+        "text": "Ulgurji narxi qancha?",
+        "status": "new"
+      },
+      {
+        "channel": "Qo‘ng‘iroq",
+        "text": "Javobsiz, 14:32",
+        "status": "wip"
+      },
+      {
+        "channel": "Excel",
+        "text": "qoldiq_v7_final.xlsx",
+        "status": "wip"
+      },
+      {
+        "channel": "WhatsApp",
+        "text": "Buyurtmam qayerda?",
+        "status": "ok"
+      },
+      {
+        "channel": "Hisob №118",
+        "text": "To‘lov kutilmoqda",
+        "status": "ok"
+      }
+    ]
+  },
+  "services": {
+    "title": "Xizmatlar",
+    "lead": "1–6 haftada ishga tushirib, natijasini darhol ko‘rish mumkin bo‘lgan vazifalarni olamiz.",
+    "labels": {
+      "for": "Kimga",
+      "includes": "Nima kiradi",
+      "price": "Narx",
+      "term": "Muddat",
+      "cta": "Muhokama qilish"
+    },
+    "items": [
+      {
+        "id": "audit",
+        "title": "Audit",
+        "for": "Nimadan boshlashni bilmasangiz",
+        "short": "Arizalar va pul qayerda yo‘qolishini topamiz.",
+        "text": "Arizalar, savdo va hisob qanday tashkil etilganini ko‘rib chiqamiz. Pul qayerda yo‘qolishini ko‘rsatib, narxlari bilan reja beramiz. Audit narxi loyiha narxiga qo‘shib hisoblanadi.",
+        "includes": [
+          "Siz va jamoangiz bilan ikki uchrashuv",
+          "Joriy jarayonlar sxemasi",
+          "Smetali joriy etish rejasi"
+        ],
+        "price": "$150",
+        "term": "1 hafta"
+      },
+      {
+        "id": "sites",
+        "title": "Saytlar",
+        "for": "Internetdan ariza kerak bo‘lsa",
+        "short": "Ariza yig‘adigan uch tilli sayt.",
+        "text": "Rus, o‘zbek va ingliz tillaridagi sayt. Nima sotayotganingizni tushuntiradi va ariza yig‘adi.",
+        "includes": [
+          "Brendingizga mos dizayn",
+          "Arizalar darhol Telegramga",
+          "Google va Yandeksga ulash"
+        ],
+        "price": "$400 dan",
+        "term": "1–2 hafta"
+      },
+      {
+        "id": "bots",
+        "title": "Telegram-botlar",
+        "for": "Mijozlar Telegramda yozsa",
+        "short": "Buyurtma va to‘lov Telegramning o‘zida.",
+        "text": "Bot kecha-kunduz buyurtma va yozilishlarni qabul qiladi, to‘lov oladi va menejerga xabar beradi.",
+        "includes": [
+          "Katalog va savat",
+          "Click va Payme orqali to‘lov",
+          "Bildirishnoma va xabarnomalar"
+        ],
+        "price": "$500 dan",
+        "term": "2–4 hafta"
+      },
+      {
+        "id": "crm",
+        "title": "CRM",
+        "for": "Arizalar yo‘qolsa",
+        "short": "Barcha arizalar bitta oynada.",
+        "text": "amoCRM yoki Bitrix24ni savdo jarayoningizga moslab sozlaymiz va jamoani o‘qitamiz.",
+        "includes": [
+          "Barcha kanallar bitta oynada",
+          "Bitim bosqichlari va menejerlarga vazifalar",
+          "O‘qitish va yo‘riqnoma"
+        ],
+        "price": "$1 000 dan",
+        "term": "3–6 hafta"
+      },
+      {
+        "id": "analytics",
+        "title": "Tahlil",
+        "for": "Raqamlar qo‘lda yig‘ilsa",
+        "short": "Tushum va qoldiqlar bitta ekranda.",
+        "text": "1C, Excel va CRM ma’lumotlarini o‘zi yangilanadigan bitta ekranga yig‘amiz.",
+        "includes": [
+          "Tushum, savdo, qoldiqlar",
+          "Telefondan kirish",
+          "Har hafta hisobot"
+        ],
+        "price": "$700 dan",
+        "term": "2–4 hafta"
+      },
+      {
+        "id": "ai",
+        "title": "AI-yordamchilar",
+        "for": "Bir xil savollar ko‘p bo‘lsa",
+        "short": "Mijozlarga kecha-kunduz javob beradi.",
+        "text": "Yordamchi mijozlarga materiallaringiz asosida javob beradi va arizani menejerga uzatadi.",
+        "includes": [
+          "Rus va o‘zbek tillarida",
+          "Telegramda va saytda ishlaydi",
+          "Arizalarni CRMga uzatish"
+        ],
+        "price": "$800 dan",
+        "term": "2–4 hafta"
+      }
+    ]
+  },
+  "process": {
+    "title": "Qanday ishlaymiz",
+    "lead": "To‘rt qadam. Narx va muddat ish boshlanishidan oldin ma’lum.",
+    "steps": [
+      {
+        "title": "Suhbat",
+        "time": "1–2 kun",
+        "text": "Vazifani tahlil qilamiz va smetani hisoblaymiz."
+      },
+      {
+        "title": "Shartnoma",
+        "time": "1 kun",
+        "text": "Hajm, muddat va narx qog‘ozda. 50% oldindan to‘lov."
+      },
+      {
+        "title": "Ishga tushirish",
+        "time": "1–6 hafta",
+        "text": "Oraliq versiyalarni ko‘rsatamiz va jamoani o‘qitamiz."
+      },
+      {
+        "title": "Qo‘llab-quvvatlash",
+        "time": "har oy",
+        "text": "Ishini kuzatamiz, tuzatamiz, rivojlantiramiz."
+      }
+    ],
+    "principlesTitle": "Qoidalarimiz",
+    "principles": [
+      {
+        "title": "Avval shartnoma",
+        "text": "Hajm, muddat va narx ish boshlanishidan oldin yozib qo‘yiladi."
+      },
+      {
+        "title": "Narx oshmaydi",
+        "text": "Smeta roziligingizsiz o‘zgarmaydi."
+      },
+      {
+        "title": "Hammasi sizniki",
+        "text": "Kod, kirish huquqlari va ma’lumotlar sizda qoladi."
+      }
+    ],
+    "faqTitle": "Ko‘p beriladigan savollar",
+    "faq": [
+      {
+        "question": "Loyiha qancha turadi?",
+        "answer": "Aniq narxni qisqa suhbatdan keyin aytamiz va shartnomada qayd etamiz."
+      },
+      {
+        "question": "Qanday to‘lanadi?",
+        "answer": "50% ish boshlanishidan oldin, 50% qabul qilingandan keyin. O‘tkazma orqali, so‘mda."
+      },
+      {
+        "question": "Ishga tushirish qancha vaqt oladi?",
+        "answer": "Sayt 1–2 hafta, bot 2–4, CRM va tahlil 3–6."
+      },
+      {
+        "question": "Ishga tushgandan keyin tuzatish kerak bo‘lsa-chi?",
+        "answer": "Xatolarni 30 kun bepul tuzatamiz. Keyin qo‘llab-quvvatlash obunasi yoki soatbay."
+      },
+      {
+        "question": "Faqat Toshkentda ishlaysizmi?",
+        "answer": "Yo‘q, butun O‘zbekiston bo‘ylab va xorij bilan. Toshkentda yoki onlayn uchrashamiz."
+      }
+    ]
+  },
+  "prices": {
+    "title": "Narxlar",
+    "lead": "Loyiha narxi shartnomada qayd etiladi va roziligingizsiz o‘zgarmaydi.",
+    "projectsTitle": "Loyihalar",
+    "cols": {
+      "service": "Xizmat",
+      "price": "Narx",
+      "term": "Muddat"
+    },
+    "supportTitle": "Ishga tushgandan keyingi qo‘llab-quvvatlash",
+    "supportLead": "Birinchi oy bepul.",
+    "popular": "Ko‘p tanlanadi",
+    "perMonth": "oyiga",
+    "choose": "Tanlash",
+    "no": "yo‘q",
+    "plans": [
+      {
+        "name": "Start",
+        "for": "Sayt",
+        "price": "$50 dan"
+      },
+      {
+        "name": "Biznes",
+        "for": "Sayt, bot va CRM",
+        "price": "$150 dan",
+        "featured": true
+      },
+      {
+        "name": "Hamkor",
+        "for": "Tahlil bilan",
+        "price": "$350 dan"
+      }
+    ],
+    "rows": [
+      {
+        "label": "Hosting, domen, zaxira nusxalar",
+        "start": "+",
+        "business": "+",
+        "partner": "+"
+      },
+      {
+        "label": "Oylik tuzatishlar",
+        "start": "2 soatgacha",
+        "business": "6 soatgacha",
+        "partner": "15 soatgacha"
+      },
+      {
+        "label": "Javob vaqti",
+        "start": "kun davomida",
+        "business": "2 soat",
+        "partner": "2 soat, navbatsiz"
+      },
+      {
+        "label": "Ish monitoringi",
+        "start": "-",
+        "business": "+",
+        "partner": "+"
+      },
+      {
+        "label": "Hisobot",
+        "start": "-",
+        "business": "oyiga bir marta",
+        "partner": "har hafta"
+      }
+    ],
+    "payment": "To‘lov: 50% ish boshlanishidan oldin, 50% qabul qilingandan keyin. Narxlar mo‘ljal uchun dollarda, shartnomada MB kursi bo‘yicha so‘mda."
+  },
+  "contacts": {
+    "title": "Aloqa",
+    "lead": "Ish kuni davomida javob beramiz. Birinchi maslahat bepul.",
+    "email": "Pochta",
+    "phone": "Telefon",
+    "copy": "Nusxa olish",
+    "copied": "Nusxa olindi",
+    "city": "Toshkent, O‘zbekiston"
+  },
+  "form": {
+    "title": "Ariza",
+    "name": "Ism",
+    "contact": "Telefon yoki Telegram",
+    "service": "Nima kerak",
+    "task": "Vazifa",
+    "taskHint": "Masalan: Instagramdan kelgan arizalar yo‘qoladi, ularni bir joyda ko‘rmoqchimiz",
+    "services": [
+      "Hali bilmayman, maslahat kerak",
+      "Audit",
+      "Saytlar",
+      "Telegram-botlar",
+      "CRM",
+      "Tahlil",
+      "AI-yordamchilar",
+      "Qo‘llab-quvvatlash"
+    ],
+    "required": "Ushbu maydonni to‘ldiring",
+    "submit": "WhatsApp orqali yuborish",
+    "note": "Ariza bizda saqlanadi va tayyor xabar bilan WhatsApp ochiladi.",
+    "intro": "Assalomu alaykum! PLT GROUP saytidan ariza."
+  },
+  "footer": {
+    "tagline": "O‘zbekiston biznesi uchun saytlar, botlar, CRM va tahlil.",
+    "privacy": "Maxfiylik",
+    "rights": "Barcha huquqlar himoyalangan."
+  },
+  "privacy": {
+    "title": "Maxfiylik siyosati",
+    "description": "PLT GROUP pltgroup.uz sayti tashrifchilarining ma’lumotlari bilan qanday ishlaydi.",
+    "sections": [
+      {
+        "title": "Qanday ma’lumot olamiz",
+        "text": "Ariza shaklini yuborganingizda biz unda ko‘rsatilgan ism, aloqa va vazifa tavsifini olamiz. Ular faqat PLT GROUP xodimlari kira oladigan himoyalangan tizimda saqlanadi. So‘ng tayyor xabar bilan WhatsApp ochiladi. Sayt boshqa shaxsiy ma’lumotlarni yig‘maydi."
+      },
+      {
+        "title": "Qanday foydalanamiz",
+        "text": "Faqat murojaatga javob berish va taklif tayyorlash uchun. Ma’lumotlarni sotmaymiz va uchinchi shaxslarga bermaymiz."
+      },
+      {
+        "title": "Uchinchi tomon xizmatlari",
+        "text": "Sayt Google Fonts shriftlarini yuklaydi va Cloudflare’da ishlaydi. WhatsApp va Telegramda ularning qoidalari amal qiladi."
+      },
+      {
+        "title": "Ma’lumotlarni o‘chirish",
+        "text": "Saytdagi istalgan aloqa orqali yozing, yozishma va murojaat ma’lumotlarini o‘chiramiz."
+      }
+    ],
+    "updated": "2026-yil 15-oktabrdagi tahrir."
+  },
+  "notFound": {
+    "title": "Sahifa topilmadi",
+    "text": "Manzil o‘zgargan bo‘lishi mumkin.",
+    "home": "Bosh sahifaga"
+  },
+  "work": {
+    "title": "Keyslar va yangiliklar",
+    "description": "PLT GROUP loyihalari va kompaniya yangiliklari.",
+    "lead": "Biz ishga tushirgan loyihalar va kompaniya yangiliklari.",
+    "case": "Keys",
+    "news": "Yangilik",
+    "back": "Barcha keys va yangiliklar",
+    "more": "O‘qish"
+  }
+}

@@ -1,15 +1,17 @@
-# PLT GROUP — pltgroup.uz
+# PLT GROUP | pltgroup.uz
 
-Corporate website of PLT GROUP: websites, Telegram bots, automation and analytics for businesses in Uzbekistan.
+Corporate website of PLT GROUP: websites, Telegram bots, CRM and analytics for businesses in Uzbekistan.
 
-Static site, no framework. Languages: Russian (`/`), Uzbek (`/uz/`), English (`/en/`).
+Static site, no framework. Languages: Russian (`/`), Uzbek (`/uz/`), English (`/en/`). Hosted on Cloudflare Pages.
 
-## Edit
+## Content
 
-- Text for all languages: `src/i18n.mjs`
-- Phone, messengers, languages: `src/site.mjs`
-- Page layout: `src/page.mjs`
-- Styles and scripts: `assets/styles.css`, `assets/app.js`
+- Site text and prices per language: `content/ru.json`, `content/uz.json`, `content/en.json`
+- Contacts: `content/site.json`
+- Cases and news: `content/posts/<slug>.json`
+- Page layout: `src/page.mjs`; styles and scripts: `assets/styles.css`, `assets/app.js`
+
+All of the above, except layout and styles, is edited in the admin panel at `/admin`.
 
 ## Build
 
@@ -17,4 +19,35 @@ Static site, no framework. Languages: Russian (`/`), Uzbek (`/uz/`), English (`/
 node src/build.mjs
 ```
 
-Regenerates `index.html`, `uz/`, `en/`, `privacy.html`, `404.html`, redirects from old page URLs and `sitemap.xml`. Commit the generated files: the host serves them as they are.
+Regenerates all pages, redirects from old URLs, `404.html` and `sitemap.xml`.
+
+## Admin panel
+
+`/admin` (files in `admin/`, API in `functions/`, Cloudflare Pages Functions).
+
+- Requests from the site form are stored in Cloudflare D1.
+- Texts, prices, cases and news are saved as commits to this repository; Cloudflare rebuilds the site.
+- Sign-in by login and password. The owner creates staff accounts and chooses what each one can open.
+
+### Cloudflare setup (once)
+
+1. **Workers & Pages → D1 → Create database**, name `pltgroup`.
+2. Pages project **pltgroup-website → Settings → Bindings → Add → D1 database**: variable name `DB`, database `pltgroup`.
+3. **Settings → Variables and secrets** (Production):
+   - `OWNER_LOGIN` (text): owner login, e.g. `kamran`
+   - `OWNER_PASSWORD` (secret): owner password for the first sign-in, at least 8 characters
+   - `GITHUB_TOKEN` (secret): fine-grained GitHub token, repository `Ronnyuz/pltgroup-website`, permission **Contents: Read and write**
+   - `GITHUB_REPO` (text): `Ronnyuz/pltgroup-website`
+   - `GITHUB_BRANCH` (text): `main`
+4. **Settings → Build**: build command `node src/build.mjs`, build output directory `/`.
+5. **Deployments → Retry deployment** on the latest one.
+
+The first sign-in with `OWNER_LOGIN` and `OWNER_PASSWORD` creates the owner account. After that the password lives in the database; change it in the panel under «Мой профиль».
+
+### Local run
+
+```sh
+npx wrangler pages dev . --d1 DB=pltgroup
+```
+
+with `OWNER_LOGIN`, `OWNER_PASSWORD`, `GITHUB_TOKEN`, `GITHUB_REPO` in `.dev.vars`.
