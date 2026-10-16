@@ -125,6 +125,7 @@ function footer(ctx) {
 <div class="chat" data-chat data-lang="${t.meta.code}" data-labels="${esc(JSON.stringify(t.chat))}" hidden></div>
 <script src="${ctx.root}assets/app.js" defer></script>
 <script src="${ctx.root}assets/chat.js" defer></script>
+<!--/email_off-->
 </body>
 </html>
 `;
@@ -133,6 +134,7 @@ function footer(ctx) {
 const layout = (ctx, meta, body, extraHead = '') => `${head(ctx, meta)}${extraHead}
 </head>
 <body class="page-${ctx.page}">
+<!--email_off-->
 ${header(ctx)}
 <main id="main">
 ${body}
@@ -372,10 +374,10 @@ export function notFound(ctx) {
   return `<!doctype html>
 <html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>${esc(n.title)} | PLT GROUP</title><meta name="robots" content="noindex">
 <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml"><link rel="stylesheet" href="${FONTS}"><link rel="stylesheet" href="/assets/styles.css"></head>
-<body class="page-404"><main class="nf"><div class="wrap">
+<body class="page-404"><!--email_off--><main class="nf"><div class="wrap">
 <span class="nf-logo">${logo}</span>
 <h1>${esc(n.title)}</h1><p class="lead">${esc(n.text)}</p><a class="btn btn--amber" href="/">${esc(n.home)}</a>
-</div></main></body></html>
+</div></main><!--/email_off--></body></html>
 `;
 }
 
