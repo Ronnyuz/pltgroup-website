@@ -354,7 +354,7 @@
     "sections": [
       {
         "title": "Qanday ma’lumot olamiz",
-        "text": "Ariza shaklini yuborganingizda biz unda ko‘rsatilgan ism, aloqa va vazifa tavsifini olamiz. Ular faqat PLT GROUP xodimlari kira oladigan himoyalangan tizimda saqlanadi. So‘ng tayyor xabar bilan WhatsApp ochiladi. Sayt boshqa shaxsiy ma’lumotlarni yig‘maydi."
+        "text": "Ariza shaklini yuborganingizda biz unda ko‘rsatilgan ism, aloqa va vazifa tavsifini olamiz. Ular faqat PLT GROUP xodimlari kira oladigan himoyalangan tizimda saqlanadi. So‘ng tayyor xabar bilan WhatsApp ochiladi. Sayt boshqa shaxsiy ma’lumotlarni yig‘maydi. Saytdagi chatga yozsangiz, xabarlaringiz saqlanadi va maslahatchi javoblarini tayyorlaydigan sun’iy intellekt xizmatiga uzatiladi. Chatda qoldirgan ism va kontaktingiz arizaga tushadi."
       },
       {
         "title": "Qanday foydalanamiz",
@@ -362,7 +362,7 @@
       },
       {
         "title": "Uchinchi tomon xizmatlari",
-        "text": "Sayt Google Fonts shriftlarini yuklaydi va Cloudflare’da ishlaydi. WhatsApp va Telegramda ularning qoidalari amal qiladi."
+        "text": "Sayt Google Fonts shriftlarini yuklaydi va Cloudflare’da ishlaydi. Chatdagi maslahatchi javoblarini uchinchi tomon provayderining sun’iy intellekt xizmati tayyorlaydi. WhatsApp va Telegramda ularning qoidalari amal qiladi."
       },
       {
         "title": "Ma’lumotlarni o‘chirish",
@@ -384,5 +384,15 @@
     "news": "Yangilik",
     "back": "Barcha keys va yangiliklar",
     "more": "O‘qish"
+  },
+  "chat": {
+    "open": "Savol berish",
+    "title": "PLT GROUP maslahatchisi",
+    "note": "AI-yordamchi. Darhol javob beradi, aniq narxni menejer aytadi.",
+    "greeting": "Assalomu alaykum! Biznesingiz nima bilan shug‘ullanishi va nimani yaxshilamoqchi ekaningizni aytib bering. Nima mos kelishi va qancha turishini aytaman.",
+    "placeholder": "Savolingizni yozing",
+    "send": "Yuborish",
+    "close": "Yopish",
+    "error": "Yuborib bo‘lmadi. Qayta urinib ko‘ring."
   }
 }

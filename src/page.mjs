@@ -117,7 +117,9 @@ function footer(ctx) {
     ${langSwitch(ctx)}
   </div>
 </footer>
+<div class="chat" data-chat data-lang="${t.meta.code}" data-labels="${esc(JSON.stringify(t.chat))}" hidden></div>
 <script src="${ctx.root}assets/app.js" defer></script>
+<script src="${ctx.root}assets/chat.js" defer></script>
 </body>
 </html>
 `;

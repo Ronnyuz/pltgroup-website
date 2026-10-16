@@ -363,3 +363,40 @@ svg { display: block; max-width: 100%; }
 
 /* Hidden field that only bots fill in. */
 .hp { position: absolute; left: -10000px; width: 1px; height: 1px; overflow: hidden; }
+
+/* Site consultant */
+.chat { position: fixed; right: 20px; bottom: 20px; z-index: 60; }
+.chat-launch { display: inline-flex; align-items: center; gap: 10px; height: 52px; padding: 0 20px 0 16px; border: 1px solid var(--line); border-radius: 999px; background: var(--field); color: var(--text); font-family: inherit; font-weight: 600; font-size: 15px; line-height: 1; cursor: pointer; box-shadow: 0 8px 30px rgba(0, 0, 0, .12); transition: transform .2s, box-shadow .2s; }
+.chat-launch:hover { transform: translateY(-2px); box-shadow: 0 12px 36px rgba(0, 0, 0, .16); }
+.chat-launch svg { width: 22px; height: 22px; }
+.chat-panel { width: 380px; height: min(600px, calc(100vh - 40px)); display: flex; flex-direction: column; background: var(--bg); border: 1px solid var(--line); border-radius: 22px; box-shadow: 0 20px 60px rgba(0, 0, 0, .18); overflow: hidden; }
+.chat-panel[hidden], .chat-launch[hidden] { display: none; }
+.chat-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; padding: 18px 18px 14px 20px; border-bottom: 1px solid var(--line); background: var(--bg-2); }
+.chat-title { margin: 0; font-weight: 700; font-size: 16px; }
+.chat-note { margin: 3px 0 0; font-size: 12.5px; color: var(--muted); line-height: 1.4; }
+.chat-close { flex: none; width: 34px; height: 34px; display: grid; place-items: center; border: 0; border-radius: 50%; background: transparent; color: var(--muted); cursor: pointer; }
+.chat-close:hover { background: var(--glow); color: var(--text); }
+.chat-close svg, .chat-send svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.chat-log { flex: 1; overflow-y: auto; padding: 18px 16px; display: flex; flex-direction: column; gap: 10px; overscroll-behavior: contain; }
+.chat-msg { max-width: 85%; padding: 10px 14px; border-radius: 16px; font-size: 14.5px; line-height: 1.5; white-space: pre-wrap; overflow-wrap: anywhere; }
+.chat-msg a { color: inherit; text-decoration: underline; }
+.chat-msg--bot { align-self: flex-start; background: var(--bg-2); border-bottom-left-radius: 6px; }
+.chat-msg--me { align-self: flex-end; background: var(--cta-bg); color: var(--cta-text); border-bottom-right-radius: 6px; }
+.chat-msg--sys { align-self: center; max-width: 100%; padding: 6px 12px; font-size: 12.5px; color: var(--muted); background: none; text-align: center; }
+.chat-typing { display: inline-flex; gap: 4px; padding: 14px; }
+.chat-typing i { width: 6px; height: 6px; border-radius: 50%; background: var(--c3); animation: chat-dot 1.2s infinite; }
+.chat-typing i:nth-child(2) { animation-delay: .15s; }
+.chat-typing i:nth-child(3) { animation-delay: .3s; }
+@keyframes chat-dot { 0%, 60%, 100% { opacity: .3; transform: none; } 30% { opacity: 1; transform: translateY(-3px); } }
+.chat-form { display: flex; align-items: flex-end; gap: 8px; padding: 12px; border-top: 1px solid var(--line); }
+.chat-form textarea { flex: 1; resize: none; min-height: 44px; max-height: 120px; padding: 11px 14px; border: 1px solid var(--line); border-radius: 14px; background: var(--field); color: var(--text); font: inherit; font-size: 15px; line-height: 1.4; }
+.chat-form textarea:focus { outline: none; border-color: var(--text); }
+.chat-send { flex: none; width: 44px; height: 44px; display: grid; place-items: center; border: 0; border-radius: 50%; background: var(--cta-bg); color: var(--cta-text); cursor: pointer; }
+.chat-send:disabled { opacity: .5; cursor: default; }
+@media (max-width: 600px) {
+  .chat { right: 12px; bottom: 12px; }
+  .chat-launch { height: 48px; padding: 0 16px 0 12px; font-size: 14px; }
+  .chat.is-open { inset: 0; }
+  .chat-panel { width: 100vw; height: 100dvh; border-radius: 0; border: 0; }
+}
+@media (prefers-reduced-motion: reduce) { .chat-typing i { animation: none; } .chat-launch { transition: none; } }
