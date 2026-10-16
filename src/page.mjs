@@ -45,7 +45,7 @@ function head(ctx, { title, description }) {
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="yandex-verification" content="3b2fb0ea389f2828">
+  <meta name="yandex-verification" content="1c2475a81e074f44">
   <title>${esc(title)}</title>
   <meta name="description" content="${esc(description)}">
   <link rel="canonical" href="${url}">
