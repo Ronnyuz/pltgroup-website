@@ -7,7 +7,9 @@
 //   GITHUB_REPO     variable, e.g. "Ronnyuz/pltgroup-website"
 //   GITHUB_BRANCH   variable, default "main"
 //   ANTHROPIC_API_KEY secret, for the site consultant (/api/chat)
-//   CHAT_MODEL      variable, optional, model for the consultant (default claude-haiku-5-5)
+//   AI              Workers AI binding: the consultant's free engine (/api/chat)
+//   CHAT_MODEL      variable, optional, Claude model when ANTHROPIC_API_KEY is set (default claude-haiku-5-5)
+//   WORKERS_AI_MODEL variable, optional, Workers AI model for the consultant
 
 export const PERMS = ['leads', 'content', 'posts'];
 const SESSION_DAYS = 14;
@@ -26,7 +28,7 @@ const SCHEMA = [
   `CREATE TABLE IF NOT EXISTS sessions (token_hash TEXT PRIMARY KEY, user_id INTEGER NOT NULL, expires_at TEXT NOT NULL)`,
   `CREATE TABLE IF NOT EXISTS leads (id INTEGER PRIMARY KEY AUTOINCREMENT, created_at TEXT NOT NULL DEFAULT (datetime('now')), name TEXT, contact TEXT, service TEXT, task TEXT, lang TEXT, page TEXT, status TEXT NOT NULL DEFAULT 'new', note TEXT NOT NULL DEFAULT '', updated_by TEXT)`,
   `CREATE TABLE IF NOT EXISTS login_failures (key TEXT PRIMARY KEY, count INTEGER NOT NULL, first_at INTEGER NOT NULL)`,
-  `CREATE TABLE IF NOT EXISTS chats (id TEXT PRIMARY KEY, created_at TEXT NOT NULL DEFAULT (datetime('now')), updated_at TEXT NOT NULL DEFAULT (datetime('now')), lang TEXT, page TEXT, system TEXT NOT NULL, messages TEXT NOT NULL, turns INTEGER NOT NULL DEFAULT 0, lead_id INTEGER)`,
+  `CREATE TABLE IF NOT EXISTS chats (id TEXT PRIMARY KEY, engine TEXT, created_at TEXT NOT NULL DEFAULT (datetime('now')), updated_at TEXT NOT NULL DEFAULT (datetime('now')), lang TEXT, page TEXT, system TEXT NOT NULL, messages TEXT NOT NULL, turns INTEGER NOT NULL DEFAULT 0, lead_id INTEGER)`,
   `CREATE TABLE IF NOT EXISTS chat_hits (key TEXT PRIMARY KEY, count INTEGER NOT NULL)`,
 ];
 let schemaReady = false;
@@ -34,6 +36,8 @@ export async function db(env) {
   if (!env.DB) throw new Error('D1 binding "DB" is missing');
   if (!schemaReady) {
     await env.DB.batch(SCHEMA.map((q) => env.DB.prepare(q)));
+    // Columns added after a table first shipped; fails harmlessly when the column exists.
+    try { await env.DB.prepare('ALTER TABLE chats ADD COLUMN engine TEXT').run(); } catch { /* already there */ }
     schemaReady = true;
   }
   return env.DB;

@@ -1,5 +1,7 @@
 // Public: the site consultant. POST {id?, message, lang, page} -> {id, reply, saved}.
-// The conversation is kept server-side and only ever appended to, so earlier turns
+// Two engines: Cloudflare Workers AI (binding AI, free daily allowance) by default, or Claude
+// when ANTHROPIC_API_KEY is set. A conversation stays on the engine it started with.
+// The conversation is kept server-side and only ever appended to; for Claude, earlier turns
 // (including the model's thinking blocks) go back to the API exactly as they came.
 import Anthropic from '@anthropic-ai/sdk';
 import { body, clip, db, fail, json, sameOrigin } from '../_lib/core.js';
@@ -8,6 +10,8 @@ import { buildSystemPrompt } from '../_lib/chat-prompt.js';
 const MAX_TURNS = 30;          // visitor messages per conversation
 const MAX_PER_DAY = 60;        // visitor messages per IP per day
 const MAX_TOOL_ROUNDS = 3;
+const WORKERS_AI_MODEL = '@cf/meta/llama-3.3-70b-instruct-fp8-fast';
+const WORKERS_AI_HISTORY = 16; // messages sent back to the model
 
 const TOOLS = [{
   name: 'save_lead',
@@ -51,6 +55,69 @@ async function saveLead(d, input, chat) {
   return 'Saved. A manager will contact the visitor within one working day.';
 }
 
+async function runClaude(env, d, chat, t) {
+  const client = new Anthropic({ apiKey: env.ANTHROPIC_API_KEY, ...(env.ANTHROPIC_BASE_URL ? { baseURL: env.ANTHROPIC_BASE_URL } : {}) });
+  // Claude Haiku 5.5 by default: fast and inexpensive. CHAT_MODEL switches to a larger model.
+  const model = env.CHAT_MODEL || 'claude-haiku-5-5';
+  const fallback = !model.startsWith('claude-haiku');
+  let reply = '';
+  let saved = false;
+  for (let round = 0; round <= MAX_TOOL_ROUNDS; round++) {
+    const response = await client.beta.messages.create({
+      model,
+      max_tokens: 4000,
+      // Haiku has no server-side fallback; larger models retry a declined request on another model.
+      ...(fallback ? { betas: ['server-side-fallback-2026-07-01', 'thinking-binding-controls-2026-08-01'], fallbacks: 'default' } : { betas: ['thinking-binding-controls-2026-08-01'] }),
+      thinking: { type: 'adaptive', block_binding: { prefix_mismatch_behavior: 'drop_block' } },
+      output_config: { effort: 'low' },
+      cache_control: { type: 'ephemeral' },
+      system: chat.system,
+      tools: TOOLS,
+      messages: chat.messages,
+    });
+    if (response.stop_reason === 'refusal') { reply = t.refusal; break; }
+    chat.messages.push({ role: 'assistant', content: response.content });
+    reply = response.content.filter((c) => c.type === 'text').map((c) => c.text).join('\n').trim() || reply;
+    const calls = response.content.filter((c) => c.type === 'tool_use');
+    if (response.stop_reason !== 'tool_use' || !calls.length) break;
+    // Every tool_use gets its result, so the stored history stays valid for the next turn.
+    const results = [];
+    for (const call of calls) {
+      const out = call.name === 'save_lead' ? await saveLead(d, call.input || {}, chat) : 'Unknown tool.';
+      if (out.startsWith('Saved')) saved = true;
+      results.push({ type: 'tool_result', tool_use_id: call.id, content: out });
+    }
+    chat.messages.push({ role: 'user', content: results });
+  }
+  return { reply, saved };
+}
+
+// Workers AI models answer with plain text; a request is passed as a [[LEAD|...]] line at the end.
+const LEAD_LINE = /\[\[LEAD\|([^\]]*)\]\]/;
+const tidy = (text) => text
+  .replace(/\*\*(.+?)\*\*/g, '$1').replace(/^#+\s*/gm, '').replace(/^\s*[*-]\s+/gm, '')
+  .replace(/\s+—\s+/g, ', ').replace(/—/g, '-').trim();
+
+async function runWorkersAI(env, d, chat) {
+  const model = env.WORKERS_AI_MODEL || WORKERS_AI_MODEL;
+  const input = { messages: [{ role: 'system', content: chat.system }, ...chat.messages.slice(-WORKERS_AI_HISTORY)], max_tokens: 700, temperature: 0.4 };
+  const out = env.AI
+    ? await env.AI.run(model, input)
+    : await (await fetch(env.AI_MOCK_URL, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ model, ...input }) })).json();
+  let text = String(out?.response ?? out?.choices?.[0]?.message?.content ?? '').trim();
+  let saved = false;
+  const m = text.match(LEAD_LINE);
+  if (m) {
+    const [name, contact, service, task] = m[1].split('|').map((x) => x.trim());
+    const res = await saveLead(d, { name, contact, service, task }, chat);
+    saved = res.startsWith('Saved');
+    text = text.replace(LEAD_LINE, '').trim();
+  }
+  text = tidy(text);
+  chat.messages.push({ role: 'assistant', content: text });
+  return { reply: text, saved };
+}
+
 export async function onRequestPost({ request, env }) {
   if (!sameOrigin(request)) return fail(403, 'forbidden');
   const b = await body(request);
@@ -58,53 +125,25 @@ export async function onRequestPost({ request, env }) {
   const t = TEXT[lang];
   const message = clip(b?.message, 1000);
   if (!message) return fail(400, 'empty message');
-  if (!env.ANTHROPIC_API_KEY) return json({ reply: t.busy, unavailable: true });
+  const engine = env.ANTHROPIC_API_KEY ? 'claude' : (env.AI || env.AI_MOCK_URL) ? 'workers-ai' : null;
+  if (!engine) return json({ reply: t.busy, unavailable: true });
 
   const d = await db(env);
   if (await overDailyLimit(d, request.headers.get('cf-connecting-ip') || 'unknown')) return json({ id: b.id, reply: t.limit });
 
   let chat = /^[a-f0-9]{32}$/.test(b.id || '') ? await d.prepare('SELECT * FROM chats WHERE id = ?').bind(b.id).first() : null;
+  if (chat && chat.engine !== engine) chat = null; // the engine changed: start a fresh conversation
   if (chat) chat = { ...chat, messages: JSON.parse(chat.messages) };
-  else chat = { id: newId(), lang, page: clip(b.page, 160), system: buildSystemPrompt(), messages: [], turns: 0, lead_id: null, isNew: true };
+  else chat = { id: newId(), engine, lang, page: clip(b.page, 160), system: buildSystemPrompt(engine === 'claude' ? 'tool' : 'marker'), messages: [], turns: 0, lead_id: null, isNew: true };
   if (chat.turns >= MAX_TURNS) return json({ id: chat.id, reply: t.long });
 
   chat.messages.push({ role: 'user', content: message });
   chat.turns += 1;
 
-  const client = new Anthropic({ apiKey: env.ANTHROPIC_API_KEY, ...(env.ANTHROPIC_BASE_URL ? { baseURL: env.ANTHROPIC_BASE_URL } : {}) });
-  // Claude Haiku 5.5 by default: fast and inexpensive. CHAT_MODEL switches to a larger model.
-  const model = env.CHAT_MODEL || 'claude-haiku-5-5';
-  const fallback = !model.startsWith('claude-haiku');
   let reply = '';
   let saved = false;
   try {
-    for (let round = 0; round <= MAX_TOOL_ROUNDS; round++) {
-      const response = await client.beta.messages.create({
-        model,
-        max_tokens: 4000,
-        // Haiku has no server-side fallback; larger models retry a declined request on another model.
-        ...(fallback ? { betas: ['server-side-fallback-2026-07-01', 'thinking-binding-controls-2026-08-01'], fallbacks: 'default' } : { betas: ['thinking-binding-controls-2026-08-01'] }),
-        thinking: { type: 'adaptive', block_binding: { prefix_mismatch_behavior: 'drop_block' } },
-        output_config: { effort: 'low' },
-        cache_control: { type: 'ephemeral' },
-        system: chat.system,
-        tools: TOOLS,
-        messages: chat.messages,
-      });
-      if (response.stop_reason === 'refusal') { reply = t.refusal; break; }
-      chat.messages.push({ role: 'assistant', content: response.content });
-      reply = response.content.filter((c) => c.type === 'text').map((c) => c.text).join('\n').trim() || reply;
-      const calls = response.content.filter((c) => c.type === 'tool_use');
-      if (response.stop_reason !== 'tool_use' || !calls.length) break;
-      // Every tool_use gets its result, so the stored history stays valid for the next turn.
-      const results = [];
-      for (const call of calls) {
-        const out = call.name === 'save_lead' ? await saveLead(d, call.input || {}, chat) : 'Unknown tool.';
-        if (out.startsWith('Saved')) saved = true;
-        results.push({ type: 'tool_result', tool_use_id: call.id, content: out });
-      }
-      chat.messages.push({ role: 'user', content: results });
-    }
+    ({ reply, saved } = engine === 'claude' ? await runClaude(env, d, chat, t) : await runWorkersAI(env, d, chat));
   } catch (err) {
     console.error('chat error', err instanceof Anthropic.APIError ? `${err.status} ${err.message}` : err);
     return json({ id: chat.isNew ? undefined : chat.id, reply: t.busy, unavailable: true });
@@ -113,8 +152,8 @@ export async function onRequestPost({ request, env }) {
 
   const messages = JSON.stringify(chat.messages);
   if (chat.isNew) {
-    await d.prepare('INSERT INTO chats (id, lang, page, system, messages, turns, lead_id) VALUES (?, ?, ?, ?, ?, ?, ?)')
-      .bind(chat.id, chat.lang, chat.page, chat.system, messages, chat.turns, chat.lead_id).run();
+    await d.prepare('INSERT INTO chats (id, engine, lang, page, system, messages, turns, lead_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?)')
+      .bind(chat.id, chat.engine, chat.lang, chat.page, chat.system, messages, chat.turns, chat.lead_id).run();
   } else {
     await d.prepare("UPDATE chats SET messages = ?, turns = ?, lead_id = ?, updated_at = datetime('now') WHERE id = ?")
       .bind(messages, chat.turns, chat.lead_id, chat.id).run();
