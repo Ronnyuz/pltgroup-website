@@ -316,7 +316,8 @@
         field('Телефон для звонка', h('input', { class: 'input', value: draft.phone, oninput: (e) => { draft.phone = e.target.value; mark(); } }), 'С кодом страны: +998331113010'),
         field('Телефон как его видно на сайте', h('input', { class: 'input', value: draft.phoneHuman, oninput: (e) => { draft.phoneHuman = e.target.value; mark(); } }), 'Например: +998 33 111 30 10'),
         field('Номер WhatsApp (сюда приходят заявки)', h('input', { class: 'input', value: draft.whatsappNumber, inputmode: 'numeric', oninput: (e) => { draft.whatsappNumber = e.target.value; mark(); } })),
-        field('Ссылка Telegram', h('input', { class: 'input', value: draft.telegram, oninput: (e) => { draft.telegram = e.target.value; mark(); } }), 'Например: https://t.me/pltgroup'));
+        field('Ссылка Telegram', h('input', { class: 'input', value: draft.telegram, oninput: (e) => { draft.telegram = e.target.value; mark(); } }), 'Например: https://t.me/pltgroup'),
+        'googleAnalytics' in draft ? field('Google Analytics', h('input', { class: 'input', value: draft.googleAnalytics, placeholder: 'G-XXXXXXXXXX', oninput: (e) => { draft.googleAnalytics = e.target.value.trim(); mark(); } }), 'Идентификатор потока данных. Пусто: аналитика выключена.') : null);
     } else {
       body = h('div', null,
         tab !== 'ru' ? h('p', { class: 'note-box' }, 'Под каждым полем серым показан русский текст, чтобы было удобно переводить. Цены на каждом языке задаются отдельно.') : null,

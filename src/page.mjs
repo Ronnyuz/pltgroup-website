@@ -64,8 +64,13 @@ function head(ctx, { title, description }) {
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="${FONTS}">
-  <link rel="stylesheet" href="${ctx.root}assets/styles.css">`;
+  <link rel="stylesheet" href="${ctx.root}assets/styles.css">${analytics()}`;
 }
+
+// Google Analytics, when an ID is set in content/site.json.
+const analytics = () => (SITE.gaId ? `
+  <script async src="https://www.googletagmanager.com/gtag/js?id=${SITE.gaId}"></script>
+  <script>window.dataLayer = window.dataLayer || []; function gtag(){dataLayer.push(arguments);} gtag('js', new Date()); gtag('config', '${SITE.gaId}');</script>` : '');
 
 const langSwitch = (ctx) => `<nav class="lang" aria-label="${esc(ctx.t.meta.langLabel)}">${LANGS.map((l) =>
   `<a href="${ctx.root}${l.path}${pageFile(ctx)}" hreflang="${l.code}" lang="${l.code}"${l.code === ctx.t.meta.code ? ' aria-current="true"' : ''}>${l.short}</a>`).join('')}</nav>`;
