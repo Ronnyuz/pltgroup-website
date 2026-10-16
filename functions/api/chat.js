@@ -31,9 +31,9 @@ const TOOLS = [{
 }];
 
 const TEXT = {
-  ru: { busy: 'Консультант сейчас недоступен. Напишите нам в Telegram или WhatsApp: +998 33 111 30 10.', long: 'Диалог получился длинным. Оставьте, пожалуйста, контакт в форме на странице «Контакты» или напишите в Telegram: +998 33 111 30 10.', limit: 'На сегодня лимит сообщений исчерпан. Напишите нам в Telegram или WhatsApp: +998 33 111 30 10.', refusal: 'С этим вопросом я помочь не могу. Расскажите о вашей задаче: сайт, бот, CRM или аналитика?' },
-  uz: { busy: 'Maslahatchi hozir mavjud emas. Telegram yoki WhatsApp orqali yozing: +998 33 111 30 10.', long: 'Suhbat uzun bo‘lib ketdi. Iltimos, «Aloqa» sahifasidagi shaklda kontaktingizni qoldiring yoki Telegramga yozing: +998 33 111 30 10.', limit: 'Bugungi xabarlar limiti tugadi. Telegram yoki WhatsApp orqali yozing: +998 33 111 30 10.', refusal: 'Bu savolda yordam bera olmayman. Vazifangiz haqida aytib bering: sayt, bot, CRM yoki analitika?' },
-  en: { busy: 'The consultant is unavailable right now. Message us on Telegram or WhatsApp: +998 33 111 30 10.', long: 'This conversation got long. Please leave your contact on the Contacts page or message us on Telegram: +998 33 111 30 10.', limit: 'The message limit for today is reached. Message us on Telegram or WhatsApp: +998 33 111 30 10.', refusal: 'I cannot help with that. Tell me about your task: a website, a bot, CRM or analytics?' },
+  ru: { empty: 'Пожалуйста! Если появятся вопросы, пишите.', busy: 'Консультант сейчас недоступен. Напишите нам в Telegram или WhatsApp: +998 33 111 30 10.', long: 'Диалог получился длинным. Оставьте, пожалуйста, контакт в форме на странице «Контакты» или напишите в Telegram: +998 33 111 30 10.', limit: 'На сегодня лимит сообщений исчерпан. Напишите нам в Telegram или WhatsApp: +998 33 111 30 10.', refusal: 'С этим вопросом я помочь не могу. Расскажите о вашей задаче: сайт, бот, CRM или аналитика?' },
+  uz: { empty: 'Arzimaydi! Savollar bo‘lsa, yozing.', busy: 'Maslahatchi hozir mavjud emas. Telegram yoki WhatsApp orqali yozing: +998 33 111 30 10.', long: 'Suhbat uzun bo‘lib ketdi. Iltimos, «Aloqa» sahifasidagi shaklda kontaktingizni qoldiring yoki Telegramga yozing: +998 33 111 30 10.', limit: 'Bugungi xabarlar limiti tugadi. Telegram yoki WhatsApp orqali yozing: +998 33 111 30 10.', refusal: 'Bu savolda yordam bera olmayman. Vazifangiz haqida aytib bering: sayt, bot, CRM yoki analitika?' },
+  en: { empty: 'You are welcome! Write if you have any questions.', busy: 'The consultant is unavailable right now. Message us on Telegram or WhatsApp: +998 33 111 30 10.', long: 'This conversation got long. Please leave your contact on the Contacts page or message us on Telegram: +998 33 111 30 10.', limit: 'The message limit for today is reached. Message us on Telegram or WhatsApp: +998 33 111 30 10.', refusal: 'I cannot help with that. Tell me about your task: a website, a bot, CRM or analytics?' },
 };
 
 const newId = () => [...crypto.getRandomValues(new Uint8Array(16))].map((b) => b.toString(16).padStart(2, '0')).join('');
@@ -47,10 +47,10 @@ async function overDailyLimit(d, ip) {
 
 async function saveLead(d, input, chat) {
   const lead = { name: clip(input.name, 120), contact: clip(input.contact, 120), service: clip(input.service, 120), task: clip(input.task, 3000) };
-  if (!lead.name || !lead.contact) return 'Not saved: name and contact are required.';
+  if (!lead.contact) return 'Not saved: a phone number or Telegram is required.';
   if (chat.lead_id) return 'Already saved earlier in this conversation.';
   const r = await d.prepare('INSERT INTO leads (name, contact, service, task, lang, page) VALUES (?, ?, ?, ?, ?, ?)')
-    .bind(lead.name, lead.contact, lead.service, lead.task, chat.lang, `${chat.page || '/'} · chat`).run();
+    .bind(lead.name || '-', lead.contact, lead.service, lead.task, chat.lang, `${chat.page || '/'} · chat`).run();
   chat.lead_id = r.meta.last_row_id;
   return 'Saved. A manager will contact the visitor within one working day.';
 }
@@ -92,28 +92,42 @@ async function runClaude(env, d, chat, t) {
   return { reply, saved };
 }
 
+// A phone number or Telegram in the visitor's message: saved as a request even if the model
+// forgets to, so a promise to call back is never left without a request behind it.
+const CONTACT = /(\+?998[\s-]?\(?\d{2}\)?[\s-]?\d{3}[\s-]?\d{2}[\s-]?\d{2})|(\+?\d[\d\s()-]{8,}\d)|(@[a-z0-9_]{4,32})|(t\.me\/[a-z0-9_]{4,32})/i;
+async function saveContactFromText(d, chat, text) {
+  if (chat.lead_id) return false;
+  const m = text.match(CONTACT);
+  if (!m) return false;
+  const said = chat.messages.filter((x) => x.role === 'user' && typeof x.content === 'string').map((x) => x.content).slice(-4).join(' / ');
+  const res = await saveLead(d, { name: '', contact: m[0].trim(), service: '', task: said }, chat);
+  return res.startsWith('Saved');
+}
+
 // Workers AI models answer with plain text; a request is passed as a [[LEAD|...]] line at the end.
 const LEAD_LINE = /\[\[LEAD\|([^\]]*)\]\]/;
 const tidy = (text) => text
   .replace(/\*\*(.+?)\*\*/g, '$1').replace(/^#+\s*/gm, '').replace(/^\s*[*-]\s+/gm, '')
   .replace(/\s+—\s+/g, ', ').replace(/—/g, '-').trim();
 
-async function runWorkersAI(env, d, chat) {
+async function runWorkersAI(env, d, chat, t) {
   const model = env.WORKERS_AI_MODEL || WORKERS_AI_MODEL;
   const input = { messages: [{ role: 'system', content: chat.system }, ...chat.messages.slice(-WORKERS_AI_HISTORY)], max_tokens: 700, temperature: 0.4 };
-  const out = env.AI
-    ? await env.AI.run(model, input)
-    : await (await fetch(env.AI_MOCK_URL, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ model, ...input }) })).json();
+  const call = async () => (env.AI
+    ? env.AI.run(model, input)
+    : (await fetch(env.AI_MOCK_URL, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ model, ...input }) })).json());
+  let out;
+  try { out = await call(); } catch (err) { console.error('workers ai, retrying', err); out = await call(); }
   let text = String(out?.response ?? out?.choices?.[0]?.message?.content ?? '').trim();
   let saved = false;
   const m = text.match(LEAD_LINE);
   if (m) {
     const [name, contact, service, task] = m[1].split('|').map((x) => x.trim());
-    const res = await saveLead(d, { name, contact, service, task }, chat);
-    saved = res.startsWith('Saved');
-    text = text.replace(LEAD_LINE, '').trim();
+    saved = (await saveLead(d, { name, contact, service, task }, chat)).startsWith('Saved');
+    text = text.replace(new RegExp(LEAD_LINE.source, 'g'), '').trim();
   }
-  text = tidy(text);
+  if (!saved) saved = await saveContactFromText(d, chat, chat.messages.at(-1).content);
+  text = tidy(text) || t.empty;
   chat.messages.push({ role: 'assistant', content: text });
   return { reply: text, saved };
 }
@@ -143,11 +157,12 @@ export async function onRequestPost({ request, env }) {
   let reply = '';
   let saved = false;
   try {
-    ({ reply, saved } = engine === 'claude' ? await runClaude(env, d, chat, t) : await runWorkersAI(env, d, chat));
+    ({ reply, saved } = engine === 'claude' ? await runClaude(env, d, chat, t) : await runWorkersAI(env, d, chat, t));
   } catch (err) {
     console.error('chat error', err instanceof Anthropic.APIError ? `${err.status} ${err.message}` : err);
     return json({ id: chat.isNew ? undefined : chat.id, reply: t.busy, unavailable: true });
   }
+  if (!saved && engine === 'claude') saved = await saveContactFromText(d, chat, message);
   if (!reply) reply = t.busy;
 
   const messages = JSON.stringify(chat.messages);
