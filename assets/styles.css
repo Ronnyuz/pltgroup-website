@@ -400,3 +400,4 @@ svg { display: block; max-width: 100%; }
   .chat-panel { width: 100vw; height: 100dvh; border-radius: 0; border: 0; }
 }
 @media (prefers-reduced-motion: reduce) { .chat-typing i { animation: none; } .chat-launch { transition: none; } }
+.chat-tools { display: flex; gap: 2px; flex: none; }
