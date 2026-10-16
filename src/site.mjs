@@ -15,6 +15,7 @@ export const SITE = {
   whatsappNumber: digits(site.whatsappNumber),
   whatsapp: `https://wa.me/${digits(site.whatsappNumber)}`,
   telegram: site.telegram,
+  gaId: /^G-[A-Z0-9]+$/.test(site.googleAnalytics || '') ? site.googleAnalytics : '',
 };
 
 // path: folder relative to the site root ('' = root).

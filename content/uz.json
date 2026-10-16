@@ -362,7 +362,7 @@
       },
       {
         "title": "Uchinchi tomon xizmatlari",
-        "text": "Sayt Google Fonts shriftlarini yuklaydi va Cloudflare’da ishlaydi. Chatdagi maslahatchi javoblarini uchinchi tomon provayderining sun’iy intellekt xizmati tayyorlaydi. WhatsApp va Telegramda ularning qoidalari amal qiladi."
+        "text": "Sayt Google Fonts shriftlarini yuklaydi, Cloudflare’da ishlaydi va Google Analytics’dan foydalanadi: u cookie o‘rnatadi va tashriflar bo‘yicha anonim statistikani yig‘adi. Chatdagi maslahatchi javoblarini sun’iy intellekt xizmati tayyorlaydi. WhatsApp va Telegramda ularning qoidalari amal qiladi."
       },
       {
         "title": "Ma’lumotlarni o‘chirish",
