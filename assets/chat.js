@@ -42,7 +42,14 @@
   close.type = 'button';
   close.setAttribute('aria-label', L.close);
   close.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>';
-  head.append(titles, close);
+  const reset = el('button', 'chat-close');
+  reset.type = 'button';
+  reset.title = L.reset;
+  reset.setAttribute('aria-label', L.reset);
+  reset.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12a8 8 0 1 0 2.3-5.6M4 4v4h4"/></svg>';
+  const tools = el('div', 'chat-tools');
+  tools.append(reset, close);
+  head.append(titles, tools);
   const log = el('div', 'chat-log');
   log.setAttribute('aria-live', 'polite');
   const form = el('form', 'chat-form');
@@ -79,6 +86,7 @@
     if (open) { render(); setTimeout(() => input.focus(), 50); }
   };
   launcher.addEventListener('click', () => setOpen(true));
+  reset.addEventListener('click', () => { state = { id: null, log: [] }; keep(); render(); input.focus(); });
   close.addEventListener('click', () => { setOpen(false); launcher.focus(); });
   document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && !panel.hidden) { setOpen(false); launcher.focus(); } });
 

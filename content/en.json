@@ -393,6 +393,7 @@
     "placeholder": "Type your question",
     "send": "Send",
     "close": "Close",
-    "error": "Could not send. Please try again."
+    "error": "Could not send. Please try again.",
+    "reset": "New chat"
   }
 }

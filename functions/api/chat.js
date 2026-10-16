@@ -31,9 +31,9 @@ const TOOLS = [{
 }];
 
 const TEXT = {
-  ru: { empty: 'Пожалуйста! Если появятся вопросы, пишите.', busy: 'Консультант сейчас недоступен. Напишите нам в Telegram или WhatsApp: +998 33 111 30 10.', long: 'Диалог получился длинным. Оставьте, пожалуйста, контакт в форме на странице «Контакты» или напишите в Telegram: +998 33 111 30 10.', limit: 'На сегодня лимит сообщений исчерпан. Напишите нам в Telegram или WhatsApp: +998 33 111 30 10.', refusal: 'С этим вопросом я помочь не могу. Расскажите о вашей задаче: сайт, бот, CRM или аналитика?' },
-  uz: { empty: 'Arzimaydi! Savollar bo‘lsa, yozing.', busy: 'Maslahatchi hozir mavjud emas. Telegram yoki WhatsApp orqali yozing: +998 33 111 30 10.', long: 'Suhbat uzun bo‘lib ketdi. Iltimos, «Aloqa» sahifasidagi shaklda kontaktingizni qoldiring yoki Telegramga yozing: +998 33 111 30 10.', limit: 'Bugungi xabarlar limiti tugadi. Telegram yoki WhatsApp orqali yozing: +998 33 111 30 10.', refusal: 'Bu savolda yordam bera olmayman. Vazifangiz haqida aytib bering: sayt, bot, CRM yoki analitika?' },
-  en: { empty: 'You are welcome! Write if you have any questions.', busy: 'The consultant is unavailable right now. Message us on Telegram or WhatsApp: +998 33 111 30 10.', long: 'This conversation got long. Please leave your contact on the Contacts page or message us on Telegram: +998 33 111 30 10.', limit: 'The message limit for today is reached. Message us on Telegram or WhatsApp: +998 33 111 30 10.', refusal: 'I cannot help with that. Tell me about your task: a website, a bot, CRM or analytics?' },
+  ru: { more: 'Чем ещё могу помочь?', empty: 'Пожалуйста! Если появятся вопросы, пишите.', busy: 'Консультант сейчас недоступен. Напишите нам в Telegram или WhatsApp: +998 33 111 30 10.', long: 'Диалог получился длинным. Оставьте, пожалуйста, контакт в форме на странице «Контакты» или напишите в Telegram: +998 33 111 30 10.', limit: 'На сегодня лимит сообщений исчерпан. Напишите нам в Telegram или WhatsApp: +998 33 111 30 10.', refusal: 'С этим вопросом я помочь не могу. Расскажите о вашей задаче: сайт, бот, CRM или аналитика?' },
+  uz: { more: 'Yana nima bilan yordam bera olaman?', empty: 'Arzimaydi! Savollar bo‘lsa, yozing.', busy: 'Maslahatchi hozir mavjud emas. Telegram yoki WhatsApp orqali yozing: +998 33 111 30 10.', long: 'Suhbat uzun bo‘lib ketdi. Iltimos, «Aloqa» sahifasidagi shaklda kontaktingizni qoldiring yoki Telegramga yozing: +998 33 111 30 10.', limit: 'Bugungi xabarlar limiti tugadi. Telegram yoki WhatsApp orqali yozing: +998 33 111 30 10.', refusal: 'Bu savolda yordam bera olmayman. Vazifangiz haqida aytib bering: sayt, bot, CRM yoki analitika?' },
+  en: { more: 'What else can I help you with?', empty: 'You are welcome! Write if you have any questions.', busy: 'The consultant is unavailable right now. Message us on Telegram or WhatsApp: +998 33 111 30 10.', long: 'This conversation got long. Please leave your contact on the Contacts page or message us on Telegram: +998 33 111 30 10.', limit: 'The message limit for today is reached. Message us on Telegram or WhatsApp: +998 33 111 30 10.', refusal: 'I cannot help with that. Tell me about your task: a website, a bot, CRM or analytics?' },
 };
 
 const newId = () => [...crypto.getRandomValues(new Uint8Array(16))].map((b) => b.toString(16).padStart(2, '0')).join('');
@@ -110,15 +110,29 @@ const tidy = (text) => text
   .replace(/\*\*(.+?)\*\*/g, '$1').replace(/^#+\s*/gm, '').replace(/^\s*[*-]\s+/gm, '')
   .replace(/\s+—\s+/g, ', ').replace(/—/g, '-').trim();
 
+// Workers AI conversations take the current prompt on every turn (nothing binds them to the
+// first one), plus a note once a request is saved so the model stops promising a call again.
 async function runWorkersAI(env, d, chat, t) {
   const model = env.WORKERS_AI_MODEL || WORKERS_AI_MODEL;
-  const input = { messages: [{ role: 'system', content: chat.system }, ...chat.messages.slice(-WORKERS_AI_HISTORY)], max_tokens: 700, temperature: 0.4 };
-  const call = async () => (env.AI
-    ? env.AI.run(model, input)
-    : (await fetch(env.AI_MOCK_URL, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ model, ...input }) })).json());
-  let out;
-  try { out = await call(); } catch (err) { console.error('workers ai, retrying', err); out = await call(); }
-  let text = String(out?.response ?? out?.choices?.[0]?.message?.content ?? '').trim();
+  const ask = async (extra) => {
+    const system = buildSystemPrompt('marker')
+      + (chat.lead_id ? '\n\nЗаявка этого посетителя уже сохранена. Не повторяй, что менеджер свяжется, и не добавляй метку. Отвечай на новое сообщение.' : '')
+      + (extra ? `\n\n${extra}` : '');
+    const input = { messages: [{ role: 'system', content: system }, ...chat.messages.slice(-WORKERS_AI_HISTORY)], max_tokens: 700, temperature: extra ? 0.7 : 0.4 };
+    const call = async () => (env.AI
+      ? env.AI.run(model, input)
+      : (await fetch(env.AI_MOCK_URL, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ model, ...input }) })).json());
+    let out;
+    try { out = await call(); } catch (err) { console.error('workers ai, retrying', err); out = await call(); }
+    return String(out?.response ?? out?.choices?.[0]?.message?.content ?? '').trim();
+  };
+  const previous = [...chat.messages].reverse().find((x) => x.role === 'assistant')?.content || '';
+  const same = (a) => tidy(a.replace(new RegExp(LEAD_LINE.source, 'g'), '')) === previous;
+
+  let text = await ask();
+  if (previous && same(text)) text = await ask('Твой прошлый ответ был таким же. Ответь заново, по существу именно на последнее сообщение посетителя.');
+  if (previous && same(text)) text = t.more;
+
   let saved = false;
   const m = text.match(LEAD_LINE);
   if (m) {

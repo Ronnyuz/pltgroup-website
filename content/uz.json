@@ -393,6 +393,7 @@
     "placeholder": "Savolingizni yozing",
     "send": "Yuborish",
     "close": "Yopish",
-    "error": "Yuborib bo‘lmadi. Qayta urinib ko‘ring."
+    "error": "Yuborib bo‘lmadi. Qayta urinib ko‘ring.",
+    "reset": "Yangi suhbat"
   }
 }
