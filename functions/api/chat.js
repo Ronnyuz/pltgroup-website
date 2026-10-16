@@ -112,10 +112,20 @@ async function runClaude(env, d, chat, t) {
 // A phone number or Telegram in the visitor's message: saved as a request even if the model
 // forgets to, so a promise to call back is never left without a request behind it.
 const CONTACT = /(\+?998[\s-]?\(?\d{2}\)?[\s-]?\d{3}[\s-]?\d{2}[\s-]?\d{2})|(\+?\d[\d\s()-]{8,}\d)|(@[a-z0-9_]{4,32})|(t\.me\/[a-z0-9_]{4,32})/i;
+// The latest phone or Telegram the visitor wrote that is not one of the company's own.
+function visitorContactIn(chat) {
+  const said = chat.messages.filter((x) => x.role === 'user' && typeof x.content === 'string').map((x) => x.content).reverse();
+  for (const text of said) {
+    const m = text.match(CONTACT);
+    if (m && !OWN.has(contactKey(m[0]))) return m[0].trim();
+  }
+  return '';
+}
+
 async function saveContactFromText(d, chat, text) {
   if (chat.lead_id) return false;
   const m = text.match(CONTACT);
-  if (!m) return false;
+  if (!m || OWN.has(contactKey(m[0]))) return false;
   const said = chat.messages.filter((x) => x.role === 'user' && typeof x.content === 'string').map((x) => x.content).slice(-4).join(' / ');
   const res = await saveLead(d, { name: '', contact: m[0].trim(), service: '', task: said }, chat);
   return res.startsWith('Saved');
@@ -155,8 +165,11 @@ async function runWorkersAI(env, d, chat, t) {
   if (m) {
     const [name, contact, service, task] = m[1].split('|').map((x) => x.trim());
     saved = (await saveLead(d, { name, contact, service, task }, chat)).startsWith('Saved');
+    // The model put in a contact the visitor never gave (often the company's own number):
+    // take the visitor's own one from the conversation, or ask for it.
+    const own = !saved && !chat.lead_id && visitorContactIn(chat);
+    if (own) saved = (await saveLead(d, { name, contact: own, service, task }, chat)).startsWith('Saved');
     text = text.replace(new RegExp(LEAD_LINE.source, 'g'), '').trim();
-    // The reply promised a call back on a contact the visitor never gave: ask for theirs instead.
     if (!saved && !chat.lead_id) text = t.contact;
   }
   if (!saved) saved = await saveContactFromText(d, chat, chat.messages.at(-1).content);
