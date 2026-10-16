@@ -147,7 +147,7 @@
   // ---------- Leads ----------
   let leadFilter = 'new';
   async function viewLeads() {
-    shell('leads', head('Заявки', 'Заявки из формы на сайте. Каждая заявка также приходит вам в WhatsApp.'), h('p', { class: 'muted' }, 'Загрузка…'));
+    shell('leads', head('Заявки', 'Заявки из формы и чата на сайте. После формы клиент также открывает ваш Telegram.'), h('p', { class: 'muted' }, 'Загрузка…'));
     let data;
     try { data = await api('GET', `/api/leads${leadFilter === 'all' ? '' : `?status=${leadFilter}`}`); } catch (e) { loadFailed(e); return; }
     newCount = data.counts.new || 0;
@@ -159,7 +159,7 @@
     const list = data.leads.length
       ? h('div', { class: 'stack' }, data.leads.map(leadCard))
       : h('p', { class: 'empty' }, leadFilter === 'new' ? 'Новых заявок нет.' : 'Здесь пока пусто.');
-    shell('leads', head('Заявки', 'Заявки из формы на сайте. Каждая заявка также приходит вам в WhatsApp.', h('button', { class: 'btn btn--small', type: 'button', onclick: viewLeads }, 'Обновить')),
+    shell('leads', head('Заявки', 'Заявки из формы и чата на сайте. После формы клиент также открывает ваш Telegram.', h('button', { class: 'btn btn--small', type: 'button', onclick: viewLeads }, 'Обновить')),
       h('div', { style: 'margin-bottom:18px' }, tabs), list);
   }
 
@@ -169,7 +169,7 @@
     const digits = v.replace(/\D/g, '');
     if (digits.length >= 9) {
       const full = digits.length === 9 ? '998' + digits : digits;
-      return h('span', { class: 'lead-contact' }, h('a', { href: `tel:+${full}` }, v), ' · ', h('a', { href: `https://wa.me/${full}`, target: '_blank', rel: 'noopener' }, 'WhatsApp'));
+      return h('span', { class: 'lead-contact' }, h('a', { href: `tel:+${full}` }, v), ' · ', h('a', { href: `https://t.me/+${full}`, target: '_blank', rel: 'noopener' }, 'Telegram'), ' · ', h('a', { href: `https://wa.me/${full}`, target: '_blank', rel: 'noopener' }, 'WhatsApp'));
     }
     return h('span', { class: 'lead-contact' }, v);
   }
@@ -315,7 +315,7 @@
         field('Почта', h('input', { class: 'input', type: 'email', value: draft.email, oninput: (e) => { draft.email = e.target.value; mark(); } })),
         field('Телефон для звонка', h('input', { class: 'input', value: draft.phone, oninput: (e) => { draft.phone = e.target.value; mark(); } }), 'С кодом страны: +998331113010'),
         field('Телефон как его видно на сайте', h('input', { class: 'input', value: draft.phoneHuman, oninput: (e) => { draft.phoneHuman = e.target.value; mark(); } }), 'Например: +998 33 111 30 10'),
-        field('Номер WhatsApp (сюда приходят заявки)', h('input', { class: 'input', value: draft.whatsappNumber, inputmode: 'numeric', oninput: (e) => { draft.whatsappNumber = e.target.value; mark(); } })),
+        field('Номер WhatsApp', h('input', { class: 'input', value: draft.whatsappNumber, inputmode: 'numeric', oninput: (e) => { draft.whatsappNumber = e.target.value; mark(); } })),
         field('Ссылка Telegram', h('input', { class: 'input', value: draft.telegram, oninput: (e) => { draft.telegram = e.target.value; mark(); } }), 'Например: https://t.me/pltgroup'),
         'googleAnalytics' in draft ? field('Google Analytics', h('input', { class: 'input', value: draft.googleAnalytics, placeholder: 'G-XXXXXXXXXX', oninput: (e) => { draft.googleAnalytics = e.target.value.trim(); mark(); } }), 'Идентификатор потока данных. Пусто: аналитика выключена.') : null);
     } else {
