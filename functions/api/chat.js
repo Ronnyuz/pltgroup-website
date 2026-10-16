@@ -6,6 +6,7 @@
 import Anthropic from '@anthropic-ai/sdk';
 import { body, clip, db, fail, json, sameOrigin } from '../_lib/core.js';
 import { buildSystemPrompt } from '../_lib/chat-prompt.js';
+import site from '../../content/site.json';
 
 const MAX_TURNS = 30;          // visitor messages per conversation
 const MAX_PER_DAY = 60;        // visitor messages per IP per day
@@ -31,9 +32,9 @@ const TOOLS = [{
 }];
 
 const TEXT = {
-  ru: { more: 'Чем ещё могу помочь?', empty: 'Пожалуйста! Если появятся вопросы, пишите.', busy: 'Консультант сейчас недоступен. Напишите нам в Telegram или WhatsApp: +998 33 111 30 10.', long: 'Диалог получился длинным. Оставьте, пожалуйста, контакт в форме на странице «Контакты» или напишите в Telegram: +998 33 111 30 10.', limit: 'На сегодня лимит сообщений исчерпан. Напишите нам в Telegram или WhatsApp: +998 33 111 30 10.', refusal: 'С этим вопросом я помочь не могу. Расскажите о вашей задаче: сайт, бот, CRM или аналитика?' },
-  uz: { more: 'Yana nima bilan yordam bera olaman?', empty: 'Arzimaydi! Savollar bo‘lsa, yozing.', busy: 'Maslahatchi hozir mavjud emas. Telegram yoki WhatsApp orqali yozing: +998 33 111 30 10.', long: 'Suhbat uzun bo‘lib ketdi. Iltimos, «Aloqa» sahifasidagi shaklda kontaktingizni qoldiring yoki Telegramga yozing: +998 33 111 30 10.', limit: 'Bugungi xabarlar limiti tugadi. Telegram yoki WhatsApp orqali yozing: +998 33 111 30 10.', refusal: 'Bu savolda yordam bera olmayman. Vazifangiz haqida aytib bering: sayt, bot, CRM yoki analitika?' },
-  en: { more: 'What else can I help you with?', empty: 'You are welcome! Write if you have any questions.', busy: 'The consultant is unavailable right now. Message us on Telegram or WhatsApp: +998 33 111 30 10.', long: 'This conversation got long. Please leave your contact on the Contacts page or message us on Telegram: +998 33 111 30 10.', limit: 'The message limit for today is reached. Message us on Telegram or WhatsApp: +998 33 111 30 10.', refusal: 'I cannot help with that. Tell me about your task: a website, a bot, CRM or analytics?' },
+  ru: { contact: 'Чтобы менеджер с вами связался, оставьте, пожалуйста, ваш номер телефона или Telegram.', more: 'Чем ещё могу помочь?', empty: 'Пожалуйста! Если появятся вопросы, пишите.', busy: 'Консультант сейчас недоступен. Напишите нам в Telegram или WhatsApp: +998 33 111 30 10.', long: 'Диалог получился длинным. Оставьте, пожалуйста, контакт в форме на странице «Контакты» или напишите в Telegram: +998 33 111 30 10.', limit: 'На сегодня лимит сообщений исчерпан. Напишите нам в Telegram или WhatsApp: +998 33 111 30 10.', refusal: 'С этим вопросом я помочь не могу. Расскажите о вашей задаче: сайт, бот, CRM или аналитика?' },
+  uz: { contact: 'Menejer siz bilan bog‘lanishi uchun telefon raqamingiz yoki Telegramingizni qoldiring.', more: 'Yana nima bilan yordam bera olaman?', empty: 'Arzimaydi! Savollar bo‘lsa, yozing.', busy: 'Maslahatchi hozir mavjud emas. Telegram yoki WhatsApp orqali yozing: +998 33 111 30 10.', long: 'Suhbat uzun bo‘lib ketdi. Iltimos, «Aloqa» sahifasidagi shaklda kontaktingizni qoldiring yoki Telegramga yozing: +998 33 111 30 10.', limit: 'Bugungi xabarlar limiti tugadi. Telegram yoki WhatsApp orqali yozing: +998 33 111 30 10.', refusal: 'Bu savolda yordam bera olmayman. Vazifangiz haqida aytib bering: sayt, bot, CRM yoki analitika?' },
+  en: { contact: 'So a manager can reach you, please leave your phone number or Telegram.', more: 'What else can I help you with?', empty: 'You are welcome! Write if you have any questions.', busy: 'The consultant is unavailable right now. Message us on Telegram or WhatsApp: +998 33 111 30 10.', long: 'This conversation got long. Please leave your contact on the Contacts page or message us on Telegram: +998 33 111 30 10.', limit: 'The message limit for today is reached. Message us on Telegram or WhatsApp: +998 33 111 30 10.', refusal: 'I cannot help with that. Tell me about your task: a website, a bot, CRM or analytics?' },
 };
 
 const newId = () => [...crypto.getRandomValues(new Uint8Array(16))].map((b) => b.toString(16).padStart(2, '0')).join('');
@@ -45,9 +46,25 @@ async function overDailyLimit(d, ip) {
   return row.count > MAX_PER_DAY;
 }
 
+// A contact counts only if the visitor wrote it: models tend to fill in the company's own
+// number from the prompt when the visitor gave none. Phones compare by their last 7 digits.
+const contactKey = (s) => {
+  const v = String(s || '').toLowerCase();
+  const digits = v.replace(/\D/g, '');
+  return digits.length >= 7 ? digits.slice(-7) : v.replace(/t\.me\//g, '').replace(/[^a-z0-9_]/g, '');
+};
+const OWN = new Set([site.phone, site.whatsappNumber, site.telegram, site.email].filter(Boolean).map(contactKey));
+function visitorContact(chat, contact) {
+  const key = contactKey(contact);
+  if (!key || key.length < 4 || OWN.has(key)) return false;
+  const said = chat.messages.filter((x) => x.role === 'user' && typeof x.content === 'string').map((x) => x.content).join('\n').toLowerCase();
+  return said.replace(/\D/g, '').includes(key) || said.replace(/[^a-z0-9_]/g, '').includes(key);
+}
+
 async function saveLead(d, input, chat) {
   const lead = { name: clip(input.name, 120), contact: clip(input.contact, 120), service: clip(input.service, 120), task: clip(input.task, 3000) };
   if (!lead.contact) return 'Not saved: a phone number or Telegram is required.';
+  if (!visitorContact(chat, lead.contact)) return 'Not saved: ask the visitor for their own phone number or Telegram.';
   if (chat.lead_id) return 'Already saved earlier in this conversation.';
   const r = await d.prepare('INSERT INTO leads (name, contact, service, task, lang, page) VALUES (?, ?, ?, ?, ?, ?)')
     .bind(lead.name || '-', lead.contact, lead.service, lead.task, chat.lang, `${chat.page || '/'} · chat`).run();
@@ -95,10 +112,20 @@ async function runClaude(env, d, chat, t) {
 // A phone number or Telegram in the visitor's message: saved as a request even if the model
 // forgets to, so a promise to call back is never left without a request behind it.
 const CONTACT = /(\+?998[\s-]?\(?\d{2}\)?[\s-]?\d{3}[\s-]?\d{2}[\s-]?\d{2})|(\+?\d[\d\s()-]{8,}\d)|(@[a-z0-9_]{4,32})|(t\.me\/[a-z0-9_]{4,32})/i;
+// The latest phone or Telegram the visitor wrote that is not one of the company's own.
+function visitorContactIn(chat) {
+  const said = chat.messages.filter((x) => x.role === 'user' && typeof x.content === 'string').map((x) => x.content).reverse();
+  for (const text of said) {
+    const m = text.match(CONTACT);
+    if (m && !OWN.has(contactKey(m[0]))) return m[0].trim();
+  }
+  return '';
+}
+
 async function saveContactFromText(d, chat, text) {
   if (chat.lead_id) return false;
   const m = text.match(CONTACT);
-  if (!m) return false;
+  if (!m || OWN.has(contactKey(m[0]))) return false;
   const said = chat.messages.filter((x) => x.role === 'user' && typeof x.content === 'string').map((x) => x.content).slice(-4).join(' / ');
   const res = await saveLead(d, { name: '', contact: m[0].trim(), service: '', task: said }, chat);
   return res.startsWith('Saved');
@@ -138,7 +165,12 @@ async function runWorkersAI(env, d, chat, t) {
   if (m) {
     const [name, contact, service, task] = m[1].split('|').map((x) => x.trim());
     saved = (await saveLead(d, { name, contact, service, task }, chat)).startsWith('Saved');
+    // The model put in a contact the visitor never gave (often the company's own number):
+    // take the visitor's own one from the conversation, or ask for it.
+    const own = !saved && !chat.lead_id && visitorContactIn(chat);
+    if (own) saved = (await saveLead(d, { name, contact: own, service, task }, chat)).startsWith('Saved');
     text = text.replace(new RegExp(LEAD_LINE.source, 'g'), '').trim();
+    if (!saved && !chat.lead_id) text = t.contact;
   }
   if (!saved) saved = await saveContactFromText(d, chat, chat.messages.at(-1).content);
   text = tidy(text) || t.empty;

@@ -45,7 +45,7 @@ function head(ctx, { title, description }) {
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="yandex-verification" content="3b2fb0ea389f2828">
+  <meta name="yandex-verification" content="1c2475a81e074f44">
   <title>${esc(title)}</title>
   <meta name="description" content="${esc(description)}">
   <link rel="canonical" href="${url}">
@@ -342,14 +342,14 @@ export function contacts(ctx) {
         </ul>
         <p class="small">${esc(c.city)}</p>
       </div>
-      <form class="form" data-form novalidate data-wa="${SITE.whatsappNumber}" data-intro="${esc(f.intro)}" data-lang="${ctx.t.meta.code}">
+      <form class="form" data-form novalidate data-tg="${SITE.telegram}" data-intro="${esc(f.intro)}" data-lang="${ctx.t.meta.code}">
         <h2>${esc(f.title)}</h2>
         <div class="hp" aria-hidden="true"><label for="f-website">Website</label><input id="f-website" name="website" tabindex="-1" autocomplete="off"></div>
         <div class="field"><label for="f-name">${esc(f.name)}</label><input id="f-name" name="name" autocomplete="name" required><span class="error">${esc(f.required)}</span></div>
         <div class="field"><label for="f-contact">${esc(f.contact)}</label><input id="f-contact" name="contact" autocomplete="tel" inputmode="tel" placeholder="+998" required><span class="error">${esc(f.required)}</span></div>
         <div class="field"><label for="f-service">${esc(f.service)}</label><select id="f-service" name="service">${f.services.map((x, i) => `<option value="${esc(x)}" data-id="${ids[i]}">${esc(x)}</option>`).join('')}</select></div>
         <div class="field"><label for="f-task">${esc(f.task)}</label><textarea id="f-task" name="task" rows="4" placeholder="${esc(f.taskHint)}"></textarea></div>
-        <button class="btn btn--amber btn--block" type="submit">${icon.whatsapp}${esc(f.submit)}</button>
+        <button class="btn btn--amber btn--block" type="submit">${icon.telegram}${esc(f.submit)}</button>
         <p class="small form-note">${esc(f.note)}</p>
       </form>
     </div>

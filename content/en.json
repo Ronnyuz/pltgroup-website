@@ -339,8 +339,8 @@
       "Support"
     ],
     "required": "Please fill in this field",
-    "submit": "Send via WhatsApp",
-    "note": "We keep a copy of your request, and WhatsApp opens with a ready message.",
+    "submit": "Send and open Telegram",
+    "note": "We keep your request, and our Telegram opens. The request text is copied, so you can paste it into the chat.",
     "intro": "Hello! Request from the PLT GROUP website."
   },
   "footer": {
@@ -354,7 +354,7 @@
     "sections": [
       {
         "title": "What data we receive",
-        "text": "When you send the request form, we receive the name, contact and task description you entered. They are kept in a protected system that only PLT GROUP staff can access. Then WhatsApp opens with a ready message. The site collects no other personal data. If you write in the chat on the site, your messages are stored and sent to an artificial intelligence service that generates the consultant's replies. The name and contact you leave in the chat go into a request."
+        "text": "When you send the request form, we receive the name, contact and task description you entered. They are kept in a protected system that only PLT GROUP staff can access. Then our Telegram opens. The site collects no other personal data. If you write in the chat on the site, your messages are stored and sent to an artificial intelligence service that generates the consultant's replies. The name and contact you leave in the chat go into a request."
       },
       {
         "title": "How we use it",

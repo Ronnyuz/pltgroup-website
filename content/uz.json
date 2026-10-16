@@ -339,8 +339,8 @@
       "Qo‘llab-quvvatlash"
     ],
     "required": "Ushbu maydonni to‘ldiring",
-    "submit": "WhatsApp orqali yuborish",
-    "note": "Ariza bizda saqlanadi va tayyor xabar bilan WhatsApp ochiladi.",
+    "submit": "Yuborish va Telegramni ochish",
+    "note": "Ariza bizda saqlanadi va Telegramimiz ochiladi. Ariza matni nusxalandi, uni chatga qo‘yishingiz mumkin.",
     "intro": "Assalomu alaykum! PLT GROUP saytidan ariza."
   },
   "footer": {
@@ -354,7 +354,7 @@
     "sections": [
       {
         "title": "Qanday ma’lumot olamiz",
-        "text": "Ariza shaklini yuborganingizda biz unda ko‘rsatilgan ism, aloqa va vazifa tavsifini olamiz. Ular faqat PLT GROUP xodimlari kira oladigan himoyalangan tizimda saqlanadi. So‘ng tayyor xabar bilan WhatsApp ochiladi. Sayt boshqa shaxsiy ma’lumotlarni yig‘maydi. Saytdagi chatga yozsangiz, xabarlaringiz saqlanadi va maslahatchi javoblarini tayyorlaydigan sun’iy intellekt xizmatiga uzatiladi. Chatda qoldirgan ism va kontaktingiz arizaga tushadi."
+        "text": "Ariza shaklini yuborganingizda biz unda ko‘rsatilgan ism, aloqa va vazifa tavsifini olamiz. Ular faqat PLT GROUP xodimlari kira oladigan himoyalangan tizimda saqlanadi. So‘ng Telegramimiz ochiladi. Sayt boshqa shaxsiy ma’lumotlarni yig‘maydi. Saytdagi chatga yozsangiz, xabarlaringiz saqlanadi va maslahatchi javoblarini tayyorlaydigan sun’iy intellekt xizmatiga uzatiladi. Chatda qoldirgan ism va kontaktingiz arizaga tushadi."
       },
       {
         "title": "Qanday foydalanamiz",
