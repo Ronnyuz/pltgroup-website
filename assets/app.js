@@ -35,6 +35,7 @@
   const word = document.querySelector('[data-particles]');
   if (word) {
     const ctx = word.getContext('2d');
+    const TEXT = word.dataset.particles || 'PLT';
     let W, H, ps = [], mx = -9999, my = -9999;
     const build = () => {
       [W, H] = sizeCanvas(word, ctx);
@@ -43,12 +44,12 @@
       const off = document.createElement('canvas'); off.width = W; off.height = H;
       const o = off.getContext('2d');
       o.font = '800 100px Manrope, Arial, sans-serif';
-      const ratio = o.measureText('PLT').width / 100;
-      const size = Math.min((room - 76) / 0.74, (W * (W < 600 ? 0.86 : 0.62)) / ratio);
+      const ratio = o.measureText(TEXT).width / 100;
+      const size = Math.min((room - 76) / 0.74, (W * (W < 600 ? 0.86 : (TEXT.length > 3 ? 0.8 : 0.62))) / ratio);
       o.font = `800 ${size}px Manrope, Arial, sans-serif`;
-      const tw = o.measureText('PLT').width, x0 = (W - tw) / 2;
+      const tw = o.measureText(TEXT).width, x0 = (W - tw) / 2;
       const y0 = Math.max(56, (room - size * 0.74) / 2 + 20) + size * 0.74;
-      o.fillStyle = '#fff'; o.fillText('PLT', x0, y0);
+      o.fillStyle = '#fff'; o.fillText(TEXT, x0, y0);
       const data = o.getImageData(0, 0, W, H).data;
       const step = W < 600 ? 6 : 8;
       const old = ps; ps = [];

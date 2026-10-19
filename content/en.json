@@ -5,23 +5,23 @@
   },
   "pages": {
     "home": {
-      "title": "PLT GROUP | Websites, Telegram bots, CRM and analytics in Tashkent",
+      "title": "PLT Digital | Websites, Telegram bots, CRM and analytics in Tashkent",
       "description": "Websites, Telegram bots, CRM and analytics for businesses in Uzbekistan. Under contract, at a fixed price."
     },
     "services": {
-      "title": "Services | PLT GROUP",
+      "title": "Services | PLT Digital",
       "description": "Websites, Telegram bots, CRM, analytics and AI assistants. What is included, what it costs and how long it takes."
     },
     "process": {
-      "title": "How we work | PLT GROUP",
+      "title": "How we work | PLT Digital",
       "description": "Four steps from the first call to launch. Price and timeline are agreed before work starts."
     },
     "prices": {
-      "title": "Prices | PLT GROUP",
+      "title": "Prices | PLT Digital",
       "description": "Project prices and support plans after launch. Paid in UZS under contract."
     },
     "contacts": {
-      "title": "Contact | PLT GROUP",
+      "title": "Contact | PLT Digital",
       "description": "Email, phone, Telegram and WhatsApp for PLT GROUP in Tashkent."
     }
   },
@@ -387,7 +387,7 @@
   },
   "chat": {
     "open": "Ask a question",
-    "title": "PLT GROUP consultant",
+    "title": "PLT Digital consultant",
     "note": "AI assistant. Answers right away, a manager will confirm the exact price.",
     "greeting": "Hello! Tell me what your business does and what you want to improve. I will suggest what fits and what it costs.",
     "placeholder": "Type your question",
