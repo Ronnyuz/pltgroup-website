@@ -1,5 +1,14 @@
 // HTML templates for every page. Text: src/i18n.mjs. Contacts: src/site.mjs.
 import { SITE, LANGS } from './site.mjs';
+import { createHash } from 'node:crypto';
+import { readFileSync } from 'node:fs';
+import { dirname, join } from 'node:path';
+import { fileURLToPath } from 'node:url';
+
+// Asset links carry a short hash of the file, so browsers fetch the new version after every change.
+const ASSETS = join(dirname(fileURLToPath(import.meta.url)), '..', 'assets');
+const ver = (f) => createHash('sha1').update(readFileSync(join(ASSETS, f))).digest('hex').slice(0, 8);
+const V = { css: ver('styles.css'), app: ver('app.js'), chat: ver('chat.js') };
 
 const META = { ru: { htmlLang: 'ru', ogLocale: 'ru_RU' }, uz: { htmlLang: 'uz', ogLocale: 'uz_UZ' }, en: { htmlLang: 'en', ogLocale: 'en_US' } };
 
@@ -65,7 +74,7 @@ function head(ctx, { title, description }) {
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="${FONTS}">
-  <link rel="stylesheet" href="${ctx.root}assets/styles.css">${analytics()}`;
+  <link rel="stylesheet" href="${ctx.root}assets/styles.css?v=${V.css}">${analytics()}`;
 }
 
 // Google Analytics, when an ID is set in content/site.json.
@@ -124,8 +133,8 @@ function footer(ctx) {
   </div>
 </footer>
 <div class="chat" data-chat data-lang="${t.meta.code}" data-labels="${esc(JSON.stringify(t.chat))}" hidden></div>
-<script src="${ctx.root}assets/app.js" defer></script>
-<script src="${ctx.root}assets/chat.js" defer></script>
+<script src="${ctx.root}assets/app.js?v=${V.app}" defer></script>
+<script src="${ctx.root}assets/chat.js?v=${V.chat}" defer></script>
 <!--/email_off-->
 </body>
 </html>
@@ -374,7 +383,7 @@ export function notFound(ctx) {
   const n = ctx.t.notFound;
   return `<!doctype html>
 <html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>${esc(n.title)} | PLT GROUP</title><meta name="robots" content="noindex">
-<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml"><link rel="stylesheet" href="${FONTS}"><link rel="stylesheet" href="/assets/styles.css"></head>
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml"><link rel="stylesheet" href="${FONTS}"><link rel="stylesheet" href="/assets/styles.css?v=${V.css}"></head>
 <body class="page-404"><!--email_off--><main class="nf"><div class="wrap">
 <span class="nf-logo">${logo}</span>
 <h1>${esc(n.title)}</h1><p class="lead">${esc(n.text)}</p><a class="btn btn--amber" href="/">${esc(n.home)}</a>
