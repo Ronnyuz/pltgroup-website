@@ -35,7 +35,7 @@ const FILES = { home: 'index.html', services: 'services.html', process: 'process
 const urls = [];
 for (const l of LANGS) {
   const t = dict[l.code];
-  const root = l.path ? '../' : '';
+  const root = '../'.repeat(l.path.split('/').filter(Boolean).length);
   for (const [page, file] of Object.entries(FILES)) {
     const ctx = { t, page, root, langPath: l.path, posts };
     write(l.path + file, tpl[page](ctx));
@@ -48,14 +48,17 @@ for (const l of LANGS) {
 }
 
 // Old URLs from the first version of the site.
-const redirects = { 'about.html': './', 'contact.html': 'contacts.html', 'solutions.html': 'services.html', 'industries.html': 'services.html' };
+const redirects = { 'about.html': 'digital/', 'contact.html': 'digital/contacts.html', 'solutions.html': 'digital/services.html', 'industries.html': 'digital/services.html' };
 for (const [from, to] of Object.entries(redirects)) {
-  write(from, `<!doctype html><html lang="ru"><head><meta charset="utf-8"><title>PLT GROUP</title><meta name="robots" content="noindex"><link rel="canonical" href="${SITE.url}/${to === './' ? '' : to}"><meta http-equiv="refresh" content="0; url=${to}"></head><body><a href="${to}">PLT GROUP</a></body></html>\n`);
+  write(from, `<!doctype html><html lang="ru"><head><meta charset="utf-8"><title>PLT GROUP</title><meta name="robots" content="noindex"><link rel="canonical" href="${SITE.url}/${to}"><meta http-equiv="refresh" content="0; url=${to}"></head><body><a href="${to}">PLT GROUP</a></body></html>\n`);
 }
 
 write('404.html', tpl.notFound({ t: dict.ru, page: '404', posts }));
 
 const today = new Date().toISOString().slice(0, 10);
+// Static pages of the group (index.html, agrovia/, retail/, privacy.html) are kept by hand.
+for (const u of ['', 'agrovia/', 'retail/', 'privacy.html']) urls.unshift(`${SITE.url}/${u}`);
+
 write('sitemap.xml', `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 ${urls.map((u) => `  <url><loc>${u}</loc><lastmod>${today}</lastmod></url>`).join('\n')}

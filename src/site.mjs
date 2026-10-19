@@ -18,9 +18,10 @@ export const SITE = {
   gaId: /^G-[A-Z0-9]+$/.test(site.googleAnalytics || '') ? site.googleAnalytics : '',
 };
 
-// path: folder relative to the site root ('' = root).
+// path: folder relative to the site root. The IT site (PLT Digital) lives under /digital/;
+// the site root holds the PLT GROUP page and the other companies (static files, not built here).
 export const LANGS = [
-  { code: 'ru', short: 'RU', path: '' },
-  { code: 'uz', short: 'UZ', path: 'uz/' },
-  { code: 'en', short: 'EN', path: 'en/' },
+  { code: 'ru', short: 'RU', path: 'digital/' },
+  { code: 'uz', short: 'UZ', path: 'digital/uz/' },
+  { code: 'en', short: 'EN', path: 'digital/en/' },
 ];

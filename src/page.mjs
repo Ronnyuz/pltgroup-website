@@ -50,7 +50,7 @@ function head(ctx, { title, description }) {
   <meta name="description" content="${esc(description)}">
   <link rel="canonical" href="${url}">
   ${LANGS.map((l) => `<link rel="alternate" hreflang="${l.code}" href="${SITE.url}/${l.path}${file}">`).join('\n  ')}
-  <link rel="alternate" hreflang="x-default" href="${SITE.url}/${file}">
+  <link rel="alternate" hreflang="x-default" href="${SITE.url}/${LANGS[0].path}${file}">
   <meta name="theme-color" content="#fbfbfd">
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="PLT GROUP">
