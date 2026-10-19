@@ -5,23 +5,23 @@
   },
   "pages": {
     "home": {
-      "title": "PLT GROUP | Saytlar, Telegram-botlar, CRM va tahlil, Toshkent",
+      "title": "PLT Digital | Saytlar, Telegram-botlar, CRM va tahlil, Toshkent",
       "description": "O‘zbekiston biznesi uchun saytlar, Telegram-botlar, CRM va tahlil. Shartnoma asosida, qat’iy narx bilan."
     },
     "services": {
-      "title": "Xizmatlar | PLT GROUP",
+      "title": "Xizmatlar | PLT Digital",
       "description": "Saytlar, Telegram-botlar, CRM, tahlil va AI-yordamchilar. Nima kiradi, qancha turadi va qancha davom etadi."
     },
     "process": {
-      "title": "Qanday ishlaymiz | PLT GROUP",
+      "title": "Qanday ishlaymiz | PLT Digital",
       "description": "Suhbatdan ishga tushirishgacha to‘rt qadam. Narx va muddat ish boshlanishidan oldin ma’lum."
     },
     "prices": {
-      "title": "Narxlar | PLT GROUP",
+      "title": "Narxlar | PLT Digital",
       "description": "Loyihalar va ishga tushgandan keyingi qo‘llab-quvvatlash narxlari. Shartnoma bo‘yicha so‘mda to‘lov."
     },
     "contacts": {
-      "title": "Aloqa | PLT GROUP",
+      "title": "Aloqa | PLT Digital",
       "description": "PLT GROUP pochtasi, telefoni, Telegram va WhatsApp, Toshkent."
     }
   },
@@ -387,7 +387,7 @@
   },
   "chat": {
     "open": "Savol berish",
-    "title": "PLT GROUP maslahatchisi",
+    "title": "PLT Digital maslahatchisi",
     "note": "AI-yordamchi. Darhol javob beradi, aniq narxni menejer aytadi.",
     "greeting": "Assalomu alaykum! Biznesingiz nima bilan shug‘ullanishi va nimani yaxshilamoqchi ekaningizni aytib bering. Nima mos kelishi va qancha turishini aytaman.",
     "placeholder": "Savolingizni yozing",

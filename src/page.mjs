@@ -84,8 +84,8 @@ function header(ctx) {
   return `<a class="skip" href="#main">${esc(t.nav.skip)}</a>
 <header class="site-header" data-header>
   <div class="wrap header-row">
-    <a class="brand" href="${href(ctx, 'home')}"${ctx.page === 'home' ? ' aria-current="page"' : ''}>${logo}<span>PLT GROUP</span></a>
-    <nav class="nav" aria-label="${esc(t.nav.label)}">${navLinks(ctx)}</nav>
+    <a class="brand" href="${href(ctx, 'home')}"${ctx.page === 'home' ? ' aria-current="page"' : ''}>${logo}<span>PLT Digital</span></a>
+    <nav class="nav" aria-label="${esc(t.nav.label)}">${navLinks(ctx)}<a href="${ctx.root}">PLT GROUP</a></nav>
     <div class="header-end">
       ${langSwitch(ctx)}
       <a class="btn btn--small header-cta" href="${href(ctx, 'contacts')}">${esc(t.nav.cta)}</a>
@@ -106,7 +106,7 @@ function footer(ctx) {
   return `<footer class="site-footer">
   <div class="wrap footer-top">
     <div class="footer-brand">
-      <a class="brand" href="${href(ctx, 'home')}">${logo}<span>PLT GROUP</span></a>
+      <a class="brand" href="${href(ctx, 'home')}">${logo}<span>PLT Digital</span></a>
       <p>${esc(t.footer.tagline)}</p>
     </div>
     <nav class="footer-nav" aria-label="${esc(t.nav.label)}">${navLinks({ ...ctx, page: null })}</nav>
@@ -118,7 +118,7 @@ function footer(ctx) {
     </div>
   </div>
   <div class="wrap footer-bottom">
-    <span>© ${new Date().getFullYear()} PLT GROUP. ${esc(t.footer.rights)}</span>
+    <span>© ${new Date().getFullYear()} PLT Digital · <a href="${ctx.root}">PLT GROUP</a>. ${esc(t.footer.rights)}</span>
     <a href="${href(ctx, 'privacy')}">${esc(t.footer.privacy)}</a>
     ${langSwitch(ctx)}
   </div>
@@ -177,7 +177,7 @@ function board(b) {
 export function home(ctx) {
   const t = ctx.t, h = t.home;
   const body = `  <section class="hero">
-    <canvas class="hero-canvas" data-particles aria-hidden="true"></canvas>
+    <canvas class="hero-canvas" data-particles="DIGITAL" aria-hidden="true"></canvas>
     <div class="wrap hero-copy">
       <h1 class="hero-title">${esc(h.title)}</h1>
       <p class="lead">${esc(h.lead)}</p>
@@ -367,7 +367,7 @@ export function privacy(ctx) {
       <p class="small">${esc(p.updated)}</p>
     </div>
   </section>`;
-  return layout(ctx, { title: `${p.title} | PLT GROUP`, description: p.description }, body);
+  return layout(ctx, { title: `${p.title} | PLT Digital`, description: p.description }, body);
 }
 
 export function notFound(ctx) {
@@ -408,7 +408,7 @@ export function work(ctx) {
     </div>
   </section>
   ${ctaBand(ctx)}`;
-  return layout(ctx, { title: `${w.title} | PLT GROUP`, description: w.description }, body);
+  return layout(ctx, { title: `${w.title} | PLT Digital`, description: w.description }, body);
 }
 
 export function post(ctx) {
@@ -427,5 +427,5 @@ export function post(ctx) {
     </div>
   </article>
   ${ctaBand(ctx)}`;
-  return layout(ctx, { title: `${title} | PLT GROUP`, description: pick(p.summary, code) }, body);
+  return layout(ctx, { title: `${title} | PLT Digital`, description: pick(p.summary, code) }, body);
 }
