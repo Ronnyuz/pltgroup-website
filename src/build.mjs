@@ -33,7 +33,10 @@ for (const l of LANGS) {
 
 const FILES = { home: 'index.html', services: 'services.html', process: 'process.html', prices: 'prices.html', contacts: 'contacts.html', privacy: 'privacy.html', ...(posts.length ? { work: 'work.html' } : {}) };
 const urls = [];
-for (const l of LANGS) {
+// The PLT Digital page (/digital/) is now a static page in the PLT GROUP design, like /agrovia/ and /retail/.
+// The generated IT pages are switched off; set this to true to build them again from content/*.json.
+const BUILD_IT_PAGES = false;
+for (const l of BUILD_IT_PAGES ? LANGS : []) {
   const t = dict[l.code];
   const root = '../'.repeat(l.path.split('/').filter(Boolean).length);
   for (const [page, file] of Object.entries(FILES)) {
@@ -48,7 +51,7 @@ for (const l of LANGS) {
 }
 
 // Old URLs from the first version of the site.
-const redirects = { 'about.html': 'digital/', 'contact.html': 'digital/contacts.html', 'solutions.html': 'digital/services.html', 'industries.html': 'digital/services.html' };
+const redirects = { 'about.html': 'digital/', 'contact.html': 'digital/#contact', 'solutions.html': 'digital/#services', 'industries.html': 'digital/#services' };
 for (const [from, to] of Object.entries(redirects)) {
   write(from, `<!doctype html><html lang="ru"><head><meta charset="utf-8"><title>PLT GROUP</title><meta name="robots" content="noindex"><link rel="canonical" href="${SITE.url}/${to}"><meta http-equiv="refresh" content="0; url=${to}"></head><body><a href="${to}">PLT GROUP</a></body></html>\n`);
 }
@@ -57,7 +60,7 @@ write('404.html', tpl.notFound({ t: dict.ru, page: '404', posts }));
 
 const today = new Date().toISOString().slice(0, 10);
 // Static pages of the group (index.html, agrovia/, retail/, privacy.html) are kept by hand.
-for (const u of ['', 'agrovia/', 'retail/', 'privacy.html']) urls.unshift(`${SITE.url}/${u}`);
+for (const u of ['', 'digital/', 'agrovia/', 'retail/', 'privacy.html']) urls.unshift(`${SITE.url}/${u}`);
 
 write('sitemap.xml', `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
