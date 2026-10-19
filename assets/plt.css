@@ -251,3 +251,13 @@ button[disabled] { opacity: .6; cursor: progress; }
 .doc p { color: var(--muted); margin-bottom: 12px; max-width: 40em; }
 .group-title { font-size: 15px; font-weight: 700; letter-spacing: 0; color: var(--muted); margin: 36px 0 12px; }
 .section-top + .group-title { margin-top: 0; }
+
+/* Launch prices: regular price struck through, start price highlighted until the date in data-promo-until */
+.price s { color: var(--muted); font-weight: 500; margin-right: 6px; text-decoration-thickness: 1.5px; }
+.price b { font-weight: 800; color: var(--text); }
+.price.expired s { text-decoration: none; color: var(--text); font-weight: 700; margin: 0; }
+.price.expired b { display: none; }
+.promo-note { display: inline-block; margin: 0 8px 6px 0; padding: 4px 10px; border-radius: 999px; font-size: 13px; font-weight: 700; color: var(--accent); background: color-mix(in srgb, var(--accent) 14%, transparent); }
+@media (max-width: 760px) { .row-end { white-space: normal; } }
+.row { grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr) auto; }
+@media (max-width: 760px) { .row { grid-template-columns: 1fr; } }

@@ -249,3 +249,13 @@ var REQUISITES = {
     row('ИНН', 'STIR', r.inn) + row('Адрес', 'Manzil', r.address);
   box.hidden = false;
 })();
+
+/* Launch prices end automatically: after the date the regular price shows alone */
+(function () {
+  var now = Date.now();
+  document.querySelectorAll('[data-promo-until]').forEach(function (el) {
+    var end = Date.parse(el.getAttribute('data-promo-until') + 'T23:59:59+05:00');
+    if (now > end) el.classList.add('expired');
+  });
+  if (document.querySelector('.price.expired')) document.querySelectorAll('[data-promo-note]').forEach(function (n) { n.hidden = true; });
+})();
