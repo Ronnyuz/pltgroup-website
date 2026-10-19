@@ -462,7 +462,7 @@
       h('div', { class: 'stack' },
         h('div', { class: 'card' },
           h('div', { class: 'grid3' }, field('Тип', type), field('Дата', date), field('Клиент', client, 'Можно без названия компании')),
-          field('Адрес страницы', slugInput, isNew ? 'Заполнится сам по заголовку. Потом его изменить нельзя.' : `pltgroup.uz/work/${slug}.html`),
+          field('Адрес страницы', slugInput, isNew ? 'Заполнится сам по заголовку. Потом его изменить нельзя.' : `pltgroup.uz/digital/work/${slug}.html`),
           h('div', { class: 'field' }, h('label', { class: 'lbl' }, 'Обложка'), preview, h('p', { class: 'hint' }, 'JPG, PNG или WebP до 3 МБ, лучше горизонтальная.')),
           h('label', { class: 'check' }, published, 'Опубликовать на сайте')),
         h('div', { class: 'card' }, langBox)));
