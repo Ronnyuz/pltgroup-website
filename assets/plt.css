@@ -139,6 +139,7 @@ a.row:hover .row-name, .row:hover .row-name { transform: translateX(8px); color:
 .proj:hover { border-color: color-mix(in srgb, var(--accent) 60%, transparent); background: var(--surface); }
 .proj-top { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
 .pill { padding: 4px 10px; border-radius: 999px; font-size: 12px; font-weight: 700; white-space: nowrap; color: var(--accent); background: color-mix(in srgb, var(--accent) 14%, transparent); }
+.pill--live { color: #17733e; background: #e3f4ea; }
 .proj h3 { font-size: clamp(26px, 3vw, 36px); }
 .proj p { color: var(--muted); }
 @media (max-width: 760px) { .proj-grid { grid-template-columns: 1fr; } }
