@@ -15,7 +15,8 @@ const process_ = cut('<section class="section" id="process">', '</section>');
 const contact = cut('<section class="section contacts-sec" id="contact">', '</section>');
 const footer = cut('<footer class="foot">', '</footer>');
 const tail = '<script src="/assets/plt.js?v=0bb341ba"></script>\n</body>\n</html>\n';
-const rows = [...src.matchAll(/<li class="row">[\s\S]*?<\/li>/g)].map((m) => m[0]);
+// Service rows on /digital/ are links to these pages; here they are shown as plain rows.
+const rows = [...src.matchAll(/<li(?: class="row")?>(?:<a class="row" href="[^"]*">)?(<span class="row-name">[\s\S]*?)(?:<\/a>)?<\/li>/g)].map((m) => `<li class="row">${m[1]}</li>`);
 const rowOf = (name) => rows.find((r) => r.includes(`<span class="ru">${name}</span>`) || r.includes(`<span class="row-name">${name}</span>`));
 
 const ru = (r, u) => `<span class="ru">${r}</span><span class="uz">${u}</span>`;
