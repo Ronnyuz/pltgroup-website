@@ -102,7 +102,7 @@ export const ARTICLES = [
           'Конструкторы подходят для простых сценариев: меню и ответы на вопросы. Когда нужны заказы, оплата, связь с учётом или CRM, лучше заказать разработку: бот будет работать именно так, как устроен ваш бизнес.',
         ] },
         { h: 'Telegram-бот в PLT Digital', p: [
-          'Делаем ботов для заказов, оплаты, записи и заявок, а также Telegram Mini App. Пример нашего бота: AZS Radar показывает ближайшие АЗС с ценами на топливо. Первый результат через две недели. Подробности и цены на странице <a href="/digital/telegram-bot/">«Создание Telegram-ботов»</a>.',
+          'Делаем ботов для заказов, оплаты, записи и заявок, а также Telegram Mini App. Наши запущенные боты: AZS Radar (ближайшие АЗС с ценами на топливо) и Цветотека (поиск цветов в Ташкенте). Первый результат через две недели. Подробности и цены на странице <a href="/digital/telegram-bot/">«Создание Telegram-ботов»</a>.',
         ] },
       ],
       faq: [
@@ -136,7 +136,7 @@ export const ARTICLES = [
           'Konstruktorlar oddiy ssenariylar uchun mos: menyu va savollarga javoblar. Buyurtma, to‘lov, hisob yoki CRM bilan bog‘lanish kerak bo‘lsa, dasturlashni buyurtma qilgan ma’qul: bot aynan biznesingiz qanday ishlasa, shunday ishlaydi.',
         ] },
         { h: 'PLT Digitalda Telegram-bot', p: [
-          'Buyurtma, to‘lov, yozilish va arizalar uchun botlar hamda Telegram Mini App yaratamiz. Botimizga misol: AZS Radar yoqilg‘i narxlari bilan yaqin shoxobchalarni ko‘rsatadi. Birinchi natija ikki haftada. Batafsil va narxlar <a href="/digital/telegram-bot/">«Telegram-bot yaratish»</a> sahifasida.',
+          'Buyurtma, to‘lov, yozilish va arizalar uchun botlar hamda Telegram Mini App yaratamiz. Ishga tushirgan botlarimiz: AZS Radar (yoqilg‘i narxlari bilan yaqin shoxobchalar) va Цветотека (Toshkentda gul qidirish). Birinchi natija ikki haftada. Batafsil va narxlar <a href="/digital/telegram-bot/">«Telegram-bot yaratish»</a> sahifasida.',
         ] },
       ],
       faq: [
