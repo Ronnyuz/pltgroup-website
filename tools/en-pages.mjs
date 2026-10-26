@@ -334,6 +334,7 @@ ${footer}
         <p><strong>PLT GROUP</strong> is an IT company from Tashkent. Our team at <a href="/en/digital/">PLT Digital</a> builds websites, Telegram bots, AI assistants, CRM and reports for small and medium businesses.</p>
         <p>We work with clients from Uzbekistan and other countries online, in English, Russian or Uzbek.</p>
         <p>Our own products: the Telegram bots AZS Radar and Tsvetoteka are live, a shop POS system and FinHelper are in development.</p>
+        <p>The group also includes <a href="/retail/">PLT Retail</a>: household chemicals and home goods with delivery in Tashkent (site in Russian and Uzbek).</p>
       </div>
     </div>
   </section>
