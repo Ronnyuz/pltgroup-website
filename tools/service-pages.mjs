@@ -60,7 +60,7 @@ const PAGES = [
       [ru('Заказы и оплата', 'Buyurtma va to‘lov'), ru('Клиент выбирает товар или услугу и оплачивает прямо в Telegram.', 'Mijoz mahsulot yoki xizmatni tanlaydi va to‘g‘ridan-to‘g‘ri Telegramda to‘laydi.')],
       [ru('Запись и заявки', 'Yozilish va arizalar'), ru('Бот принимает заявки круглосуточно и передаёт их сотрудникам.', 'Bot arizalarni kecha-kunduz qabul qiladi va xodimlarga uzatadi.')],
       [ru('Telegram Mini App', 'Telegram Mini App'), ru('Приложение внутри Telegram: каталог, личный кабинет, статистика.', 'Telegram ichidagi ilova: katalog, shaxsiy kabinet, statistika.')],
-      [ru('Свой опыт', 'O‘z tajribamiz'), ru('Мы запустили своего бота AZS Radar: ближайшие АЗС с ценами на топливо.', 'O‘zimizning AZS Radar botini ishga tushirdik: yoqilg‘i narxlari bilan yaqin shoxobchalar.')],
+      [ru('Свой опыт', 'O‘z tajribamiz'), ru('Мы запустили своих ботов: AZS Radar (АЗС и цены на топливо) и Цветотека (поиск цветов в Ташкенте).', 'O‘z botlarimizni ishga tushirdik: AZS Radar (shoxobchalar va yoqilg‘i narxlari) va Цветотека (Toshkentda gul qidirish).')],
     ],
     faq: [
       ['Сколько стоит создать Telegram-бота?', 'Telegram-bot yaratish qancha turadi?', 'Цена зависит от функций бота, ориентир указан выше. Точную сумму назовём после первой встречи.', 'Narx bot funksiyalariga bog‘liq, taxminiy narx yuqorida ko‘rsatilgan. Aniq summani birinchi uchrashuvdan keyin aytamiz.'],
@@ -198,7 +198,6 @@ ${header}
       <div class="section-top"><h2>${ru('Что входит', 'Nimalar kiradi')}</h2><p>${ru('Цена зависит от объёма работ. Точную сумму назовём после первой встречи.', 'Narx ish hajmiga bog‘liq. Aniq summani birinchi uchrashuvdan keyin aytamiz.')}</p></div>
       <ul class="rows">${p.rows.map(rowOf).join('')}</ul>
       <ul class="rules-grid four" style="margin-top:48px">${p.items.map(([t, d]) => `<li><span class="rule-dot"></span><h3><strong>${t}</strong></h3><span>${d}</span></li>`).join('')}</ul>
-      <p lang="en" class="small" style="margin-top:40px;max-width:52em;color:var(--muted)">${p.en}</p>
     </div>
   </section>
   ${process_.replace('<section class="section" id="process">', '<section class="section" id="process" style="background:var(--bg-2)">')}
