@@ -60,7 +60,11 @@ write('404.html', tpl.notFound({ t: dict.ru, page: '404', posts }));
 
 const today = new Date().toISOString().slice(0, 10);
 // Static pages of the group (index.html, agrovia/, retail/, privacy.html) are kept by hand.
-for (const u of ['', 'digital/', 'digital/sayt/', 'digital/telegram-bot/', 'digital/crm/', 'digital/ai-assistant/', 'agrovia/', 'retail/', 'privacy']) urls.unshift(`${SITE.url}/${u}`);
+// Each of them also has an Uzbek copy under /uz/.
+const STATIC = ['', 'digital/', 'digital/sayt/', 'digital/telegram-bot/', 'digital/crm/', 'digital/ai-assistant/',
+  'blog/', 'blog/skolko-stoit-sayt/', 'blog/kak-sozdat-telegram-bota/', 'blog/sayt-ili-telegram-bot/', 'blog/ii-assistent-dlya-biznesa/',
+  'agrovia/', 'retail/'];
+urls.unshift(...STATIC.map((u) => `${SITE.url}/${u}`), `${SITE.url}/privacy`, ...STATIC.map((u) => `${SITE.url}/uz/${u}`));
 
 write('sitemap.xml', `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">

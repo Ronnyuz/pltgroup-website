@@ -12,7 +12,14 @@
   }
   var saved = null;
   try { saved = localStorage.getItem(KEY); } catch (e) {}
-  setLang(saved === 'uz' ? 'uz' : 'ru');
+  /* Pages with their own address per language (data-page-lang) always show that language;
+     the RU/UZ buttons lead to the other address from <link rel="alternate" hreflang>. */
+  var fixedLang = root.getAttribute('data-page-lang');
+  setLang(fixedLang || (saved === 'uz' ? 'uz' : 'ru'));
+  function altUrl(l) {
+    var a = document.querySelector('link[rel="alternate"][hreflang="' + l + '"]');
+    return a ? a.href : null;
+  }
 
   /* Theme: light, dark or follow the system. Stored per visitor; light by default. */
   var TKEY = 'plt-theme', mq = window.matchMedia ? matchMedia('(prefers-color-scheme: dark)') : null;
@@ -51,7 +58,11 @@
   function show(msg) { toast.textContent = msg; toast.hidden = false; clearTimeout(timer); timer = setTimeout(function () { toast.hidden = true; }, 1800); }
   document.addEventListener('click', function (e) {
     var b = e.target.closest('[data-lang]');
-    if (b) { setLang(b.getAttribute('data-lang')); return; }
+    if (b) {
+      var l = b.getAttribute('data-lang'), url = fixedLang && l !== fixedLang ? altUrl(l) : null;
+      if (url) { try { localStorage.setItem(KEY, l); } catch (err) {} location.href = url + location.hash; return; }
+      setLang(l); return;
+    }
     var c = e.target.closest('[data-copy]');
     if (!c) return;
     var uz = root.lang === 'uz';

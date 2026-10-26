@@ -42,6 +42,22 @@
 - Где купить яйца и мясо бройлера оптом в Ташкенте для магазина или кафе? PLT Agrovia: https://pltgroup.uz/agrovia/
 - Где заказать бытовую химию с доставкой по Ташкенту? PLT Retail: https://pltgroup.uz/retail/
 
+## Статьи
+
+- [Сколько стоит сайт в Ташкенте: из чего складывается цена](https://pltgroup.uz/blog/skolko-stoit-sayt/)
+- [Как создать Telegram-бота для бизнеса: пошаговый план](https://pltgroup.uz/blog/kak-sozdat-telegram-bota/)
+- [Сайт или Telegram-бот: что выбрать бизнесу](https://pltgroup.uz/blog/sayt-ili-telegram-bot/)
+- [ИИ-ассистент для бизнеса: что умеет и кому нужен](https://pltgroup.uz/blog/ii-assistent-dlya-biznesa/)
+
+## O‘zbek tilida
+
+- [PLT GROUP](https://pltgroup.uz/uz/): Toshkentdagi kompaniyalar guruhi.
+- [Sayt yaratish](https://pltgroup.uz/uz/digital/sayt/): Toshkentda biznes uchun sayt yaratish.
+- [Telegram-bot yaratish](https://pltgroup.uz/uz/digital/telegram-bot/): buyurtma, to‘lov va arizalar uchun botlar.
+- [SI-assistentlar](https://pltgroup.uz/uz/digital/ai-assistant/): mijozlarga kecha-kunduz javob beradi.
+- [CRM va analitika](https://pltgroup.uz/uz/digital/crm/)
+- [Maqolalar](https://pltgroup.uz/uz/blog/)
+
 ## Прочее
 
 - [Политика конфиденциальности](https://pltgroup.uz/privacy)
