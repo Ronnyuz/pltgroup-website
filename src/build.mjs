@@ -63,8 +63,10 @@ const today = new Date().toISOString().slice(0, 10);
 // Each of them also has an Uzbek copy under /uz/.
 const STATIC = ['', 'digital/', 'digital/sayt/', 'digital/telegram-bot/', 'digital/crm/', 'digital/ai-assistant/',
   'blog/', 'blog/skolko-stoit-sayt/', 'blog/kak-sozdat-telegram-bota/', 'blog/sayt-ili-telegram-bot/', 'blog/ii-assistent-dlya-biznesa/',
-  'agrovia/', 'retail/'];
-urls.unshift(...STATIC.map((u) => `${SITE.url}/${u}`), `${SITE.url}/privacy`, ...STATIC.map((u) => `${SITE.url}/uz/${u}`));
+];
+// English pages (tools/en-pages.mjs). PLT Agrovia and PLT Retail are kept but hidden (noindex) until they get their own sites.
+const EN_PAGES = ['en/', 'en/digital/', 'en/digital/website/', 'en/digital/telegram-bot/', 'en/digital/crm/', 'en/digital/ai-assistant/', 'en/privacy/'];
+urls.unshift(...STATIC.map((u) => `${SITE.url}/${u}`), `${SITE.url}/privacy`, ...STATIC.map((u) => `${SITE.url}/uz/${u}`), ...EN_PAGES.map((u) => `${SITE.url}/${u}`));
 
 write('sitemap.xml', `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">

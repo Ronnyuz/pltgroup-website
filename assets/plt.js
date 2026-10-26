@@ -7,8 +7,8 @@
     root.lang = l;
     try { localStorage.setItem(KEY, l); } catch (e) {}
     document.querySelectorAll('[data-lang]').forEach(function (b) { b.setAttribute('aria-pressed', String(b.getAttribute('data-lang') === l)); });
-    document.querySelectorAll('option[data-ru]').forEach(function (o) { o.textContent = o.getAttribute('data-' + l); });
-    document.querySelectorAll('[data-ph-ru]').forEach(function (f) { f.placeholder = f.getAttribute('data-ph-' + l); });
+    document.querySelectorAll('option[data-ru]').forEach(function (o) { var t = o.getAttribute('data-' + l); if (t) o.textContent = t; });
+    document.querySelectorAll('[data-ph-ru]').forEach(function (f) { var t = f.getAttribute('data-ph-' + l); if (t) f.placeholder = t; });
   }
   var saved = null;
   try { saved = localStorage.getItem(KEY); } catch (e) {}
@@ -59,19 +59,20 @@
   document.addEventListener('click', function (e) {
     var b = e.target.closest('[data-lang]');
     if (b) {
-      var l = b.getAttribute('data-lang'), url = fixedLang && l !== fixedLang ? altUrl(l) : null;
+      /* English exists only for PLT Digital; from other pages EN leads to the English home page. */
+      var l = b.getAttribute('data-lang'), url = l !== fixedLang ? (altUrl(l) || (l === 'en' ? '/en/' : null)) : null;
       if (url) { try { localStorage.setItem(KEY, l); } catch (err) {} location.href = url + location.hash; return; }
       setLang(l); return;
     }
     var c = e.target.closest('[data-copy]');
     if (!c) return;
-    var uz = root.lang === 'uz';
+    var uz = root.lang === 'uz', en = root.lang === 'en';
     function fallback() {
       var el = document.getElementById(c.getAttribute('data-target'));
       if (el) { var r = document.createRange(); r.selectNodeContents(el); var s = getSelection(); s.removeAllRanges(); s.addRange(r); }
-      show(uz ? 'Matn belgilandi, nusxa oling' : 'Текст выделен, скопируйте его');
+      show(en ? 'Text selected, copy it' : uz ? 'Matn belgilandi, nusxa oling' : 'Текст выделен, скопируйте его');
     }
-    try { navigator.clipboard.writeText(c.getAttribute('data-copy')).then(function () { show(uz ? 'Nusxa olindi' : 'Скопировано'); }, fallback); }
+    try { navigator.clipboard.writeText(c.getAttribute('data-copy')).then(function () { show(en ? 'Copied' : uz ? 'Nusxa olindi' : 'Скопировано'); }, fallback); }
     catch (err) { fallback(); }
   });
 
@@ -194,7 +195,7 @@ var REQUISITES = {
       if (b && !bad) bad = inp;
     });
     if (bad) { bad.focus(); return; }
-    var uz = document.documentElement.lang === 'uz';
+    var lang = document.documentElement.lang, uz = lang === 'uz', en = lang === 'en';
     var v = function (id) { var el = form.querySelector('#' + id); return el ? el.value.trim() : ''; };
     var site = (document.title || 'PLT GROUP').trim();
     var data = {
@@ -203,7 +204,7 @@ var REQUISITES = {
       'Телефон или Telegram': v('f-contact'),
       'Что нужно': v('f-what'),
       'Комментарий': v('f-task') || '-',
-      'Язык': uz ? 'узбекский' : 'русский',
+      'Язык': en ? 'английский' : uz ? 'узбекский' : 'русский',
       _subject: 'Заявка с сайта ' + site + ': ' + v('f-name'),
       _template: 'table',
       _captcha: 'false'
@@ -212,7 +213,7 @@ var REQUISITES = {
     if (fail) fail.hidden = true;
     btn.disabled = true;
     var before = label ? label.innerHTML : '';
-    if (label) label.textContent = uz ? 'Yuborilmoqda…' : 'Отправляем…';
+    if (label) label.textContent = en ? 'Sending…' : uz ? 'Yuborilmoqda…' : 'Отправляем…';
     var toMail = fetch('https://formsubmit.co/ajax/' + FORM_TO, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
@@ -222,12 +223,12 @@ var REQUISITES = {
     var toAdmin = fetch('/api/lead', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ name: v('f-name'), contact: v('f-contact'), service: site + ': ' + v('f-what'), task: v('f-task'), lang: uz ? 'uz' : 'ru', page: location.pathname, website: '' })
+      body: JSON.stringify({ name: v('f-name'), contact: v('f-contact'), service: site + ': ' + v('f-what'), task: v('f-task'), lang: lang, page: location.pathname, website: '' })
     }).then(function (r) { if (!r.ok) throw new Error(r.status); return true; });
     var toTg = TG_ENDPOINT ? fetch(TG_ENDPOINT, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ site: site, name: v('f-name'), contact: v('f-contact'), what: v('f-what'), comment: v('f-task'), lang: uz ? 'uz' : 'ru', _honey: '' })
+      body: JSON.stringify({ site: site, name: v('f-name'), contact: v('f-contact'), what: v('f-what'), comment: v('f-task'), lang: lang, _honey: '' })
     }).then(function (r) { if (!r.ok) throw new Error(r.status); return true; }) : Promise.reject('off');
     Promise.allSettled([toAdmin, toMail, toTg]).then(function (rs) {
       if (rs.some(function (x) { return x.status === 'fulfilled'; })) return true;
@@ -240,7 +241,7 @@ var REQUISITES = {
       .catch(function () {
         if (!fail) return;
         if (/claude/.test(location.hostname)) {
-          fail.textContent = uz ? 'Bu ko‘rib chiqish rejimi: bu yerda yuborish o‘chirilgan. Saytda ariza pochtaga keladi.' : 'Это режим просмотра: здесь отправка отключена. На сайте заявка придёт на почту.';
+          fail.textContent = en ? 'This is a preview: sending is turned off here. On the live site the request goes to email.' : uz ? 'Bu ko‘rib chiqish rejimi: bu yerda yuborish o‘chirilgan. Saytda ariza pochtaga keladi.' : 'Это режим просмотра: здесь отправка отключена. На сайте заявка придёт на почту.';
         }
         fail.hidden = false;
       })

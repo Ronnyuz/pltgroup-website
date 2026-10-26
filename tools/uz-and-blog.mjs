@@ -6,7 +6,7 @@ import { ARTICLES } from './articles.mjs';
 
 const ROOT = process.argv[2];
 const SITE = 'https://pltgroup.uz';
-const JS_VER = 'lang2';
+const JS_VER = 'lang3';
 const DATE = '2026-10-26';
 const read = (rel) => readFileSync(join(ROOT, rel), 'utf8');
 const write = (rel, s) => {
@@ -58,9 +58,11 @@ function setMeta(h, m) {
   r(/(<meta name="twitter:description" content=")[^"]*/, `$1${esc(m.desc)}`);
   return h;
 }
-function hreflang(h, ruUrl, uzUrl, self) {
+// English versions exist for the PLT GROUP home page and PLT Digital (tools/en-pages.mjs).
+const EN_OF = { '': 'en/', 'digital/': 'en/digital/', 'digital/sayt/': 'en/digital/website/', 'digital/telegram-bot/': 'en/digital/telegram-bot/', 'digital/crm/': 'en/digital/crm/', 'digital/ai-assistant/': 'en/digital/ai-assistant/' };
+function hreflang(h, ruUrl, uzUrl, self, enUrl) {
   h = h.replace(/\n<link rel="alternate" hreflang="[^"]*" href="[^"]*">/g, '');
-  h = h.replace(/(<link rel="canonical" href=")[^"]*(">)/, `$1${self}$2\n<link rel="alternate" hreflang="ru" href="${ruUrl}">\n<link rel="alternate" hreflang="uz" href="${uzUrl}">\n<link rel="alternate" hreflang="x-default" href="${ruUrl}">`);
+  h = h.replace(/(<link rel="canonical" href=")[^"]*(">)/, `$1${self}$2\n<link rel="alternate" hreflang="ru" href="${ruUrl}">\n<link rel="alternate" hreflang="uz" href="${uzUrl}">${enUrl ? `\n<link rel="alternate" hreflang="en" href="${enUrl}">` : ''}\n<link rel="alternate" hreflang="x-default" href="${enUrl || ruUrl}">`);
   h = h.replace(/(<meta property="og:url" content=")[^"]*/, `$1${self}`);
   return h;
 }
@@ -78,7 +80,7 @@ function syncFaq(h) {
 
 const KW_DIGITAL_UZ = 'sayt yaratish, sayt qilish, sayt ochish, sayt buyurtma qilish, arzon sayt, sayt narxi, telegram bot yaratish, tg bot yaratish, bot yasash, bot qilish, telegram bot narxi, CRM tizimi, SI assistent, sun’iy intellekt bot, IT kompaniya Toshkent, veb sayt Toshkent';
 const UZ = {
-  '': { title: 'PLT GROUP (Toshkent, O‘zbekiston): sayt va Telegram-bot yaratish, parrandachilik, maishiy kimyo', desc: 'PLT GROUP: Toshkentdagi uchta kompaniya. PLT Digital (sayt, bot, CRM), PLT Agrovia fermasi (tuxum, broyler go‘shti) va PLT Retail (maishiy kimyo yetkazib berish).', keywords: 'PLT GROUP, PLT GROUP Toshkent, PLT GROUP O‘zbekiston, PLT Digital, PLT Agrovia, PLT Retail, sayt yaratish Toshkent, telegram bot yaratish, tuxum ulgurji Toshkent, maishiy kimyo yetkazib berish' },
+  '': { title: 'PLT GROUP: Toshkentda sayt, Telegram-bot va SI-assistent yaratish', desc: 'PLT GROUP (Toshkent, O‘zbekiston): IT kompaniya. O‘zbekiston va butun dunyodagi biznes uchun sayt, Telegram-bot, SI-assistent va CRM yaratish.', keywords: 'PLT GROUP, PLT GROUP Toshkent, PLT GROUP O‘zbekiston, PLT Digital, IT kompaniya Toshkent, sayt yaratish Toshkent, telegram bot yaratish, SI assistent, CRM' },
   'digital/': { title: 'Toshkentda sayt va Telegram-bot yaratish | PLT Digital', desc: 'Toshkentda sayt va Telegram-bot yaratish: biznes uchun saytlar, botlar, CRM, analitika va SI-assistentlar. Birinchi natija ikki haftada.', keywords: KW_DIGITAL_UZ },
   'digital/sayt/': { title: 'Toshkentda sayt yaratish: biznes uchun sayt buyurtma qilish | PLT Digital', desc: 'Toshkentda sayt yaratish: arizalarni yig‘adigan va ularni Telegram yoki CRMga yuboradigan kompaniya sayti yoki lending. Birinchi natija ikki haftada.', keywords: 'sayt yaratish, sayt yaratish Toshkent, sayt qilish, sayt ochish, sayt buyurtma qilish, sayt qildirish, arzon sayt, sayt narxi, lending, kompaniya sayti, veb sayt yaratish, website development Tashkent' },
   'digital/telegram-bot/': { title: 'Telegram-bot yaratish Toshkentda: bot buyurtma qilish | PLT Digital', desc: 'Biznes uchun Telegram-bot yaratish: buyurtma, to‘lov, yozilish va arizalar to‘g‘ridan-to‘g‘ri Telegramda, shuningdek Telegram Mini App. Birinchi natija ikki haftada.', keywords: 'telegram bot yaratish, tg bot yaratish, bot yasash, bot qilish, telegram bot buyurtma, telegram bot narxi, biznes uchun bot, buyurtma boti, Telegram Mini App, telegram bot development Tashkent' },
@@ -93,7 +95,7 @@ const htmlFiles = [];
 (function walk(dir) {
   for (const f of readdirSync(join(ROOT, dir))) {
     const rel = dir ? `${dir}/${f}` : f;
-    if (/^(\.git|node_modules|admin|functions|src|content|assets|uz)$/.test(f) && !dir) continue;
+    if (/^(\.git|node_modules|admin|functions|src|content|assets|uz|en|tools)$/.test(f) && !dir) continue;
     if (statSync(join(ROOT, rel)).isDirectory()) walk(rel); else if (f.endsWith('.html')) htmlFiles.push(rel);
   }
 })('');
@@ -102,6 +104,7 @@ for (const f of htmlFiles) {
   let h = read(f);
   const before = h;
   h = h.replace(/plt\.js\?v=[\w]+/, `plt.js?v=${JS_VER}`);
+  if (!h.includes('data-lang="en"')) h = h.replace(/(<button type="button" data-lang="uz" aria-pressed="(?:true|false)">UZ<\/button>)/, '$1\n        <button type="button" data-lang="en" aria-pressed="false">EN</button>');
   if (!h.includes('href="/blog/"')) h = h.replace(/(<li><a href="\/digital\/ai-assistant\/">[\s\S]*?<\/a><\/li>)(<\/ul>)/, `$1${BLOG_LI}$2`);
   if (h !== before) writeFileSync(join(ROOT, f), h);
 }
@@ -257,13 +260,13 @@ ${footer}
 // 3. Russian pages get hreflang; Uzbek copies are written to /uz/.
 for (const [path, m] of Object.entries(UZ)) {
   const rel = `${path}index.html`;
-  const ruUrl = `${SITE}/${path}`, uzUrl = `${SITE}/uz/${path}`;
+  const ruUrl = `${SITE}/${path}`, uzUrl = `${SITE}/uz/${path}`, enUrl = EN_OF[path] !== undefined ? `${SITE}/${EN_OF[path]}` : null;
   let h = read(rel).replace(/<html lang="ru"[^>]*>/, '<html lang="ru" data-page-lang="ru">');
-  h = hreflang(h, ruUrl, uzUrl, ruUrl);
+  h = hreflang(h, ruUrl, uzUrl, ruUrl, enUrl);
   writeFileSync(join(ROOT, rel), h);
   let u = uzLinks(onlyUz(h)).replace('<html lang="ru" data-page-lang="ru">', '<html lang="uz" data-page-lang="uz">');
   u = setMeta(u, m);
-  u = hreflang(u, ruUrl, uzUrl, uzUrl)
+  u = hreflang(u, ruUrl, uzUrl, uzUrl, enUrl)
     .replace('<meta property="og:locale" content="ru_RU">\n<meta property="og:locale:alternate" content="uz_UZ">', '<meta property="og:locale" content="uz_UZ">\n<meta property="og:locale:alternate" content="ru_RU">');
   u = syncFaq(u);
   write(`uz/${rel}`, u);
