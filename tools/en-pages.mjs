@@ -136,7 +136,7 @@ ${ld ? `<script type="application/ld+json">\n${JSON.stringify(ld, null, 1)}\n</s
 const TAIL = `<script src="/assets/plt.js?v=${JS_VER}"></script>\n</body>\n</html>\n`;
 
 const ORG = { '@type': 'Organization', '@id': `${SITE}/#org`, name: 'PLT GROUP', url: `${SITE}/en/`, logo: `${SITE}/assets/apple-touch-icon.png`, email: 'info@pltgroup.uz', telephone: '+998331113010',
-  address: { '@type': 'PostalAddress', addressLocality: 'Tashkent', addressCountry: 'UZ' }, alternateName: ['PLT GROUP Uzbekistan', 'PLT GROUP Tashkent'],
+  address: { '@type': 'PostalAddress', streetAddress: 'Amir Temur street', postalCode: '100155', addressLocality: 'Tashkent', addressCountry: 'UZ' }, hasMap: 'https://maps.google.com/?cid=6775161695992049582', alternateName: ['PLT GROUP Uzbekistan', 'PLT GROUP Tashkent'],
   disambiguatingDescription: 'IT company from Tashkent, Uzbekistan. Not related to companies with the same name in other countries.' };
 const DIGITAL = { '@type': 'ProfessionalService', '@id': `${SITE}/digital/#org`, name: 'PLT Digital', url: `${SITE}/en/digital/`, image: `${SITE}/assets/og.png`,
   description: 'Websites, Telegram bots, AI assistants, CRM and analytics for businesses in Uzbekistan and worldwide.',
