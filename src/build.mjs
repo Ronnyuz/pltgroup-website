@@ -63,6 +63,7 @@ const today = new Date().toISOString().slice(0, 10);
 // Each of them also has an Uzbek copy under /uz/.
 const STATIC = ['', 'digital/', 'digital/sayt/', 'digital/telegram-bot/', 'digital/crm/', 'digital/ai-assistant/',
   'blog/', 'blog/skolko-stoit-sayt/', 'blog/kak-sozdat-telegram-bota/', 'blog/sayt-ili-telegram-bot/', 'blog/ii-assistent-dlya-biznesa/',
+  'blog/sayt-besplatno/', 'blog/telegram-bot-besplatno/', 'blog/skolko-stoit-telegram-bot/', 'blog/kak-vybrat-razrabotchika/',
 ];
 // English pages (tools/en-pages.mjs). PLT Agrovia and PLT Retail are kept but hidden (noindex) until they get their own sites.
 const EN_PAGES = ['en/', 'en/digital/', 'en/digital/website/', 'en/digital/telegram-bot/', 'en/digital/crm/', 'en/digital/ai-assistant/', 'en/privacy/'];

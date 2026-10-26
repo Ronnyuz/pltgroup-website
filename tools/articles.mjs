@@ -280,4 +280,250 @@ export const ARTICLES = [
       ],
     },
   },
+  {
+    slug: 'sayt-besplatno',
+    service: 'sayt',
+    ru: {
+      title: 'Можно ли сделать сайт бесплатно: честный разбор',
+      desc: 'Как сделать сайт бесплатно: конструкторы с бесплатным тарифом, их ограничения и когда бизнесу выгоднее заказать сайт. Бесплатная консультация PLT Digital в Ташкенте.',
+      keywords: 'сделать сайт бесплатно, бесплатно сайт, создать сайт бесплатно, бесплатный сайт для бизнеса, конструктор сайтов бесплатно, сайт бесплатно Ташкент',
+      lead: 'Сделать сайт бесплатно можно, но у бесплатных вариантов есть ограничения. Разбираем, кому они подходят, а когда бизнесу выгоднее заказать сайт.',
+      sections: [
+        { h: 'Бесплатные способы', ul: [
+          'Конструкторы сайтов с бесплатным тарифом: собираете страницу из готовых блоков сами.',
+          'Бесплатные страницы в Google Business Profile и картах: адрес, телефон, фото, отзывы.',
+          'Страница-визитка в соцсетях или Telegram-канал со ссылками на контакты.',
+        ] },
+        { h: 'Ограничения бесплатного сайта', ul: [
+          'Адрес вида вашсайт.конструктор.com вместо своего домена, клиенты доверяют такому меньше.',
+          'Реклама или логотип конструктора на страницах.',
+          'Мало возможностей: сложно подключить приём заявок в Telegram, оплату, несколько языков.',
+          'Сайт хуже находится в Google и Яндексе, если его не настраивать под поиск.',
+          'Всё время уходит у вас: тексты, дизайн, настройка.',
+        ] },
+        { h: 'Когда хватит бесплатного', p: [
+          'Если нужно просто показать контакты и проверить идею, бесплатного конструктора или карточки в Google Картах достаточно.',
+        ] },
+        { h: 'Когда лучше заказать сайт', p: [
+          'Когда сайт должен приводить клиентов: находиться в поиске, собирать заявки и работать на нескольких языках. Тогда сайт окупается, а не просто существует.',
+          'В PLT Digital первая консультация бесплатная: разберём задачу и подскажем, хватит ли вам бесплатного варианта или нужен свой сайт. Цены на странице <a href="/digital/sayt/">«Разработка сайтов»</a>.',
+        ] },
+      ],
+      faq: [
+        ['Можно ли сделать сайт полностью бесплатно?', 'Да, в конструкторе с бесплатным тарифом, но с чужим адресом, рекламой конструктора и ограниченными функциями.'],
+        ['Консультация в PLT Digital платная?', 'Нет, первая консультация бесплатная. Позвоните или напишите: +998 33 111 30 10.'],
+        ['Сколько стоит недорогой сайт?', 'Цены «от» указаны на странице «Разработка сайтов». Можно начать с простого сайта, который собирает заявки.'],
+      ],
+    },
+    uz: {
+      title: 'Saytni bepul qilish mumkinmi: halol tahlil',
+      desc: 'Saytni bepul qanday qilish mumkin: bepul tarifli konstruktorlar, ularning cheklovlari va biznesga qachon sayt buyurtma qilish foydaliroq. PLT Digitalda bepul maslahat.',
+      keywords: 'bepul sayt, saytni bepul qilish, bepul sayt yaratish, bepul sayt konstruktori, biznes uchun bepul sayt',
+      lead: 'Saytni bepul qilish mumkin, lekin bepul variantlarning cheklovlari bor. Ular kimga mos va qachon biznesga sayt buyurtma qilish foydaliroq ekanini ko‘rib chiqamiz.',
+      sections: [
+        { h: 'Bepul usullar', ul: [
+          'Bepul tarifli sayt konstruktorlari: sahifani tayyor bloklardan o‘zingiz yig‘asiz.',
+          'Google Business Profile va xaritalardagi bepul sahifa: manzil, telefon, rasmlar, sharhlar.',
+          'Ijtimoiy tarmoqdagi vizitka sahifa yoki kontaktlar bilan Telegram-kanal.',
+        ] },
+        { h: 'Bepul saytning cheklovlari', ul: [
+          'O‘z domeningiz o‘rniga saytingiz.konstruktor.com kabi manzil, mijozlar bunga kamroq ishonadi.',
+          'Sahifalarda konstruktor reklamasi yoki logotipi.',
+          'Imkoniyatlar kam: arizalarni Telegramga yuborish, to‘lov, bir nechta tilni ulash qiyin.',
+          'Qidiruvga sozlanmasa, sayt Google va Yandexda yomonroq topiladi.',
+          'Butun vaqt sizdan ketadi: matnlar, dizayn, sozlash.',
+        ] },
+        { h: 'Qachon bepul yetarli', p: [
+          'Faqat kontaktlarni ko‘rsatish va g‘oyani sinab ko‘rish kerak bo‘lsa, bepul konstruktor yoki Google Xaritalardagi kartochka yetarli.',
+        ] },
+        { h: 'Qachon sayt buyurtma qilgan ma’qul', p: [
+          'Sayt mijoz olib kelishi kerak bo‘lganda: qidiruvda topilishi, arizalarni yig‘ishi va bir nechta tilda ishlashi kerak bo‘lganda. Shunda sayt shunchaki mavjud bo‘lmaydi, o‘zini oqlaydi.',
+          'PLT Digitalda birinchi maslahat bepul: vazifani ko‘rib chiqamiz va sizga bepul variant yetarlimi yoki o‘z saytingiz kerakmi, aytib beramiz. Narxlar <a href="/digital/sayt/">«Sayt yaratish»</a> sahifasida.',
+        ] },
+      ],
+      faq: [
+        ['Saytni butunlay bepul qilish mumkinmi?', 'Ha, bepul tarifli konstruktorda, lekin begona manzil, konstruktor reklamasi va cheklangan funksiyalar bilan.'],
+        ['PLT Digitalda maslahat pullikmi?', 'Yo‘q, birinchi maslahat bepul. Qo‘ng‘iroq qiling yoki yozing: +998 33 111 30 10.'],
+        ['Arzon sayt qancha turadi?', 'Boshlang‘ich narxlar «Sayt yaratish» sahifasida. Arizalarni yig‘adigan oddiy saytdan boshlash mumkin.'],
+      ],
+    },
+  },
+  {
+    slug: 'telegram-bot-besplatno',
+    service: 'telegram-bot',
+    ru: {
+      title: 'Как сделать Telegram-бота бесплатно и когда нужна разработка',
+      desc: 'Как сделать бота в Telegram бесплатно: BotFather и конструкторы ботов, что они умеют и когда для бизнеса нужна разработка тг-бота. Бесплатная консультация PLT Digital.',
+      keywords: 'сделать бота в телеграм бесплатно, тг бот бесплатно, создать телеграм бота бесплатно, конструктор телеграм ботов, BotFather, тг бот, бот тг',
+      lead: 'Простого Telegram-бота можно создать бесплатно за пару минут. Рассказываем, как это сделать и где заканчиваются возможности бесплатных ботов.',
+      sections: [
+        { h: 'Бесплатно: BotFather', ol: [
+          'Откройте в Telegram официального бота @BotFather.',
+          'Отправьте команду /newbot, придумайте имя и адрес бота.',
+          'Получите токен: это ключ, через который бот подключается к программе или конструктору.',
+        ] },
+        { h: 'Бесплатно: конструкторы ботов', p: [
+          'Конструкторы позволяют собрать меню, кнопки и ответы на частые вопросы без программирования. У многих есть бесплатный тариф с ограничениями по числу пользователей и функций.',
+        ] },
+        { h: 'Когда бесплатного бота мало', ul: [
+          'Нужно принимать заказы и оплату прямо в Telegram.',
+          'Заявки должны уходить сотрудникам или в CRM.',
+          'Нужен каталог товаров, запись на услуги или Telegram Mini App.',
+          'Бот должен работать надёжно, без рекламы конструктора и ограничений.',
+        ] },
+        { h: 'Разработка Telegram-бота в PLT Digital', p: [
+          'Делаем ботов под вашу задачу: заказы, оплата, запись, заявки и Mini App. Первая консультация бесплатная, первый результат через две недели. Подробности и цены на странице <a href="/digital/telegram-bot/">«Создание Telegram-ботов»</a>.',
+        ] },
+      ],
+      faq: [
+        ['Можно ли сделать тг-бота бесплатно?', 'Да, создать бота в BotFather бесплатно, а простые меню можно собрать в конструкторе с бесплатным тарифом.'],
+        ['Нужно ли уметь программировать?', 'Для простого бота в конструкторе нет. Для заказов, оплаты и связи с CRM нужна разработка.'],
+        ['Сколько стоит разработка бота?', 'Цены «от» указаны на странице «Создание Telegram-ботов», первая консультация бесплатная.'],
+      ],
+    },
+    uz: {
+      title: 'Telegram-botni bepul qanday qilish mumkin va qachon dasturlash kerak',
+      desc: 'Telegramda botni bepul qanday qilish mumkin: BotFather va bot konstruktorlari, ular nimalarni qila oladi va biznes uchun qachon tg-bot dasturlash kerak. PLT Digitalda bepul maslahat.',
+      keywords: 'telegram bot bepul, tg bot bepul qilish, telegram bot yaratish bepul, bot konstruktori, BotFather, tg bot',
+      lead: 'Oddiy Telegram-botni bir necha daqiqada bepul yaratish mumkin. Buni qanday qilishni va bepul botlar imkoniyatlari qayerda tugashini aytamiz.',
+      sections: [
+        { h: 'Bepul: BotFather', ol: [
+          'Telegramda rasmiy @BotFather botini oching.',
+          '/newbot buyrug‘ini yuboring, bot nomi va manzilini o‘ylab toping.',
+          'Tokenni oling: bu bot dastur yoki konstruktorga ulanadigan kalit.',
+        ] },
+        { h: 'Bepul: bot konstruktorlari', p: [
+          'Konstruktorlar dasturlashsiz menyu, tugmalar va ko‘p beriladigan savollarga javoblarni yig‘ish imkonini beradi. Ko‘pchiligida foydalanuvchilar soni va funksiyalar bo‘yicha cheklangan bepul tarif bor.',
+        ] },
+        { h: 'Bepul bot qachon yetmaydi', ul: [
+          'Buyurtma va to‘lovni to‘g‘ridan-to‘g‘ri Telegramda qabul qilish kerak.',
+          'Arizalar xodimlarga yoki CRMga borishi kerak.',
+          'Mahsulotlar katalogi, xizmatlarga yozilish yoki Telegram Mini App kerak.',
+          'Bot konstruktor reklamasi va cheklovlarsiz ishonchli ishlashi kerak.',
+        ] },
+        { h: 'PLT Digitalda Telegram-bot yaratish', p: [
+          'Vazifangizga mos botlar yaratamiz: buyurtma, to‘lov, yozilish, arizalar va Mini App. Birinchi maslahat bepul, birinchi natija ikki haftada. Batafsil va narxlar <a href="/digital/telegram-bot/">«Telegram-bot yaratish»</a> sahifasida.',
+        ] },
+      ],
+      faq: [
+        ['Tg-botni bepul qilish mumkinmi?', 'Ha, BotFatherda botni bepul yaratish mumkin, oddiy menyuni esa bepul tarifli konstruktorda yig‘ish mumkin.'],
+        ['Dasturlashni bilish kerakmi?', 'Konstruktordagi oddiy bot uchun yo‘q. Buyurtma, to‘lov va CRM bilan bog‘lanish uchun dasturlash kerak.'],
+        ['Bot yaratish qancha turadi?', 'Boshlang‘ich narxlar «Telegram-bot yaratish» sahifasida, birinchi maslahat bepul.'],
+      ],
+    },
+  },
+  {
+    slug: 'skolko-stoit-telegram-bot',
+    service: 'telegram-bot',
+    ru: {
+      title: 'Сколько стоит Telegram-бот в Ташкенте и от чего зависит цена',
+      desc: 'Сколько стоит разработка Telegram-бота в Ташкенте и Узбекистане: что влияет на цену тг-бота, простой бот, бот с оплатой и Mini App. Цены PLT Digital.',
+      keywords: 'сколько стоит телеграм бот, цена телеграм бота Ташкент, стоимость разработки бота, тг бот цена, заказать бота цена, telegram bot narxi',
+      lead: 'Цена Telegram-бота зависит от того, что он должен делать. Разбираем, из чего складывается стоимость и как начать недорого.',
+      sections: [
+        { h: 'Что влияет на цену бота', ul: [
+          'Сценарий: только меню и ответы или заказы, запись и оплата.',
+          'Куда идут заявки: в группу Telegram, в CRM или в учётную программу.',
+          'Нужна ли оплата прямо в боте.',
+          'Нужен ли каталог товаров или Telegram Mini App.',
+          'Сколько языков: русский, узбекский, английский.',
+        ] },
+        { h: 'Как начать недорого', p: [
+          'Начните с бота, который принимает заявки или заказы и передаёт их сотрудникам. Оплату, каталог и Mini App можно добавить потом, когда бот начнёт приносить заказы.',
+        ] },
+        { h: 'Цены в PLT Digital', p: [
+          'Цены «от» указаны на странице <a href="/digital/telegram-bot/">«Создание Telegram-ботов»</a>. Точную сумму называем после первой встречи, консультация бесплатная. Первый результат через две недели.',
+        ] },
+      ],
+      faq: [
+        ['Сколько стоит простой тг-бот?', 'Цена зависит от функций. Ориентир указан на странице «Создание Telegram-ботов», точную сумму назовём после бесплатной консультации.'],
+        ['Можно ли добавить функции потом?', 'Да, бота можно развивать постепенно: сначала заявки, потом оплата и каталог.'],
+      ],
+    },
+    uz: {
+      title: 'Toshkentda Telegram-bot qancha turadi va narx nimaga bog‘liq',
+      desc: 'Toshkent va O‘zbekistonda Telegram-bot yaratish qancha turadi: tg-bot narxiga nima ta’sir qiladi, oddiy bot, to‘lovli bot va Mini App. PLT Digital narxlari.',
+      keywords: 'telegram bot narxi, tg bot narxi Toshkent, bot yaratish narxi, telegram bot qancha turadi, bot buyurtma narxi',
+      lead: 'Telegram-bot narxi u nima qilishi kerakligiga bog‘liq. Narx nimalardan iboratligini va qanday arzon boshlashni ko‘rib chiqamiz.',
+      sections: [
+        { h: 'Bot narxiga nima ta’sir qiladi', ul: [
+          'Ssenariy: faqat menyu va javoblar yoki buyurtma, yozilish va to‘lov.',
+          'Arizalar qayerga boradi: Telegram guruhiga, CRMga yoki hisob dasturiga.',
+          'To‘lov to‘g‘ridan-to‘g‘ri botda kerakmi.',
+          'Mahsulotlar katalogi yoki Telegram Mini App kerakmi.',
+          'Tillar soni: rus, o‘zbek, ingliz.',
+        ] },
+        { h: 'Qanday arzon boshlash mumkin', p: [
+          'Ariza yoki buyurtmalarni qabul qilib, xodimlarga uzatadigan botdan boshlang. To‘lov, katalog va Mini Appni bot buyurtma olib kela boshlaganda keyin qo‘shish mumkin.',
+        ] },
+        { h: 'PLT Digital narxlari', p: [
+          'Boshlang‘ich narxlar <a href="/digital/telegram-bot/">«Telegram-bot yaratish»</a> sahifasida. Aniq summani birinchi uchrashuvdan keyin aytamiz, maslahat bepul. Birinchi natija ikki haftada.',
+        ] },
+      ],
+      faq: [
+        ['Oddiy tg-bot qancha turadi?', 'Narx funksiyalarga bog‘liq. Taxminiy narx «Telegram-bot yaratish» sahifasida, aniq summani bepul maslahatdan keyin aytamiz.'],
+        ['Funksiyalarni keyin qo‘shish mumkinmi?', 'Ha, botni bosqichma-bosqich rivojlantirish mumkin: avval arizalar, keyin to‘lov va katalog.'],
+      ],
+    },
+  },
+  {
+    slug: 'kak-vybrat-razrabotchika',
+    service: 'sayt',
+    ru: {
+      title: 'Как выбрать разработчика сайта или Telegram-бота в Ташкенте',
+      desc: 'Как выбрать разработчика сайта или тг-бота в Ташкенте: на что смотреть, какие вопросы задать, договор, сроки, поддержка. Чек-лист перед заказом.',
+      keywords: 'как выбрать разработчика сайта, разработчик сайтов Ташкент, разработчик телеграм ботов, веб студия Ташкент, IT компания Ташкент, заказать сайт Ташкент',
+      lead: 'От разработчика зависит, будет ли сайт или бот приносить клиентов. Вот на что смотреть перед заказом.',
+      sections: [
+        { h: 'На что смотреть', ul: [
+          'Примеры работ и свои продукты, которые реально работают.',
+          'Договор: функции, срок и цена должны быть записаны.',
+          'Дизайн до начала работ: вы видите, что получите.',
+          'Промежуточные версии: можно вносить правки по ходу.',
+          'Поддержка после запуска и обучение сотрудников.',
+        ] },
+        { h: 'Какие вопросы задать', ol: [
+          'Как заявки с сайта или бота будут приходить ко мне?',
+          'Кто будет владельцем домена, кода и аккаунтов?',
+          'Что входит в цену, а что оплачивается отдельно?',
+          'Сколько стоит поддержка после запуска?',
+        ] },
+        { h: 'Как работает PLT Digital', p: [
+          'Разбираем задачу за одну встречу, показываем дизайн, фиксируем функции, срок и цену в договоре. Показываем промежуточные версии, после запуска обучаем сотрудников и остаёмся на связи. Первая консультация бесплатная, первый результат через две недели. Наши запущенные продукты: Telegram-боты AZS Radar и Цветотека. <a href="/digital/">Услуги и цены PLT Digital</a>.',
+        ] },
+      ],
+      faq: [
+        ['Нужен ли договор с разработчиком?', 'Да. В договоре должны быть функции, срок и цена, тогда результат предсказуем.'],
+        ['Работает ли PLT Digital по договору?', 'Да, функции, срок и цену фиксируем в договоре до начала работ.'],
+      ],
+    },
+    uz: {
+      title: 'Toshkentda sayt yoki Telegram-bot dasturchisini qanday tanlash kerak',
+      desc: 'Toshkentda sayt yoki tg-bot dasturchisini qanday tanlash kerak: nimaga qarash, qanday savollar berish, shartnoma, muddat, qo‘llab-quvvatlash. Buyurtmadan oldin tekshiruv ro‘yxati.',
+      keywords: 'sayt dasturchisini tanlash, sayt dasturchisi Toshkent, telegram bot dasturchisi, IT kompaniya Toshkent, sayt buyurtma qilish Toshkent',
+      lead: 'Sayt yoki bot mijoz olib kelishi dasturchiga bog‘liq. Buyurtmadan oldin nimaga qarash kerakligi.',
+      sections: [
+        { h: 'Nimaga qarash kerak', ul: [
+          'Ishlar namunalari va haqiqatan ishlayotgan o‘z mahsulotlari.',
+          'Shartnoma: funksiyalar, muddat va narx yozilgan bo‘lishi kerak.',
+          'Ish boshlanishidan oldin dizayn: nima olishingizni ko‘rasiz.',
+          'Oraliq versiyalar: jarayonda tuzatish kiritish mumkin.',
+          'Ishga tushirgandan keyin qo‘llab-quvvatlash va xodimlarni o‘qitish.',
+        ] },
+        { h: 'Qanday savollar berish kerak', ol: [
+          'Sayt yoki botdan arizalar menga qanday keladi?',
+          'Domen, kod va akkauntlar kimga tegishli bo‘ladi?',
+          'Narxga nima kiradi, nima alohida to‘lanadi?',
+          'Ishga tushirgandan keyin qo‘llab-quvvatlash qancha turadi?',
+        ] },
+        { h: 'PLT Digital qanday ishlaydi', p: [
+          'Vazifani bitta uchrashuvda aniqlaymiz, dizaynni ko‘rsatamiz, funksiyalar, muddat va narxni shartnomada belgilaymiz. Oraliq versiyalarni ko‘rsatamiz, ishga tushirgandan keyin xodimlarni o‘rgatamiz va aloqada qolamiz. Birinchi maslahat bepul, birinchi natija ikki haftada. Ishga tushirgan mahsulotlarimiz: AZS Radar va Цветотека Telegram-botlari. <a href="/digital/">PLT Digital xizmatlari va narxlari</a>.',
+        ] },
+      ],
+      faq: [
+        ['Dasturchi bilan shartnoma kerakmi?', 'Ha. Shartnomada funksiyalar, muddat va narx bo‘lishi kerak, shunda natija oldindan ma’lum bo‘ladi.'],
+        ['PLT Digital shartnoma asosida ishlaydimi?', 'Ha, funksiyalar, muddat va narxni ish boshlanishidan oldin shartnomada belgilaymiz.'],
+      ],
+    },
+  },
 ];
