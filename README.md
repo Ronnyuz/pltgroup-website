@@ -63,7 +63,7 @@ with `OWNER_LOGIN`, `OWNER_PASSWORD`, `GITHUB_TOKEN`, `GITHUB_REPO` in `.dev.var
 
 - Service pages `/digital/sayt/`, `/digital/telegram-bot/`, `/digital/crm/`, `/digital/ai-assistant/` are generated from `digital/index.html`: `node tools/service-pages.mjs .`
 - English pages under `/en/` (home, PLT Digital, services, privacy): `node tools/en-pages.mjs .` (run it after `tools/uz-and-blog.mjs`).
-- PLT Agrovia (`/agrovia/`) is kept but hidden: `noindex`, not linked, not in the sitemap. PLT Retail is linked quietly (footer, one line on the home page).
+- PLT Agrovia (`/agrovia/`) and PLT Retail (`/retail/`) are kept but hidden: `noindex`, not linked, not in the sitemap. They will get their own sites later.
 - Uzbek copies of all main pages under `/uz/` (with hreflang) and the blog `/blog/`, `/uz/blog/` (texts in `tools/articles.mjs`): `node tools/uz-and-blog.mjs .`
 - After editing `index.html`, `digital/index.html`, `agrovia/index.html` or `retail/index.html`, run both commands in this order so `/uz/` stays in sync, then commit.
 - `llms.txt` describes the company for AI search; `096f69b6d9ea6b70d6b279f08c149197.txt` is the public IndexNow key (Bing, Yandex).
