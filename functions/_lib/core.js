@@ -111,18 +111,22 @@ export async function requireUser(request, env, perm) {
   return { user };
 }
 
-// Simple brute-force brake: 8 failed logins per login or IP lock it for 15 minutes.
+// Brute-force brake, counted over 15 minutes. One address gets 8 failed logins; a login gets 50
+// from all addresses together. The high per-login limit stops guessing one account from many
+// addresses, yet a stranger who knows the login cannot lock its owner out with a few wrong tries.
 const WINDOW = 15 * 60 * 1000;
+const failureLimit = (key) => (key.startsWith('login:') ? 50 : 8);
 export async function tooManyFailures(env, keys) {
   const d = await db(env);
   for (const key of keys) {
     const row = await d.prepare('SELECT count, first_at FROM login_failures WHERE key = ?').bind(key).first();
-    if (row && Date.now() - row.first_at < WINDOW && row.count >= 8) return true;
+    if (row && Date.now() - row.first_at < WINDOW && row.count >= failureLimit(key)) return true;
   }
   return false;
 }
 export async function noteFailure(env, keys) {
   const d = await db(env), now = Date.now();
+  await d.prepare('DELETE FROM login_failures WHERE first_at < ?').bind(now - WINDOW).run();
   for (const key of keys) {
     await d.prepare(`INSERT INTO login_failures (key, count, first_at) VALUES (?, 1, ?)
       ON CONFLICT(key) DO UPDATE SET count = CASE WHEN ? - first_at > ? THEN 1 ELSE count + 1 END, first_at = CASE WHEN ? - first_at > ? THEN ? ELSE first_at END`)
@@ -176,3 +180,13 @@ export async function ghDelete(env, path, message, sha) {
 }
 
 export const clip = (v, n) => String(v ?? '').trim().slice(0, n);
+
+// Rate-limit counters (table chat_hits). A key names its period, e.g. "lead:<ip>:2026-11-02T14",
+// and returns the count after this hit. Now and then counters from earlier days are removed.
+export async function bump(env, key) {
+  const d = await db(env);
+  const row = await d.prepare('INSERT INTO chat_hits (key, count) VALUES (?, 1) ON CONFLICT(key) DO UPDATE SET count = count + 1 RETURNING count').bind(key).first();
+  if (Math.random() < 0.02) await d.prepare('DELETE FROM chat_hits WHERE key NOT LIKE ?').bind(`%${new Date().toISOString().slice(0, 10)}%`).run();
+  return row.count;
+}
+export const clientIp = (request) => request.headers.get('cf-connecting-ip') || 'unknown';

@@ -26,7 +26,9 @@ export async function onRequest({ request, env, params }) {
       await d.prepare("INSERT INTO users (login, name, pass_hash, salt, role, perms) VALUES (?, ?, ?, ?, 'owner', '[]')").bind(login, 'Владелец', hash, salt).run();
     }
     const user = await d.prepare('SELECT * FROM users WHERE login = ?').bind(login).first();
-    if (!user || !user.active || !(await checkPassword(password, user))) { await noteFailure(env, keys); return fail(401, 'Неверный логин или пароль.'); }
+    // An unknown login still costs one password hash, so the response time does not reveal which logins exist.
+    const passwordOk = await checkPassword(password, user || { salt: '0'.repeat(32), pass_hash: '' });
+    if (!user || !user.active || !passwordOk) { await noteFailure(env, keys); return fail(401, 'Неверный логин или пароль.'); }
     await clearFailures(env, keys);
     await d.prepare('DELETE FROM sessions WHERE expires_at < ?').bind(new Date().toISOString()).run();
     return json({ user: publicUser(user) }, 200, { 'set-cookie': await createSession(env, user.id) });

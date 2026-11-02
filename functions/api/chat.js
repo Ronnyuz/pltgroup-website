@@ -4,12 +4,13 @@
 // The conversation is kept server-side and only ever appended to; for Claude, earlier turns
 // (including the model's thinking blocks) go back to the API exactly as they came.
 import Anthropic from '@anthropic-ai/sdk';
-import { body, clip, db, fail, json, sameOrigin } from '../_lib/core.js';
+import { body, bump, clientIp, clip, db, fail, json, sameOrigin } from '../_lib/core.js';
 import { buildSystemPrompt } from '../_lib/chat-prompt.js';
 import site from '../../content/site.json';
 
 const MAX_TURNS = 30;          // visitor messages per conversation
 const MAX_PER_DAY = 60;        // visitor messages per IP per day
+const MAX_ALL_PER_DAY = 1500;  // messages from all visitors per day: caps the cost of a flood
 const MAX_TOOL_ROUNDS = 3;
 const WORKERS_AI_MODEL = '@cf/meta/llama-3.3-70b-instruct-fp8-fast';
 const WORKERS_AI_HISTORY = 16; // messages sent back to the model
@@ -39,11 +40,10 @@ const TEXT = {
 
 const newId = () => [...crypto.getRandomValues(new Uint8Array(16))].map((b) => b.toString(16).padStart(2, '0')).join('');
 
-async function overDailyLimit(d, ip) {
-  const key = `${ip}:${new Date().toISOString().slice(0, 10)}`;
-  await d.prepare('INSERT INTO chat_hits (key, count) VALUES (?, 1) ON CONFLICT(key) DO UPDATE SET count = count + 1').bind(key).run();
-  const row = await d.prepare('SELECT count FROM chat_hits WHERE key = ?').bind(key).first();
-  return row.count > MAX_PER_DAY;
+async function overDailyLimit(env, ip) {
+  const day = new Date().toISOString().slice(0, 10);
+  if (await bump(env, `${ip}:${day}`) > MAX_PER_DAY) return true;
+  return await bump(env, `chat-all:${day}`) > MAX_ALL_PER_DAY;
 }
 
 // A contact counts only if the visitor wrote it: models tend to fill in the company's own
@@ -189,7 +189,7 @@ export async function onRequestPost({ request, env }) {
   if (!engine) return json({ reply: t.busy, unavailable: true });
 
   const d = await db(env);
-  if (await overDailyLimit(d, request.headers.get('cf-connecting-ip') || 'unknown')) return json({ id: b.id, reply: t.limit });
+  if (await overDailyLimit(env, clientIp(request))) return json({ id: b.id, reply: t.limit });
 
   let chat = /^[a-f0-9]{32}$/.test(b.id || '') ? await d.prepare('SELECT * FROM chats WHERE id = ?').bind(b.id).first() : null;
   if (chat && chat.engine !== engine) chat = null; // the engine changed: start a fresh conversation
