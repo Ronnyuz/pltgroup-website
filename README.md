@@ -65,5 +65,6 @@ with `OWNER_LOGIN`, `OWNER_PASSWORD`, `GITHUB_TOKEN`, `GITHUB_REPO` in `.dev.var
 - English pages under `/en/` (home, PLT Digital, services, privacy): `node tools/en-pages.mjs .` (run it after `tools/uz-and-blog.mjs`).
 - PLT Agrovia (`/agrovia/`) and PLT Retail (`/retail/`) are kept but hidden: `noindex`, not linked, not in the sitemap. They will get their own sites later.
 - Uzbek copies of all main pages under `/uz/` (with hreflang) and the blog `/blog/`, `/uz/blog/` (texts in `tools/articles.mjs`): `node tools/uz-and-blog.mjs .`
-- After editing `index.html`, `digital/index.html`, `agrovia/index.html` or `retail/index.html`, run both commands in this order so `/uz/` stays in sync, then commit.
+- After editing `index.html`, `digital/index.html`, `agrovia/index.html` or `retail/index.html`, run `tools/service-pages.mjs`, `tools/uz-and-blog.mjs` and `tools/en-pages.mjs` in this order so the copies stay in sync, then commit.
+- The Russian files in the repository are bilingual (the source for `/uz/`). On Cloudflare `src/build.mjs` removes the Uzbek text from them, so the published Russian pages have one language.
 - `llms.txt` describes the company for AI search; `096f69b6d9ea6b70d6b279f08c149197.txt` is the public IndexNow key (Bing, Yandex).
