@@ -227,6 +227,33 @@ ${footer}
 }
 
 /* ---------- service pages ---------- */
+const GUIDES = {
+  website: { h: 'Which website does your business need', p: [
+    '<strong>Landing page</strong>: one page for a service or an ad campaign. The fastest start when you want to test demand and begin collecting leads.',
+    '<strong>Company website</strong>: services, prices, examples of work and contacts. People find it in Google for many different searches, so it brings customers constantly.',
+    '<strong>Catalog</strong>: products or services organized in sections. Customers choose on their own and send a request, and you get it straight in Telegram or CRM.',
+    'We build websites for shops, cafes, salons, service companies and other small and medium businesses. Every website works well on phones and is set up for search: titles, descriptions, structured data and Google Search Console. In the free first consultation we help you choose the format that pays off for you.',
+  ] },
+  'telegram-bot': { h: 'What Telegram bots we build', p: [
+    '<strong>Order bot</strong>: catalog or menu, cart and delivery address. A good fit for shops, cafes and delivery.',
+    '<strong>Booking bot</strong>: the customer picks a service and a time, and your team sees the booking right away. A good fit for salons and service companies.',
+    '<strong>Lead and FAQ bot</strong>: collects contact details and answers common questions 24/7 while your managers are busy.',
+    '<strong>Telegram Mini App</strong>: an app inside Telegram with a catalog and personal account. Customers do not need to install anything.',
+    'Your customers already have Telegram, so ordering takes a couple of taps. The bot can be connected to your website and CRM to keep all leads in one place. The first consultation is free.',
+  ] },
+  crm: { h: 'When a business needs a CRM', p: [
+    '<strong>Leads get lost.</strong> Customers write on Instagram, Telegram and your website, and some messages go unanswered. In a CRM every lead arrives in one window.',
+    '<strong>It is unclear who does what.</strong> A CRM shows who is working on each lead and who still needs a reply.',
+    '<strong>The numbers are hidden.</strong> Revenue and stock sit in different spreadsheets. Analytics brings them together on one screen, and the owner can check reports from a phone.',
+    'We build the system around your processes, so the price is set individually. In the free first consultation we find out what slows you down.',
+  ] },
+  'ai-assistant': { h: 'Where an AI assistant helps', p: [
+    '<strong>Answers to common questions.</strong> Prices, deadlines, address, availability: customers get an answer at once instead of waiting for a manager.',
+    '<strong>Leads at night and on weekends.</strong> The assistant takes contact details and passes the request to your team, so the customer does not leave for a competitor.',
+    '<strong>Less load on managers.</strong> It handles routine questions and passes complex ones to people.',
+    'We give the assistant your services, prices and rules, and check its answers before launch. It works on your website and in Telegram. The first consultation is free.',
+  ] },
+};
 const PAGES = [
   { slug: 'website', ru: 'digital/sayt/', particles: 'WEB', option: 'Website', rows: [0],
     title: 'Website Development: Order a Business Website | PLT Digital', service: 'Website development',
@@ -273,6 +300,12 @@ for (const p of PAGES) {
       <div class="section-top"><h2>Price and what is included</h2><p>Price depends on the scope. We give the exact price after the first call.</p></div>
       <ul class="rows">${p.rows.map((i) => row(SERVICES[i], false)).join('')}</ul>
       <ul class="rules-grid four" style="margin-top:48px">${p.items.map(([t, d]) => `<li><span class="rule-dot"></span><h3><strong>${t}</strong></h3><span>${d}</span></li>`).join('')}</ul>
+    </div>
+  </section>
+  <section class="section" id="guide">
+    <div class="wrap about">
+      <h2>${GUIDES[p.slug].h}</h2>
+      <div class="about-text">${GUIDES[p.slug].p.map((x) => `<p>${x}</p>`).join('')}</div>
     </div>
   </section>
   ${process_.replace('<section class="section" id="process">', '<section class="section" id="process" style="background:var(--bg-2)">')}

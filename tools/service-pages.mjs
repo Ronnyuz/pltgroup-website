@@ -1,6 +1,7 @@
 // Generates PLT Digital service pages from digital/index.html: node tools/service-pages.mjs .
 import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
+import { ARTICLES } from './articles.mjs';
 
 const ROOT = process.argv[2];
 const SITE = 'https://pltgroup.uz';
@@ -21,6 +22,35 @@ const rowOf = (name) => rows.find((r) => r.includes(`<span class="ru">${name}</s
 
 const ru = (r, u) => `<span class="ru">${r}</span><span class="uz">${u}</span>`;
 const esc = (s) => s.replace(/&/g, '&amp;').replace(/"/g, '&quot;');
+
+// Longer explanation on each service page and the articles it links to.
+const GUIDES = {
+  sayt: { h: ru('Какой сайт нужен вашему бизнесу', 'Biznesingizga qanday sayt kerak'), related: ['skolko-stoit-sayt', 'sayt-besplatno', 'kak-vybrat-razrabotchika'], p: [
+    ru('<strong>Лендинг</strong>: одна страница под услугу или рекламу. Самый быстрый старт, когда нужно проверить спрос и начать собирать заявки.', '<strong>Lending</strong>: xizmat yoki reklama uchun bitta sahifa. Talabni sinab ko‘rish va arizalarni yig‘ishni boshlash kerak bo‘lganda eng tez yo‘l.'),
+    ru('<strong>Сайт компании</strong>: услуги, цены, примеры работ и контакты. Такой сайт находят в Google и Яндексе по разным запросам, и он приводит клиентов постоянно.', '<strong>Kompaniya sayti</strong>: xizmatlar, narxlar, ish namunalari va kontaktlar. Bunday saytni Google va Yandexda turli so‘rovlar bo‘yicha topishadi va u doimiy ravishda mijoz olib keladi.'),
+    ru('<strong>Каталог</strong>: товары или услуги с разделами. Клиент выбирает сам и оставляет заявку, а вы сразу получаете её в Telegram или CRM.', '<strong>Katalog</strong>: bo‘limlarga ajratilgan mahsulot yoki xizmatlar. Mijoz o‘zi tanlaydi va ariza qoldiradi, siz uni darhol Telegram yoki CRMda olasiz.'),
+    ru('Делаем сайты для магазинов, кафе, салонов, сервисов и других компаний малого и среднего бизнеса. Сайт удобно открывается с телефона и настроен под поиск: заголовки, описания, разметка и подключение Google Search Console. На первой бесплатной консультации подскажем, какой формат окупится именно у вас.', 'Do‘konlar, kafelar, salonlar, servislar va boshqa kichik va o‘rta biznes kompaniyalari uchun saytlar yaratamiz. Sayt telefonda qulay ochiladi va qidiruvga sozlanadi: sarlavhalar, tavsiflar, belgilash va Google Search Console ulanishi. Birinchi bepul maslahatda aynan sizga qaysi format o‘zini oqlashini aytamiz.'),
+  ] },
+  'telegram-bot': { h: ru('Какие Telegram-боты мы делаем', 'Qanday Telegram-botlar yaratamiz'), related: ['kak-sozdat-telegram-bota', 'skolko-stoit-telegram-bot', 'telegram-bot-besplatno'], p: [
+    ru('<strong>Бот для заказов</strong>: каталог или меню, корзина и адрес доставки. Подходит магазинам, кафе и доставке.', '<strong>Buyurtma boti</strong>: katalog yoki menyu, savat va yetkazish manzili. Do‘konlar, kafelar va yetkazib berish uchun mos.'),
+    ru('<strong>Бот для записи</strong>: клиент выбирает услугу и время, а сотрудник сразу видит запись. Подходит салонам и сервисам.', '<strong>Yozilish boti</strong>: mijoz xizmat va vaqtni tanlaydi, xodim esa yozuvni darhol ko‘radi. Salonlar va servislar uchun mos.'),
+    ru('<strong>Бот для заявок и вопросов</strong>: собирает контакты и отвечает на частые вопросы круглосуточно, пока менеджеры заняты.', '<strong>Ariza va savollar boti</strong>: kontaktlarni yig‘adi va menejerlar band bo‘lganda ko‘p beriladigan savollarga kecha-kunduz javob beradi.'),
+    ru('<strong>Telegram Mini App</strong>: приложение внутри Telegram с каталогом и личным кабинетом. Клиенту ничего не нужно устанавливать.', '<strong>Telegram Mini App</strong>: katalog va shaxsiy kabinetli Telegram ichidagi ilova. Mijoz hech narsa o‘rnatishi shart emas.'),
+    ru('Telegram у клиентов уже есть, поэтому заказ занимает пару нажатий. Бота можно связать с сайтом и CRM, чтобы все заявки были в одном месте. Первая консультация бесплатная.', 'Mijozlarda Telegram allaqachon bor, shuning uchun buyurtma bir necha bosishda bo‘ladi. Botni sayt va CRM bilan bog‘lash mumkin, shunda barcha arizalar bir joyda bo‘ladi. Birinchi maslahat bepul.'),
+  ] },
+  crm: { h: ru('Когда бизнесу нужна CRM', 'Biznesga qachon CRM kerak'), related: ['kak-vybrat-razrabotchika', 'sayt-ili-telegram-bot'], p: [
+    ru('<strong>Заявки теряются.</strong> Клиенты пишут в Instagram, Telegram и на сайт, и часть сообщений остаётся без ответа. В CRM все заявки приходят в одно окно.', '<strong>Arizalar yo‘qoladi.</strong> Mijozlar Instagram, Telegram va saytga yozadi, xabarlarning bir qismi javobsiz qoladi. CRMda barcha arizalar bitta oynaga keladi.'),
+    ru('<strong>Непонятно, кто и что делает.</strong> CRM показывает, на какой заявке кто работает и кому нужно ответить.', '<strong>Kim nima qilayotgani noma’lum.</strong> CRM qaysi ariza ustida kim ishlayotganini va kimga javob berish kerakligini ko‘rsatadi.'),
+    ru('<strong>Не видно цифр.</strong> Выручка и остатки лежат в разных таблицах. Аналитика собирает их на одном экране, и владелец смотрит отчёты с телефона.', '<strong>Raqamlar ko‘rinmaydi.</strong> Tushum va qoldiqlar turli jadvallarda turadi. Analitika ularni bitta ekranda yig‘adi, egasi hisobotlarni telefonda ko‘radi.'),
+    ru('Систему делаем под ваши процессы, поэтому цена договорная. На первой бесплатной консультации разберём, что мешает работать.', 'Tizimni jarayonlaringizga moslab yaratamiz, shuning uchun narx kelishiladi. Birinchi bepul maslahatda ishga nima xalaqit berayotganini aniqlaymiz.'),
+  ] },
+  'ai-assistant': { h: ru('Где ИИ-ассистент приносит пользу', 'SI-assistent qayerda foyda keltiradi'), related: ['ii-assistent-dlya-biznesa'], p: [
+    ru('<strong>Ответы на частые вопросы.</strong> Цены, сроки, адрес, наличие: клиент получает ответ сразу и не ждёт менеджера.', '<strong>Ko‘p beriladigan savollarga javob.</strong> Narxlar, muddatlar, manzil, mavjudlik: mijoz javobni darhol oladi va menejerni kutmaydi.'),
+    ru('<strong>Заявки ночью и в выходные.</strong> Ассистент записывает контакты и передаёт заявку сотруднику, поэтому клиент не уходит к конкуренту.', '<strong>Tunda va dam olish kunlari arizalar.</strong> Assistent kontaktlarni yozib oladi va arizani xodimga uzatadi, shuning uchun mijoz raqobatchiga ketmaydi.'),
+    ru('<strong>Разгрузка менеджеров.</strong> Однотипные вопросы берёт на себя, а сложные передаёт людям.', '<strong>Menejerlar yukini kamaytirish.</strong> Bir xil savollarni o‘z zimmasiga oladi, murakkablarini esa odamlarga uzatadi.'),
+    ru('Мы даём ассистенту ваши услуги, цены и правила и проверяем ответы перед запуском. Работает на сайте и в Telegram. Первая консультация бесплатная.', 'Assistentga xizmatlaringiz, narxlar va qoidalaringizni beramiz va ishga tushirishdan oldin javoblarni tekshiramiz. Saytda va Telegramda ishlaydi. Birinchi maslahat bepul.'),
+  ] },
+};
 
 const PAGES = [
   {
@@ -51,11 +81,11 @@ const PAGES = [
   },
   {
     slug: 'telegram-bot', particles: 'BOT', option: 'Telegram-бот', rows: ['Telegram-боты'],
-    title: 'Создание Telegram-ботов в Ташкенте: заказать телеграм-бота | PLT Digital',
-    desc: 'Создание Telegram-ботов для бизнеса в Ташкенте: заказы, оплата, запись и заявки прямо в Telegram, а также Telegram Mini App. Первый результат через две недели.',
+    title: 'Разработка Telegram-ботов в Ташкенте: создать бота для бизнеса | PLT Digital',
+    desc: 'Разработка Telegram-ботов для бизнеса в Ташкенте: заказы, оплата, запись и заявки прямо в Telegram, а также Telegram Mini App. Первый результат через две недели.',
     keywords: 'создать телеграм бота, создать тг бота, создание телеграм ботов, разработка телеграм ботов, заказать телеграм бота, телеграм бот для бизнеса, тг бот, бот для заказов, бот для записи, Telegram Mini App, чат-бот Ташкент, разработка ботов Узбекистан, telegram bot yaratish, bot yasash, tg bot yaratish, telegram bot buyurtma, телеграмм бот, телеграмм бот заказать, сделать бота в телеграм, как сделать бота, бот для телеграм, бот для магазина, бот для заказов еды, нужен бот, тг бот заказать, бот цена, telegram bot qilish, bot kerak, telegram bot narxi, telegram bot development, create telegram bot, make telegram bot, telegram bot Tashkent',
-    service: 'Создание Telegram-ботов', serviceEn: 'Telegram bot development',
-    h1: ru('Создание Telegram-ботов', 'Telegram-bot yaratish'),
+    service: 'Разработка Telegram-ботов', serviceEn: 'Telegram bot development',
+    h1: ru('Разработка Telegram-ботов в Ташкенте', 'Toshkentda Telegram-bot yaratish'),
     lead: ru('Делаем телеграм-ботов для бизнеса в Ташкенте и по Узбекистану: заказы, оплата, запись и ответы клиентам прямо в Telegram.', 'Toshkent va O‘zbekiston bo‘ylab biznes uchun Telegram-botlar yaratamiz: buyurtma, to‘lov, yozilish va mijozlarga javob to‘g‘ridan-to‘g‘ri Telegramda.'),
     items: [
       [ru('Заказы и оплата', 'Buyurtma va to‘lov'), ru('Клиент выбирает товар или услугу и оплачивает прямо в Telegram.', 'Mijoz mahsulot yoki xizmatni tanlaydi va to‘g‘ridan-to‘g‘ri Telegramda to‘laydi.')],
@@ -81,7 +111,7 @@ const PAGES = [
     desc: 'Внедрение CRM и аналитики для бизнеса в Ташкенте: все заявки из сайта, Telegram и Instagram в одном окне, выручка и остатки на одном экране.',
     keywords: 'CRM Ташкент, внедрение CRM, CRM для бизнеса, CRM система Узбекистан, CRM для малого бизнеса, учёт заявок, аналитика продаж, дашборд, отчёты для бизнеса, автоматизация бизнеса Ташкент, CRM tizimi, biznes avtomatlashtirish, CRM development Uzbekistan, business analytics Tashkent',
     service: 'CRM и аналитика', serviceEn: 'CRM and business analytics',
-    h1: ru('CRM и аналитика для бизнеса', 'Biznes uchun CRM va analitika'),
+    h1: ru('CRM и аналитика для бизнеса в Ташкенте', 'Toshkentda biznes uchun CRM va analitika'),
     lead: ru('Собираем все заявки в одном окне и показываем выручку и остатки на одном экране. Для малого бизнеса в Ташкенте и по Узбекистану.', 'Barcha arizalarni bitta oynada yig‘amiz, tushum va qoldiqlarni bitta ekranda ko‘rsatamiz. Toshkent va O‘zbekistondagi kichik biznes uchun.'),
     items: [
       [ru('Все заявки в одном окне', 'Barcha arizalar bitta oynada'), ru('Заявки из сайта, Telegram и Instagram больше не теряются.', 'Sayt, Telegram va Instagramdan kelgan arizalar endi yo‘qolmaydi.')],
@@ -102,7 +132,7 @@ const PAGES = [
     desc: 'ИИ-ассистенты для бизнеса в Ташкенте: отвечают клиентам круглосуточно на сайте и в Telegram, собирают заявки и передают их сотрудникам.',
     keywords: 'ИИ ассистент для бизнеса, чат-бот с искусственным интеллектом, AI бот, нейросеть для бизнеса, автоответчик для клиентов, ИИ чат-бот Ташкент, sun’iy intellekt bot, SI assistent, AI assistant for business, AI chatbot Tashkent',
     service: 'ИИ-ассистенты', serviceEn: 'AI assistants',
-    h1: ru('ИИ-ассистенты для бизнеса', 'Biznes uchun SI-assistentlar'),
+    h1: ru('ИИ-ассистенты для бизнеса в Ташкенте', 'Toshkentda biznes uchun SI-assistentlar'),
     lead: ru('ИИ-ассистент отвечает вашим клиентам круглосуточно на сайте или в Telegram и передаёт заявки сотрудникам.', 'SI-assistent mijozlaringizga saytda yoki Telegramda kecha-kunduz javob beradi va arizalarni xodimlarga uzatadi.'),
     items: [
       [ru('Круглосуточно', 'Kecha-kunduz'), ru('Отвечает клиентам ночью и в выходные.', 'Mijozlarga tunda va dam olish kunlari ham javob beradi.')],
@@ -129,7 +159,7 @@ for (const p of PAGES) {
     '@graph': [
       { '@type': 'Organization', '@id': `${SITE}/#org`, name: 'PLT GROUP', url: `${SITE}/`, logo: `${SITE}/assets/apple-touch-icon.png` },
       { '@type': 'ProfessionalService', '@id': `${SITE}/digital/#org`, name: 'PLT Digital', url: `${SITE}/digital/`, telephone: '+998331113010', email: 'info@pltgroup.uz', address: { '@type': 'PostalAddress', addressLocality: 'Ташкент', addressCountry: 'UZ' }, parentOrganization: { '@id': `${SITE}/#org` } },
-      { '@type': 'Service', '@id': `${url}#service`, name: p.service, alternateName: p.serviceEn, serviceType: p.service, description: p.desc, url, provider: { '@id': `${SITE}/digital/#org` }, areaServed: [{ '@type': 'City', name: 'Ташкент' }, { '@type': 'Country', name: 'Узбекистан' }], inLanguage: ['ru', 'uz', 'en'] },
+      { '@type': 'Service', '@id': `${url}#service`, name: p.service, alternateName: p.serviceEn, serviceType: p.service, description: p.desc, url, provider: { '@id': `${SITE}/digital/#org` }, areaServed: [{ '@type': 'City', name: 'Ташкент' }, { '@type': 'Country', name: 'Узбекистан' }], },
       { '@type': 'BreadcrumbList', itemListElement: [
         { '@type': 'ListItem', position: 1, name: 'PLT GROUP', item: `${SITE}/` },
         { '@type': 'ListItem', position: 2, name: 'PLT Digital', item: `${SITE}/digital/` },
@@ -201,6 +231,12 @@ ${header}
       <ul class="rules-grid four" style="margin-top:48px">${p.items.map(([t, d]) => `<li><span class="rule-dot"></span><h3><strong>${t}</strong></h3><span>${d}</span></li>`).join('')}</ul>
     </div>
   </section>
+  <section class="section" id="guide">
+    <div class="wrap about">
+      <h2>${GUIDES[p.slug].h}</h2>
+      <div class="about-text">${GUIDES[p.slug].p.map((x) => `<p>${x}</p>`).join('')}</div>
+    </div>
+  </section>
   ${process_.replace('<section class="section" id="process">', '<section class="section" id="process" style="background:var(--bg-2)">')}
   <section class="section" id="faq">
     <div class="wrap">
@@ -212,6 +248,8 @@ ${header}
     <div class="wrap">
       <div class="section-top"><h2>${ru('Другие услуги', 'Boshqa xizmatlar')}</h2></div>
       <ul class="rows">${others(p.slug)}</ul>
+      <div class="section-top" style="margin-top:64px"><h2>${ru('Полезные статьи', 'Foydali maqolalar')}</h2></div>
+      <ul class="rows">${GUIDES[p.slug].related.map((s) => ARTICLES.find((a) => a.slug === s)).map((a) => `<li><a class="row" href="/blog/${a.slug}/"><span class="row-name">${ru(a.ru.title, a.uz.title)}</span><span class="row-short">${ru(a.ru.lead, a.uz.lead)}</span><span class="row-end link">${ru('Читать', 'O‘qish')}</span></a></li>`).join('')}</ul>
     </div>
   </section>
 

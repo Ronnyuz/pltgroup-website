@@ -74,3 +74,25 @@ write('sitemap.xml', `<?xml version="1.0" encoding="UTF-8"?>
 ${urls.map((u) => `  <url><loc>${u}</loc><lastmod>${today}</lastmod></url>`).join('\n')}
 </urlset>
 `);
+
+// Published Russian pages carry Russian text only, the Uzbek text lives under /uz/, so search engines see one language per address.
+// Only on Cloudflare: the files in the repository stay bilingual, tools/uz-and-blog.mjs builds /uz/ from them.
+if (process.env.CF_PAGES) {
+  const removeUz = (html) => {
+    const open = '<span class="uz">';
+    for (let i = html.indexOf(open); i !== -1; i = html.indexOf(open, i)) {
+      let j = i + open.length;
+      for (let depth = 1; depth;) {
+        const o = html.indexOf('<span', j), c = html.indexOf('</span>', j);
+        if (o !== -1 && o < c) { depth++; j = o + 5; } else { depth--; j = c + 7; }
+      }
+      html = html.slice(0, i) + html.slice(j);
+    }
+    return html;
+  };
+  for (const u of [...STATIC, 'agrovia/', 'retail/']) {
+    const file = join(ROOT, u, 'index.html');
+    const html = readFileSync(file, 'utf8');
+    if (html.includes('data-page-lang="ru"')) writeFileSync(file, removeUz(html));
+  }
+}
