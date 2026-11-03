@@ -11,7 +11,7 @@ export async function onRequestPatch({ request, env, params }) {
   const u = await target(env, params.id);
   if (!u) return fail(404, 'Сотрудник не найден.');
   const b = await body(request) || {};
-  if (b.password !== undefined && !validPassword(b.password)) return fail(400, 'Пароль должен быть не короче 8 символов.');
+  if (b.password !== undefined && !validPassword(b.password)) return fail(400, 'Пароль должен быть не короче 10 символов и не только из цифр.');
   const d = await db(env);
   const name = b.name === undefined ? u.name : clip(b.name, 120);
   const perms = Array.isArray(b.perms) ? JSON.stringify(b.perms.filter((p) => PERMS.includes(p))) : u.perms;

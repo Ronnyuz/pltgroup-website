@@ -491,7 +491,7 @@
     });
     const createCard = h('div', { class: 'card' }, h('h2', { style: 'margin-bottom:16px' }, 'Новый сотрудник'),
       h('div', { class: 'grid3' }, field('Имя', nName), field('Логин', nLogin, 'Латиница, от 3 символов'),
-        field('Пароль', nPass, 'Не короче 8 символов. Сотрудник сможет сменить его сам.')),
+        field('Пароль', nPass, 'Не короче 10 символов, не только цифры. Сотрудник сможет сменить его сам.')),
       h('p', { class: 'lbl' }, 'Что ему доступно'),
       permBoxes(nf.perms, (k, on) => { nf.perms = on ? [...nf.perms, k] : nf.perms.filter((p) => p !== k); }),
       create);
@@ -507,7 +507,7 @@
           h('div', null, h('p', { style: 'font-weight:700' }, u.name || u.login, u.active ? '' : ' (отключён)'), h('p', { class: 'lead-meta' }, `логин: ${u.login}`)),
           h('div', { class: 'lead-actions' },
             h('button', { class: 'btn btn--small', type: 'button', onclick: () => {
-              const p = prompt(`Новый пароль для ${u.login} (не короче 8 символов):`, randomPassword());
+              const p = prompt(`Новый пароль для ${u.login} (не короче 10 символов и не только из цифр):`, randomPassword());
               if (p) patch({ password: p }, `Пароль изменён. Новый пароль: ${p}`);
             } }, 'Сменить пароль'),
             h('button', { class: 'btn btn--small', type: 'button', onclick: () => patch({ active: !u.active }, u.active ? 'Доступ отключён' : 'Доступ включён') }, u.active ? 'Отключить' : 'Включить'),
@@ -531,7 +531,7 @@
       if (next.value !== again.value) { toast('Новые пароли не совпадают.', true); return; }
       run(btn, async () => { await api('POST', '/api/auth/password', { current: cur.value, next: next.value }); form.reset(); toast('Пароль изменён. На других устройствах нужно войти заново.'); });
     } }, h('h2', { style: 'margin-bottom:16px' }, 'Смена пароля'),
-    field('Текущий пароль', cur), field('Новый пароль', next, 'Не короче 8 символов'), field('Повторите новый пароль', again), btn);
+    field('Текущий пароль', cur), field('Новый пароль', next, 'Не короче 10 символов, не только цифры'), field('Повторите новый пароль', again), btn);
     const pName = h('input', { class: 'input', value: me.name === 'Владелец' ? '' : me.name, placeholder: 'Как вас называть в панели' });
     const pLogin = h('input', { class: 'input', value: me.login, autocapitalize: 'none', autocomplete: 'username' });
     const pCur = h('input', { class: 'input', type: 'password', autocomplete: 'current-password' });

@@ -13,10 +13,13 @@
 
 export const PERMS = ['leads', 'content', 'posts'];
 const SESSION_DAYS = 14;
-const COOKIE = 'plt_session';
+// The __Host- prefix makes the browser accept this cookie only over HTTPS, from this exact host,
+// for the whole site: a subdomain cannot set or overwrite it.
+const COOKIE = '__Host-plt_session';
 
+// API responses are not covered by _headers, so they carry their own protective headers.
 export const json = (data, status = 200, headers = {}) =>
-  new Response(JSON.stringify(data), { status, headers: { 'content-type': 'application/json; charset=utf-8', 'cache-control': 'no-store', ...headers } });
+  new Response(JSON.stringify(data), { status, headers: { 'content-type': 'application/json; charset=utf-8', 'cache-control': 'no-store', 'x-content-type-options': 'nosniff', 'x-frame-options': 'DENY', 'referrer-policy': 'no-referrer', ...headers } });
 export const fail = (status, error) => json({ error }, status);
 
 export async function body(request) {
@@ -63,8 +66,9 @@ export async function checkPassword(password, user) {
   const { hash } = await hashPassword(password, user.salt);
   return sameText(hash, user.pass_hash);
 }
+// New passwords: 10 to 200 characters, not digits only. Existing passwords keep working.
 export function validPassword(p) {
-  return typeof p === 'string' && p.length >= 8 && p.length <= 200;
+  return typeof p === 'string' && p.length >= 10 && p.length <= 200 && !/^\d+$/.test(p);
 }
 
 export const publicUser = (u) => ({ id: u.id, login: u.login, name: u.name, role: u.role, perms: u.role === 'owner' ? PERMS : JSON.parse(u.perms || '[]'), active: !!u.active, created_at: u.created_at });

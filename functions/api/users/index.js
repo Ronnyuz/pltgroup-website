@@ -14,7 +14,7 @@ export async function onRequestPost({ request, env }) {
   const b = await body(request) || {};
   const login = clip(b.login, 60).toLowerCase();
   if (!/^[a-z0-9._-]{3,60}$/.test(login)) return fail(400, 'Логин: от 3 символов, латиница, цифры, точка, дефис.');
-  if (!validPassword(b.password)) return fail(400, 'Пароль должен быть не короче 8 символов.');
+  if (!validPassword(b.password)) return fail(400, 'Пароль должен быть не короче 10 символов и не только из цифр.');
   const perms = (Array.isArray(b.perms) ? b.perms : []).filter((p) => PERMS.includes(p));
   const d = await db(env);
   if (await d.prepare('SELECT id FROM users WHERE login = ?').bind(login).first()) return fail(400, 'Такой логин уже есть.');

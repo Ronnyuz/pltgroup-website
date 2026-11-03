@@ -41,7 +41,7 @@ export async function onRequest({ request, env, params }) {
     if (error) return error;
     const b = await body(request) || {};
     if (!(await checkPassword(String(b.current || ''), user))) return fail(400, 'Текущий пароль указан неверно.');
-    if (!validPassword(b.next)) return fail(400, 'Новый пароль должен быть не короче 8 символов.');
+    if (!validPassword(b.next)) return fail(400, 'Новый пароль должен быть не короче 10 символов и не только из цифр.');
     const { hash, salt } = await hashPassword(b.next);
     const d = await db(env);
     await d.prepare('UPDATE users SET pass_hash = ?, salt = ? WHERE id = ?').bind(hash, salt, user.id).run();
