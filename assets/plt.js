@@ -271,3 +271,22 @@ var REQUISITES = {
   });
   if (document.querySelector('.price.expired')) document.querySelectorAll('[data-promo-note]').forEach(function (n) { n.hidden = true; });
 })();
+
+/* Site consultant: the AI chat from assets/chat.js (answers via /api/chat, saves requests to /admin).
+   Added here so every page that loads plt.js gets it. Labels are copied from content/*.json (chat). */
+(function () {
+  if (/^\/(agrovia|retail|admin)\//.test(location.pathname) || document.querySelector('[data-chat]')) return;
+  var LABELS = {"ru":{"open":"Задать вопрос","title":"Консультант PLT Digital","note":"ИИ-ассистент. Отвечает сразу, точную цену назовёт менеджер.","greeting":"Здравствуйте! Расскажите, чем занимается ваш бизнес и что хотите улучшить. Подскажу, что подойдёт и сколько это стоит.","placeholder":"Напишите вопрос","send":"Отправить","close":"Закрыть","error":"Не удалось отправить. Попробуйте ещё раз.","reset":"Новый диалог"},"uz":{"open":"Savol berish","title":"PLT Digital maslahatchisi","note":"AI-yordamchi. Darhol javob beradi, aniq narxni menejer aytadi.","greeting":"Assalomu alaykum! Biznesingiz nima bilan shug‘ullanishi va nimani yaxshilamoqchi ekaningizni aytib bering. Nima mos kelishi va qancha turishini aytaman.","placeholder":"Savolingizni yozing","send":"Yuborish","close":"Yopish","error":"Yuborib bo‘lmadi. Qayta urinib ko‘ring.","reset":"Yangi suhbat"},"en":{"open":"Ask a question","title":"PLT Digital consultant","note":"AI assistant. Answers right away, a manager will confirm the exact price.","greeting":"Hello! Tell me what your business does and what you want to improve. I will suggest what fits and what it costs.","placeholder":"Type your question","send":"Send","close":"Close","error":"Could not send. Please try again.","reset":"New chat"}};
+  var lang = LABELS[document.documentElement.lang] ? document.documentElement.lang : 'ru';
+  var css = document.createElement('link');
+  css.rel = 'stylesheet'; css.href = '/assets/chat.css?v=1';
+  document.head.appendChild(css);
+  var box = document.createElement('div');
+  box.className = 'chat'; box.hidden = true;
+  box.setAttribute('data-chat', ''); box.setAttribute('data-lang', lang);
+  box.setAttribute('data-labels', JSON.stringify(LABELS[lang]));
+  document.body.appendChild(box);
+  var js = document.createElement('script');
+  js.src = '/assets/chat.js?v=2'; js.defer = true;
+  document.body.appendChild(js);
+})();

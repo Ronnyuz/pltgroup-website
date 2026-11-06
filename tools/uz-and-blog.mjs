@@ -6,7 +6,7 @@ import { ARTICLES } from './articles.mjs';
 
 const ROOT = process.argv[2];
 const SITE = 'https://pltgroup.uz';
-const JS_VER = 'lang3';
+const JS_VER = 'chat1';
 const DATE = '2026-10-26';
 const read = (rel) => readFileSync(join(ROOT, rel), 'utf8');
 const write = (rel, s) => {

@@ -6,7 +6,7 @@ import { dirname, join } from 'node:path';
 
 const ROOT = process.argv[2];
 const SITE = 'https://pltgroup.uz';
-const JS_VER = 'lang3';
+const JS_VER = 'chat1';
 const read = (rel) => readFileSync(join(ROOT, rel), 'utf8');
 const write = (rel, s) => {
   if (s.includes('—')) throw new Error('em dash in ' + rel);
